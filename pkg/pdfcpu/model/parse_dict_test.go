@@ -152,7 +152,7 @@ func doTestLargeDicts(t *testing.T) {
 	var sb strings.Builder
 	sb.WriteString("<<")
 	sb.WriteString("/Key#28#29 (Value)")
-	for i := 0; i < 50000; i++ {
+	for i := range 50000 {
 		sb.WriteString(fmt.Sprintf("/Key%d (Value)", i))
 	}
 	sb.WriteString(">>")

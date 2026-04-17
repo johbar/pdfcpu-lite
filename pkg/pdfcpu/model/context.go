@@ -21,11 +21,12 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"slices"
 	"sort"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/johbar/pdfcpu-lite/pkg/log"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 )
 
 // Context represents an environment for processing PDF files.
@@ -644,10 +645,8 @@ func (wc *WriteContext) WriteEol() error {
 
 // IncrementWithObjNr adds obj# i to wc for writing.
 func (wc *WriteContext) IncrementWithObjNr(i int) {
-	for _, objNr := range wc.ObjNrs {
-		if objNr == i {
-			return
-		}
+	if slices.Contains(wc.ObjNrs, i) {
+		return
 	}
 	wc.ObjNrs = append(wc.ObjNrs, i)
 }

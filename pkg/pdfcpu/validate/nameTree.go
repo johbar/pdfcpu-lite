@@ -17,8 +17,8 @@ limitations under the License.
 package validate
 
 import (
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -612,7 +612,7 @@ func validateNameTreeDictNamesEntry(xRefTable *model.XRefTable, d types.Dict, na
 
 	var key, firstKey, lastKey string
 
-	for i := 0; i < len(a); i++ {
+	for i := range a {
 		o := a[i]
 
 		if i%2 == 0 {

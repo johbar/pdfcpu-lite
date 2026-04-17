@@ -18,10 +18,11 @@ package pdfcpu
 
 import (
 	"fmt"
+	"maps"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/johbar/pdfcpu-lite/pkg/log"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -402,9 +403,7 @@ func mergeDests(ctxSource, ctxDest *model.Context) error {
 	}
 
 	// Note: We ignore duplicate keys
-	for k, v := range destsSrc {
-		destsDest[k] = v
-	}
+	maps.Copy(destsDest, destsSrc)
 
 	return nil
 }

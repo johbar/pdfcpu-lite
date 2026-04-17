@@ -23,8 +23,8 @@ import (
 	"sort"
 	"time"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/johbar/pdfcpu-lite/pkg/log"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 

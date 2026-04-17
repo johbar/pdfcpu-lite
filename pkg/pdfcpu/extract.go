@@ -22,11 +22,11 @@ import (
 	"io"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/filter"
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/font"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/johbar/pdfcpu-lite/pkg/filter"
+	"github.com/johbar/pdfcpu-lite/pkg/log"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/font"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 

@@ -35,9 +35,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/johbar/pdfcpu-lite/pkg/log"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 
 	"golang.org/x/text/secure/precis"
@@ -228,7 +228,7 @@ func encKey(userpw string, e *model.Enc) (key []byte) {
 
 	// 2h
 	if e.R >= 3 {
-		for i := 0; i < 50; i++ {
+		for range 50 {
 			h.Reset()
 			h.Write(key[:e.L/8])
 			key = h.Sum(nil)
@@ -296,7 +296,7 @@ func key(ownerpw, userpw string, r, l int) (key []byte) {
 
 	// 3c
 	if r >= 3 {
-		for i := 0; i < 50; i++ {
+		for range 50 {
 			h.Reset()
 			h.Write(key)
 			key = h.Sum(nil)
@@ -550,7 +550,7 @@ func hashRev6(input, pw, U []byte) ([]byte, int, error) {
 		if len(U) > 0 {
 			bb = append(bb, U...)
 		}
-		for i := 0; i < 64; i++ {
+		for range 64 {
 			k1 = append(k1, bb...)
 		}
 

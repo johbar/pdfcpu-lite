@@ -22,12 +22,12 @@ import (
 	"io"
 	"math"
 
-	"github.com/pdfcpu/pdfcpu/pkg/filter"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/draw"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/matrix"
+	"github.com/johbar/pdfcpu-lite/pkg/filter"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/color"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/draw"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/matrix"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -136,7 +136,7 @@ func (nup NUp) RectsForGrid() []*types.Rectangle {
 
 	case RightDown:
 		for i := rows - 1; i >= 0; i-- {
-			for j := 0; j < cols; j++ {
+			for j := range cols {
 				llx = float64(j) * gw
 				lly = float64(i) * gh
 				rr = append(rr, types.NewRectangle(llx, lly, llx+gw, lly+gh))
@@ -144,7 +144,7 @@ func (nup NUp) RectsForGrid() []*types.Rectangle {
 		}
 
 	case DownRight:
-		for i := 0; i < cols; i++ {
+		for i := range cols {
 			for j := rows - 1; j >= 0; j-- {
 				llx = float64(i) * gw
 				lly = float64(j) * gh

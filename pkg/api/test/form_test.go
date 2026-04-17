@@ -21,9 +21,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/pdfcpu/pdfcpu/pkg/api"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/form"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
+	"github.com/johbar/pdfcpu-lite/pkg/api"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/form"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
 )
 
 /**************************************************************

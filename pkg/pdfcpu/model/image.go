@@ -34,8 +34,8 @@ import (
 
 	"github.com/hhrutter/tiff"
 
-	"github.com/pdfcpu/pdfcpu/pkg/filter"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/johbar/pdfcpu-lite/pkg/filter"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 	_ "golang.org/x/image/webp"
 )
@@ -75,7 +75,7 @@ func ImageFileNames(dir string, maxFileSize types.ByteSize) ([]string, error) {
 		return nil, err
 	}
 	fn := []string{}
-	for i := 0; i < len(files); i++ {
+	for i := range files {
 		fi := files[i]
 		fileInfo, err := fi.Info()
 		if err != nil {
@@ -206,8 +206,8 @@ func writeRGBAImageBuf(img image.Image) ([]byte, []byte) {
 	buf := make([]byte, w*h*3)
 	var softMask bool
 
-	for y := 0; y < h; y++ {
-		for x := 0; x < w; x++ {
+	for y := range h {
+		for x := range w {
 			c := img.At(x, y).(color.RGBA)
 			if !softMask {
 				if c.A != 0xFF {
@@ -237,8 +237,8 @@ func writeRGBA64ImageBuf(img image.Image) []byte {
 	i := 0
 	buf := make([]byte, w*h*6)
 
-	for y := 0; y < h; y++ {
-		for x := 0; x < w; x++ {
+	for y := range h {
+		for x := range w {
 			c := img.At(x, y).(color.RGBA64)
 			buf[i] = uint8(c.R >> 8)
 			buf[i+1] = uint8(c.R & 0x00FF)
@@ -261,8 +261,8 @@ func writeNRGBAImageBuf(xRefTable *XRefTable, img image.Image) ([]byte, []byte) 
 	var sm []byte
 	var softMask bool
 
-	for y := 0; y < h; y++ {
-		for x := 0; x < w; x++ {
+	for y := range h {
+		for x := range w {
 			c := img.At(x, y).(color.NRGBA)
 			if !softMask {
 				if xRefTable != nil && c.A != 0xFF {
@@ -295,8 +295,8 @@ func writeNRGBA64ImageBuf(xRefTable *XRefTable, img image.Image) ([]byte, []byte
 	var sm []byte
 	var softMask bool
 
-	for y := 0; y < h; y++ {
-		for x := 0; x < w; x++ {
+	for y := range h {
+		for x := range w {
 			c := img.At(x, y).(color.NRGBA64)
 			if !softMask {
 				if xRefTable != nil && c.A != 0xFFFF {
@@ -333,8 +333,8 @@ func writeSoftmask16(xRefTable *XRefTable, img *image.Alpha16) []byte {
 	var sm []byte
 	var softMask bool
 
-	for y := 0; y < h; y++ {
-		for x := 0; x < w; x++ {
+	for y := range h {
+		for x := range w {
 			c := img.Alpha16At(x, y)
 			if !softMask {
 				if xRefTable != nil && c.A != 0xFFFF {
@@ -363,8 +363,8 @@ func writeSoftmask(xRefTable *XRefTable, img *image.Alpha) []byte {
 	var sm []byte
 	var softMask bool
 
-	for y := 0; y < h; y++ {
-		for x := 0; x < w; x++ {
+	for y := range h {
+		for x := range w {
 			c := img.AlphaAt(x, y)
 			if !softMask {
 				if xRefTable != nil && c.A != 0xFF {
@@ -390,8 +390,8 @@ func writeGrayImageBuf(img image.Image) []byte {
 	i := 0
 	buf := make([]byte, w*h)
 
-	for y := 0; y < h; y++ {
-		for x := 0; x < w; x++ {
+	for y := range h {
+		for x := range w {
 			c := img.At(x, y).(color.Gray)
 			buf[i] = c.Y
 			i++
@@ -407,8 +407,8 @@ func writeGray16ImageBuf(img image.Image) []byte {
 	i := 0
 	buf := make([]byte, 2*w*h)
 
-	for y := 0; y < h; y++ {
-		for x := 0; x < w; x++ {
+	for y := range h {
+		for x := range w {
 			c := img.At(x, y).(color.Gray16)
 			buf[i] = uint8(c.Y >> 8)
 			buf[i+1] = uint8(c.Y & 0x00FF)
@@ -425,8 +425,8 @@ func writeCMYKImageBuf(img image.Image) []byte {
 	i := 0
 	buf := make([]byte, w*h*4)
 
-	for y := 0; y < h; y++ {
-		for x := 0; x < w; x++ {
+	for y := range h {
+		for x := range w {
 			c := img.At(x, y).(color.CMYK)
 			buf[i] = c.C
 			buf[i+1] = c.M
@@ -491,8 +491,8 @@ func checkIfGray(img image.Image) bool {
 	w := b.Dx()
 	h := b.Dy()
 
-	for y := 0; y < h; y++ {
-		for x := 0; x < w; x++ {
+	for y := range h {
+		for x := range w {
 			c := m.At(x, y).(color.RGBA)
 			if c.B != c.G || c.B != c.R {
 				return false
@@ -520,8 +520,8 @@ func convertToSepia(img image.Image) *image.RGBA {
 	m := convertToRGBA(img)
 	w := img.Bounds().Dx()
 	h := img.Bounds().Dy()
-	for y := 0; y < h; y++ {
-		for x := 0; x < w; x++ {
+	for y := range h {
+		for x := range w {
 			c := m.At(x, y).(color.RGBA)
 			r := math.Round((float64(c.R) * .393) + (float64(c.G) * .769) + (float64(c.B) * .189))
 			if r > 255 {

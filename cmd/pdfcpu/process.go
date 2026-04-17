@@ -31,13 +31,13 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/api"
-	"github.com/pdfcpu/pdfcpu/pkg/cli"
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/validate"
+	"github.com/johbar/pdfcpu-lite/pkg/api"
+	"github.com/johbar/pdfcpu-lite/pkg/cli"
+	"github.com/johbar/pdfcpu-lite/pkg/log"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/validate"
 	"github.com/pkg/errors"
 )
 
@@ -231,8 +231,8 @@ func process(cmd *cli.Command) {
 }
 
 func getBaseDir(path string) string {
-	i := strings.Index(path, "**")
-	basePath := path[:i]
+	before, _, _ := strings.Cut(path, "**")
+	basePath := before
 	basePath = filepath.Clean(basePath)
 	if basePath == "" {
 		return "."

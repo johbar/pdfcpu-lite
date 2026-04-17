@@ -24,9 +24,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
+	"github.com/johbar/pdfcpu-lite/pkg/log"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
 	"github.com/pkg/errors"
 )
 
@@ -202,7 +202,7 @@ func writePageSpansSplitAlongPages(ctx *model.Context, pageNrs []int, outDir, fi
 		return errors.New("pdfcpu: split along pageNrs - invalid page number sequence.")
 	}
 
-	for i := 0; i < len(pageNrs); i++ {
+	for i := range pageNrs {
 		thru = pageNrs[i] - 1
 		if thru >= ctx.PageCount {
 			break

@@ -20,7 +20,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/pdfcpu/pdfcpu/pkg/cli"
+	"github.com/johbar/pdfcpu-lite/pkg/cli"
 )
 
 func TestExtractImagesCommand(t *testing.T) {

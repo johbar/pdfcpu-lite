@@ -23,11 +23,11 @@ import (
 	"math"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/draw"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/matrix"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/color"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/draw"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/matrix"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -41,9 +41,9 @@ func ParseCutConfigForPoster(s string, u types.DisplayUnit) (*model.Cut, error) 
 
 	cut := &model.Cut{Unit: u, Scale: 1.0}
 
-	ss := strings.Split(s, ",")
+	ss := strings.SplitSeq(s, ",")
 
-	for _, s := range ss {
+	for s := range ss {
 
 		ss1 := strings.Split(s, ":")
 		if len(ss1) != 2 {
@@ -75,9 +75,9 @@ func ParseCutConfigForN(n int, s string, u types.DisplayUnit) (*model.Cut, error
 		return cut, nil
 	}
 
-	ss := strings.Split(s, ",")
+	ss := strings.SplitSeq(s, ",")
 
-	for _, s := range ss {
+	for s := range ss {
 
 		ss1 := strings.Split(s, ":")
 		if len(ss1) != 2 {
@@ -105,9 +105,9 @@ func ParseCutConfig(s string, u types.DisplayUnit) (*model.Cut, error) {
 
 	cut := &model.Cut{Unit: u}
 
-	ss := strings.Split(s, ",")
+	ss := strings.SplitSeq(s, ",")
 
-	for _, s := range ss {
+	for s := range ss {
 
 		ss1 := strings.Split(s, ":")
 		if len(ss1) != 2 {

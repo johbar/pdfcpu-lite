@@ -20,8 +20,8 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/pdfcpu/pdfcpu/pkg/api"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
+	"github.com/johbar/pdfcpu-lite/pkg/api"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
 )
 
 func TestDisableConfigDir(t *testing.T) {
@@ -37,12 +37,10 @@ func TestDisableConfigDir_Parallel(t *testing.T) {
 	t.Parallel()
 
 	var wg sync.WaitGroup
-	for i := 0; i < 100; i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
+	for range 100 {
+		wg.Go(func() {
 			api.DisableConfigDir()
-		}()
+		})
 	}
 	wg.Wait()
 	t.Log("DisableConfigDir passed")

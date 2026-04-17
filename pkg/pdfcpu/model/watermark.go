@@ -21,10 +21,10 @@ import (
 	"io"
 	"math"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/draw"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/matrix"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/color"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/draw"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/matrix"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 )
 
 const (
@@ -453,9 +453,6 @@ func (wm *Watermark) PdfResIndex(pageNr int) int {
 		return wm.PdfPageNrSrc
 	}
 	maxStampPageNr := wm.PdfMultiStartPageNrDest + len(wm.PdfRes) - 1
-	i := pageNr
-	if pageNr > maxStampPageNr {
-		i = maxStampPageNr
-	}
+	i := min(pageNr, maxStampPageNr)
 	return i
 }

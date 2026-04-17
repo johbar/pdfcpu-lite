@@ -20,11 +20,11 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/font"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	pdffont "github.com/pdfcpu/pdfcpu/pkg/pdfcpu/font"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/johbar/pdfcpu-lite/pkg/font"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/color"
+	pdffont "github.com/johbar/pdfcpu-lite/pkg/pdfcpu/font"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -313,7 +313,7 @@ func fontFromDA(s string) (string, FormFont, error) {
 
 	f.SetCol(color.Black)
 
-	for i := 0; i < len(da); i++ {
+	for i := range da {
 		if da[i] == "Tf" {
 			fontID = da[i-2][1:]
 			//tf.SetFontID(fontID)

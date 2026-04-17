@@ -37,7 +37,7 @@ func (f runLengthDecode) decode(w io.ByteWriter, src []byte, maxLen int64) {
 		i++
 		if b < 0x80 {
 			c := int(b) + 1
-			for j := 0; j < c; j++ {
+			for range c {
 				if maxLen >= 0 && maxLen == written {
 					break
 				}
@@ -49,7 +49,7 @@ func (f runLengthDecode) decode(w io.ByteWriter, src []byte, maxLen int64) {
 			continue
 		}
 		c := 257 - int(b)
-		for j := 0; j < c; j++ {
+		for range c {
 			if maxLen >= 0 && maxLen == written {
 				break
 			}

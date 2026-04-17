@@ -23,7 +23,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/pdfcpu/pdfcpu/pkg/filter"
+	"github.com/johbar/pdfcpu-lite/pkg/filter"
 )
 
 func TestFilterSupport(t *testing.T) {
@@ -163,7 +163,7 @@ func encodeDecode(t *testing.T, fileName, filterName string) {
 		return
 	}
 
-	for i := 0; i < len(d); i++ {
+	for i := range d {
 		if d[i] != g[i] {
 			t.Errorf("%s: mismatch at %d, 0x%02x != 0x%02x\n", fileName, i, d[i], g[i])
 			return
@@ -258,7 +258,7 @@ func encodeDecodeFilterPipeline(t *testing.T, fileName string, fpl []string) {
 		return
 	}
 
-	for i := 0; i < len(d); i++ {
+	for i := range d {
 		if d[i] != g[i] {
 			t.Errorf("%s: mismatch at %d, 0x%02x != 0x%02x\n", fileName, i, d[i], g[i])
 			return

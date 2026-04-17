@@ -20,8 +20,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/color"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -43,7 +43,7 @@ type cutParameterMap map[string]func(string, *Cut) error
 
 func parseHorCut(v string, cut *Cut) (err error) {
 
-	for _, s := range strings.Split(v, " ") {
+	for s := range strings.SplitSeq(v, " ") {
 		f, err := strconv.ParseFloat(s, 64)
 		if err != nil {
 			return errors.Errorf("pdfcpu: cut position must be a float value: %s\n", s)
@@ -59,7 +59,7 @@ func parseHorCut(v string, cut *Cut) (err error) {
 
 func parseVertCut(v string, cut *Cut) (err error) {
 
-	for _, s := range strings.Split(v, " ") {
+	for s := range strings.SplitSeq(v, " ") {
 		f, err := strconv.ParseFloat(s, 64)
 		if err != nil {
 			return errors.Errorf("pdfcpu: cut position must be a float value: %s\n", s)

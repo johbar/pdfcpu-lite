@@ -23,11 +23,11 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/draw"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/matrix"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/color"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/draw"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/matrix"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -235,9 +235,9 @@ func ParseImportDetails(s string, u types.DisplayUnit) (*Import, error) {
 	imp := DefaultImportConfig()
 	imp.InpUnit = u
 
-	ss := strings.Split(s, ",")
+	ss := strings.SplitSeq(s, ",")
 
-	for _, s := range ss {
+	for s := range ss {
 
 		ss1 := strings.Split(s, ":")
 		if len(ss1) != 2 {

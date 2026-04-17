@@ -20,6 +20,7 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"fmt"
+	"strings"
 
 	"github.com/pkg/errors"
 )
@@ -234,7 +235,8 @@ func (p iccProfile) tagCount() int {
 func (p iccProfile) String() string {
 
 	// profile size: 4 bytes at offset 0 (uintt32)
-	s := fmt.Sprintf(""+
+	var s strings.Builder
+	s.WriteString(fmt.Sprintf(""+
 		"              size: %d\n"+
 		"      preferredCMM: %s\n"+
 		"           version: %s\n"+
@@ -267,7 +269,7 @@ func (p iccProfile) String() string {
 		p.creator(),
 		p.id(),
 		p.tagCount(),
-	)
+	))
 
 	for i, j := 0, 132; i < p.tagCount(); i++ {
 		sig := string(p.b[j : j+4])
@@ -276,13 +278,13 @@ func (p iccProfile) String() string {
 		j += 4
 		size := binary.BigEndian.Uint32(p.b[j:])
 		j += 4
-		s += fmt.Sprintf("Tag %d: signature:%s offset:%d(#%02x) size:%d(#%02x)\n%s\n", i, sig, off, off, size, size, hex.Dump(p.b[off:off+size]))
+		s.WriteString(fmt.Sprintf("Tag %d: signature:%s offset:%d(#%02x) size:%d(#%02x)\n%s\n", i, sig, off, off, size, size, hex.Dump(p.b[off:off+size])))
 		//s += fmt.Sprintf("Tag %d: signature:%s offset:%d(#%02x) size:%d(#%02x)\n", i, sig, off, off, size, size)
 	}
-	s += "Matrix:\n"
-	s += fmt.Sprintf("%4.4f %4.4f %4.4f\n", p.rX, p.gX, p.bX)
-	s += fmt.Sprintf("%4.4f %4.4f %4.4f\n", p.rY, p.gY, p.bY)
-	s += fmt.Sprintf("%4.4f %4.4f %4.4f\n", p.rZ, p.gZ, p.bZ)
+	s.WriteString("Matrix:\n")
+	s.WriteString(fmt.Sprintf("%4.4f %4.4f %4.4f\n", p.rX, p.gX, p.bX))
+	s.WriteString(fmt.Sprintf("%4.4f %4.4f %4.4f\n", p.rY, p.gY, p.bY))
+	s.WriteString(fmt.Sprintf("%4.4f %4.4f %4.4f\n", p.rZ, p.gZ, p.bZ))
 
 	// cprt copyrightTag multiLocalizedUnicodeType contains the text copyright information for the profile.
 	// desc profileDescriptionTag multiLocalizedUnicodeType describes the structure containing invariant and localizable versions of the profile description for display. => 10.13
@@ -307,5 +309,5 @@ func (p iccProfile) String() string {
 	// meas measurementTag measurementType describes the alternative measurement specification, such as a D65 illuminant instead of the default D50.
 	// tech technologyTag signatureType => table 29
 
-	return s
+	return s.String()
 }

@@ -22,8 +22,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
+	"github.com/johbar/pdfcpu-lite/pkg/log"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
 	"github.com/pkg/errors"
 )
 
@@ -249,7 +249,7 @@ func SanitizePath(path string) string {
 	parts := strings.Split(path, string(filepath.Separator))
 
 	cleanParts := []string{}
-	for i := 0; i < len(parts); i++ {
+	for i := range parts {
 		if parts[i] != "" && parts[i] != "." && parts[i] != ".." {
 			cleanParts = append(cleanParts, parts[i])
 			continue

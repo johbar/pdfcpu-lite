@@ -20,7 +20,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/pdfcpu/pdfcpu/pkg/api"
+	"github.com/johbar/pdfcpu-lite/pkg/api"
 )
 
 func TestPortfolio(t *testing.T) {

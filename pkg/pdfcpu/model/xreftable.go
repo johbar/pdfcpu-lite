@@ -29,10 +29,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/pdfcpu/pdfcpu/pkg/filter"
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/scan"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/johbar/pdfcpu-lite/pkg/filter"
+	"github.com/johbar/pdfcpu-lite/pkg/log"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/scan"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -1183,15 +1183,15 @@ func (xRefTable *XRefTable) DumpObject(objNr, mode int) {
 			}
 
 			s := "decoded stream content (length = %d)\n%s\n"
-			s1 := ""
+			var s1 strings.Builder
 			switch mode {
 			case 1:
 				sc := bufio.NewScanner(bytes.NewReader(sd.Content))
 				sc.Split(scan.Lines)
 				for sc.Scan() {
-					s1 += sc.Text() + "\n"
+					s1.WriteString(sc.Text() + "\n")
 				}
-				str += fmt.Sprintf(s, len(sd.Content), s1)
+				str += fmt.Sprintf(s, len(sd.Content), s1.String())
 			case 2:
 				str += fmt.Sprintf(s, len(sd.Content), hex.Dump(sd.Content))
 			}

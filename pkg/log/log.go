@@ -26,16 +26,16 @@ import (
 type Logger interface {
 
 	// Printf logs a formatted string.
-	Printf(format string, args ...interface{})
+	Printf(format string, args ...any)
 
 	// Println logs a line.
-	Println(args ...interface{})
+	Println(args ...any)
 
 	// Fatalf is equivalent to Printf() followed by a program abort.
-	Fatalf(format string, args ...interface{})
+	Fatalf(format string, args ...any)
 
 	// Fatalln is equivalent to Println() followed by a progam abort.
-	Fatalln(args ...interface{})
+	Fatalln(args ...any)
 }
 
 type logger struct {
@@ -239,7 +239,7 @@ func WriteEnabled() bool {
 }
 
 // Printf writes a formatted message to the log.
-func (l *logger) Printf(format string, args ...interface{}) {
+func (l *logger) Printf(format string, args ...any) {
 
 	if l.log == nil {
 		return
@@ -249,7 +249,7 @@ func (l *logger) Printf(format string, args ...interface{}) {
 }
 
 // Println writes a line to the log.
-func (l *logger) Println(args ...interface{}) {
+func (l *logger) Println(args ...any) {
 
 	if l.log == nil {
 		return
@@ -259,7 +259,7 @@ func (l *logger) Println(args ...interface{}) {
 }
 
 // Fatalf is equivalent to Printf() followed by a program abort.
-func (l *logger) Fatalf(format string, args ...interface{}) {
+func (l *logger) Fatalf(format string, args ...any) {
 
 	if l.log == nil {
 		return
@@ -269,7 +269,7 @@ func (l *logger) Fatalf(format string, args ...interface{}) {
 }
 
 // Fatalf is equivalent to Println() followed by a program abort.
-func (l *logger) Fatalln(args ...interface{}) {
+func (l *logger) Fatalln(args ...any) {
 
 	if l.log == nil {
 		return

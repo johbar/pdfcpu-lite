@@ -18,18 +18,19 @@ package primitives
 
 import (
 	"io"
+	"maps"
 	"net/http"
 	"path/filepath"
 	"sort"
 	"strconv"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/font"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/draw"
-	pdffont "github.com/pdfcpu/pdfcpu/pkg/pdfcpu/font"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/johbar/pdfcpu-lite/pkg/font"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/color"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/draw"
+	pdffont "github.com/johbar/pdfcpu-lite/pkg/pdfcpu/font"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -622,8 +623,8 @@ func (pdf *PDF) idForFontName(fontName, fontLang string, pageFonts, globalFonts 
 
 func fontIndRef(xRefTable *model.XRefTable, fontName, fontLang string) (*types.IndirectRef, error) {
 	fName := fontName
-	if strings.HasPrefix(fontName, "cjk:") {
-		fName = strings.TrimPrefix(fontName, "cjk:")
+	if after, ok := strings.CutPrefix(fontName, "cjk:"); ok {
+		fName = after
 	}
 	if font.IsUserFont(fName) {
 		// Postpone font creation.
@@ -665,8 +666,8 @@ func (pdf *PDF) ensureFont(fontID, fontName, fontLang string, fonts model.FontMa
 	if pdf.Update() {
 
 		fName := fontName
-		if strings.HasPrefix(fontName, "cjk:") {
-			fName = strings.TrimPrefix(fontName, "cjk:")
+		if after, ok0 := strings.CutPrefix(fontName, "cjk:"); ok0 {
+			fName = after
 		}
 
 		for objNr, fo := range pdf.Optimize.FormFontObjects {
@@ -771,12 +772,8 @@ func (pdf *PDF) calcInheritedContentFonts() {
 			continue
 		}
 		ff := map[string]*FormFont{}
-		for k, v := range pdf.Fonts {
-			ff[k] = v
-		}
-		for k, v := range page.Fonts {
-			ff[k] = v
-		}
+		maps.Copy(ff, pdf.Fonts)
+		maps.Copy(ff, page.Fonts)
 		page.Content.calcFont(ff)
 	}
 }
@@ -805,12 +802,8 @@ func (pdf *PDF) calcInheritedMargins() {
 			continue
 		}
 		mm := map[string]*Margin{}
-		for k, v := range pdf.Margins {
-			mm[k] = v
-		}
-		for k, v := range page.Margins {
-			mm[k] = v
-		}
+		maps.Copy(mm, pdf.Margins)
+		maps.Copy(mm, page.Margins)
 		page.Content.calcMargin(mm)
 	}
 }
@@ -833,12 +826,8 @@ func (pdf *PDF) calcInheritedBorders() {
 			continue
 		}
 		bb := map[string]*Border{}
-		for k, v := range pdf.Borders {
-			bb[k] = v
-		}
-		for k, v := range page.Borders {
-			bb[k] = v
-		}
+		maps.Copy(bb, pdf.Borders)
+		maps.Copy(bb, page.Borders)
 		page.Content.calcBorder(bb)
 	}
 }
@@ -861,12 +850,8 @@ func (pdf *PDF) calcInheritedPaddings() {
 			continue
 		}
 		pp := map[string]*Padding{}
-		for k, v := range pdf.Paddings {
-			pp[k] = v
-		}
-		for k, v := range page.Paddings {
-			pp[k] = v
-		}
+		maps.Copy(pp, pdf.Paddings)
+		maps.Copy(pp, page.Paddings)
 		page.Content.calcPadding(pp)
 	}
 }
@@ -889,12 +874,8 @@ func (pdf *PDF) calcInheritedSimpleBoxes() {
 			continue
 		}
 		bb := map[string]*SimpleBox{}
-		for k, v := range pdf.SimpleBoxPool {
-			bb[k] = v
-		}
-		for k, v := range page.SimpleBoxPool {
-			bb[k] = v
-		}
+		maps.Copy(bb, pdf.SimpleBoxPool)
+		maps.Copy(bb, page.SimpleBoxPool)
 		page.Content.calcSimpleBoxes(bb)
 	}
 }
@@ -917,12 +898,8 @@ func (pdf *PDF) calcInheritedTextBoxes() {
 			continue
 		}
 		tb := map[string]*TextBox{}
-		for k, v := range pdf.TextBoxPool {
-			tb[k] = v
-		}
-		for k, v := range page.TextBoxPool {
-			tb[k] = v
-		}
+		maps.Copy(tb, pdf.TextBoxPool)
+		maps.Copy(tb, page.TextBoxPool)
 		page.Content.calcTextBoxes(tb)
 	}
 }
@@ -945,12 +922,8 @@ func (pdf *PDF) calcInheritedImageBoxes() {
 			continue
 		}
 		ib := map[string]*ImageBox{}
-		for k, v := range pdf.ImageBoxPool {
-			ib[k] = v
-		}
-		for k, v := range page.ImageBoxPool {
-			ib[k] = v
-		}
+		maps.Copy(ib, pdf.ImageBoxPool)
+		maps.Copy(ib, page.ImageBoxPool)
 		page.Content.calcImageBoxes(ib)
 	}
 }
@@ -973,12 +946,8 @@ func (pdf *PDF) calcInheritedTables() {
 			continue
 		}
 		t := map[string]*Table{}
-		for k, v := range pdf.TablePool {
-			t[k] = v
-		}
-		for k, v := range page.TablePool {
-			t[k] = v
-		}
+		maps.Copy(t, pdf.TablePool)
+		maps.Copy(t, page.TablePool)
 		page.Content.calcTables(t)
 	}
 }
@@ -1001,12 +970,8 @@ func (pdf *PDF) calcInheritedFieldGroups() {
 			continue
 		}
 		fg := map[string]*FieldGroup{}
-		for k, v := range pdf.FieldGroupPool {
-			fg[k] = v
-		}
-		for k, v := range page.FieldGroupPool {
-			fg[k] = v
-		}
+		maps.Copy(fg, pdf.FieldGroupPool)
+		maps.Copy(fg, page.FieldGroupPool)
 		page.Content.calcFieldGroups(fg)
 	}
 }

@@ -16,24 +16,16 @@ limitations under the License.
 
 package types
 
+import "slices"
+
 // MemberOf returns true if list contains s.
 func MemberOf(s string, list []string) bool {
-	for _, v := range list {
-		if s == v {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(list, s)
 }
 
 // IntMemberOf returns true if list contains i.
 func IntMemberOf(i int, list []int) bool {
-	for _, v := range list {
-		if i == v {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(list, i)
 }
 
 // IntMemberOf returns true if list contains i.

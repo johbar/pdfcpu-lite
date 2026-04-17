@@ -28,11 +28,11 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/pdfcpu/pdfcpu/pkg/filter"
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/scan"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/johbar/pdfcpu-lite/pkg/filter"
+	"github.com/johbar/pdfcpu-lite/pkg/log"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/scan"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -2385,11 +2385,11 @@ func readStreamContent(rd io.Reader, streamLength int) ([]byte, error) {
 			}
 			// Weak heuristic to detect the actual end of this stream
 			// once we have reached EOF due to incorrect streamLength.
-			eob := bytes.Index(buf, []byte("endstream"))
-			if eob < 0 {
+			before, _, ok := bytes.Cut(buf, []byte("endstream"))
+			if !ok {
 				return nil, err
 			}
-			return buf[:eob], nil
+			return before, nil
 		}
 
 		if log.ReadEnabled() {

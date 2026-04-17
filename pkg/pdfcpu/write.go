@@ -26,10 +26,10 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/filter"
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/johbar/pdfcpu-lite/pkg/filter"
+	"github.com/johbar/pdfcpu-lite/pkg/log"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -707,7 +707,7 @@ func createXRefStream(ctx *model.Context, i1, i2, i3 int, objNrs []int) ([]byte,
 	start := objNrs[0]
 	size := 0
 
-	for i := 0; i < len(objNrs); i++ {
+	for i := range objNrs {
 
 		j := objNrs[i]
 		entry := xRefTable.Table[j]
@@ -827,10 +827,7 @@ func writeXRefStream(ctx *model.Context) error {
 	offset := ctx.Write.Offset
 	ctx.Write.SetWriteOffset(objNumber)
 
-	i2Base := int64(*ctx.Size)
-	if offset > i2Base {
-		i2Base = offset
-	}
+	i2Base := max(offset, int64(*ctx.Size))
 
 	i1 := 1 // 0, 1 or 2 always fit into 1 byte.
 

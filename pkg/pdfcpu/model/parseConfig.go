@@ -1,5 +1,4 @@
 //go:build !js
-// +build !js
 
 /*
 Copyright 2020 The pdfcpu Authors.
@@ -24,7 +23,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 	"gopkg.in/yaml.v2"
 )

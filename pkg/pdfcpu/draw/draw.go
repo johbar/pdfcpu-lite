@@ -21,8 +21,8 @@ import (
 	"io"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/color"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 )
 
 // RenderMode represents the text rendering mode (see 9.3.6)
@@ -186,12 +186,12 @@ const (
 // HorSepLine renders a horizontal divider with optional column separators:
 // ━━━━━━━━━━┿━━━━━━━━┿━━━━━━━━━━━━━━━━━━━━━━━━┿━━━━━━━┿━━━━━━━━┿━━━━━━━━
 func HorSepLine(ii []int) string {
-	s := ""
+	var s strings.Builder
 	for i, j := range ii {
 		if i > 0 {
-			s += CrossBar
+			s.WriteString(CrossBar)
 		}
-		s += strings.Repeat(HBar, j)
+		s.WriteString(strings.Repeat(HBar, j))
 	}
-	return s
+	return s.String()
 }

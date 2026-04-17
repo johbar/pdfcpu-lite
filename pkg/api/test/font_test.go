@@ -22,13 +22,13 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/pdfcpu/pdfcpu/pkg/api"
-	"github.com/pdfcpu/pdfcpu/pkg/font"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/draw"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/johbar/pdfcpu-lite/pkg/api"
+	"github.com/johbar/pdfcpu-lite/pkg/font"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/color"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/draw"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 )
 
 func writeCoreFontDemoContent(xRefTable *model.XRefTable, p model.Page, fontName string) {
@@ -65,20 +65,20 @@ func writeCoreFontDemoContent(xRefTable *model.XRefTable, p model.Page, fontName
 	td.StrokeCol, td.FillCol = color.NewSimpleColor(0x77bdbd), color.NewSimpleColor(0xab6f30)
 	model.WriteMultiLine(xRefTable, p.Buf, p.MediaBox, nil, td)
 
-	for i := 0; i < 16; i++ {
+	for i := range 16 {
 		s = fmt.Sprintf("#%02X", i)
 		td.X, td.Y, td.Text, td.FontSize = float64(70+i*30), 427, s, 14
 		td.StrokeCol, td.FillCol = color.Black, color.SimpleColor{B: .8}
 		model.WriteMultiLine(xRefTable, p.Buf, p.MediaBox, nil, td)
 	}
 
-	for j := 0; j < 14; j++ {
+	for j := range 14 {
 		s = fmt.Sprintf("#%02X", j*16+32)
 		td.X, td.Y, td.Text = 41, float64(403-j*30), s
 		td.StrokeCol, td.FillCol = color.Black, color.SimpleColor{B: .8}
 		td.FontName, td.FontKey, td.FontSize = baseFontName, baseFontKey, 14
 		model.WriteMultiLine(xRefTable, p.Buf, p.MediaBox, nil, td)
-		for i := 0; i < 16; i++ {
+		for i := range 16 {
 			b := byte(32 + j*16 + i)
 			s = string([]byte{b})
 			td.X, td.Y, td.Text = float64(70+i*30), float64(400-j*30), s

@@ -20,9 +20,10 @@ import (
 	"bytes"
 	"compress/zlib"
 	"io"
+	"slices"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
+	"github.com/johbar/pdfcpu-lite/pkg/log"
 	"github.com/pkg/errors"
 )
 
@@ -126,12 +127,7 @@ func passThru(rin io.Reader, maxLen int64) (*bytes.Buffer, error) {
 }
 
 func intMemberOf(i int, list []int) bool {
-	for _, v := range list {
-		if i == v {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(list, i)
 }
 
 // Each prediction value implies (a) certain row filter(s).
@@ -183,7 +179,7 @@ func intMemberOf(i int, list []int) bool {
 func applyHorDiff(row []byte, colors int) ([]byte, error) {
 	// This works for 8 bits per color only.
 	for i := 1; i < len(row)/colors; i++ {
-		for j := 0; j < colors; j++ {
+		for j := range colors {
 			row[i*colors+j] += row[(i-1)*colors+j]
 		}
 	}
@@ -226,7 +222,7 @@ func processRow(pr, cr []byte, p, colors, bytesPerPixel int) ([]byte, error) {
 	case PNGAverage:
 		// The average of the two neighboring pixels (left and above).
 		// Raw(x) - floor((Raw(x-bpp)+Prior(x))/2)
-		for i := 0; i < bytesPerPixel; i++ {
+		for i := range bytesPerPixel {
 			cdat[i] += pdat[i] / 2
 		}
 		for i := bytesPerPixel; i < len(cdat); i++ {

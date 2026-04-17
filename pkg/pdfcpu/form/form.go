@@ -18,17 +18,18 @@ package form
 
 import (
 	"fmt"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
 
+	"github.com/johbar/pdfcpu-lite/pkg/log"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/draw"
+	pdffont "github.com/johbar/pdfcpu-lite/pkg/pdfcpu/font"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/primitives"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 	"github.com/mattn/go-runewidth"
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/draw"
-	pdffont "github.com/pdfcpu/pdfcpu/pkg/pdfcpu/font"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/primitives"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -138,7 +139,7 @@ func fullyQualifiedFieldName(xRefTable *model.XRefTable, indRef types.IndirectRe
 
 	pIndRef := d.IndirectRefEntry("Parent")
 	if pIndRef == nil {
-		for i := 0; i < len(fields); i++ {
+		for i := range fields {
 			if ir, ok := fields[i].(types.IndirectRef); ok && ir == indRef {
 				*id = thisID
 				*name = thisName
@@ -320,13 +321,7 @@ func collectRadioButtonGroupOptions(xRefTable *model.XRefTable, d types.Dict) ([
 				return nil, err
 			}
 			if k != "Off" {
-				found := false
-				for _, opt := range opts {
-					if opt == k {
-						found = true
-						break
-					}
-				}
+				found := slices.Contains(opts, k)
 				if !found {
 					opts = append(opts, k)
 				}

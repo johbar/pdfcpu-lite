@@ -31,7 +31,7 @@ func compare(t *testing.T, a, b []byte) {
 		return
 	}
 
-	for i := 0; i < len(a); i++ {
+	for i := range a {
 		if a[i] != b[i] {
 			t.Errorf("mismatch at %d(0x%02x), 0x%02x != 0x%02x\n", i, i, a[i], b[i])
 			t.Logf("a:\n%s\n", hex.Dump(a))

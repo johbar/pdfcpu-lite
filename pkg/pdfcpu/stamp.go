@@ -27,16 +27,16 @@ import (
 	"strings"
 	"unicode/utf16"
 
-	"github.com/pdfcpu/pdfcpu/pkg/filter"
-	"github.com/pdfcpu/pdfcpu/pkg/font"
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/draw"
-	pdffont "github.com/pdfcpu/pdfcpu/pkg/pdfcpu/font"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/format"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/matrix"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/johbar/pdfcpu-lite/pkg/filter"
+	"github.com/johbar/pdfcpu-lite/pkg/font"
+	"github.com/johbar/pdfcpu-lite/pkg/log"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/color"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/draw"
+	pdffont "github.com/johbar/pdfcpu-lite/pkg/pdfcpu/font"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/format"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/matrix"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -1142,7 +1142,7 @@ func updatePageResourcesForWM(ctx *model.Context, resDict types.Dict, wm model.W
 		resDict.Insert("ExtGState", types.Dict(map[string]types.Object{*gsID: *wm.ExtGState}))
 	} else {
 		d, _ := ctx.DereferenceDict(o)
-		for i := 0; i < 10000000; i++ {
+		for i := range 10000000 {
 			*gsID = "GS" + strconv.Itoa(i)
 			if _, found := d.Find(*gsID); !found {
 				break
@@ -1156,7 +1156,7 @@ func updatePageResourcesForWM(ctx *model.Context, resDict types.Dict, wm model.W
 		resDict.Insert("XObject", types.Dict(map[string]types.Object{*xoID: *wm.Form}))
 	} else {
 		d, _ := ctx.DereferenceDict(o)
-		for i := 0; i < 10000000; i++ {
+		for i := range 10000000 {
 			*xoID = "Fm" + strconv.Itoa(i)
 			if _, found := d.Find(*xoID); !found {
 				break

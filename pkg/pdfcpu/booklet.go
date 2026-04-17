@@ -24,9 +24,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/draw"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/draw"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -405,7 +405,7 @@ func GetBookletOrdering(pages types.IntSet, nup *model.NUp) []model.BookletPage 
 		// folioSize is the number of sheets - each "folio" has two sides and two pages per side
 		nPagesPerSignature := nup.FolioSize * 4
 		nSignaturesInBooklet := int(math.Ceil(float64(pageCount) / float64(nPagesPerSignature)))
-		for j := 0; j < nSignaturesInBooklet; j++ {
+		for j := range nSignaturesInBooklet {
 			start := j * nPagesPerSignature
 			stop := (j + 1) * nPagesPerSignature
 			if stop > len(pageNumbers) {
@@ -444,7 +444,7 @@ func getBookletPageOrdering(nup *model.NUp, pageNumbers []int, pageCount int) []
 		pageNumberFn = nupPerfectBound
 	}
 
-	for i := 0; i < pageCount; i++ {
+	for i := range pageCount {
 		pageNr, rotate := pageNumberFn(i, pageCount, pageNumbers, nup)
 		bookletPages[i].Number = pageNr
 		bookletPages[i].Rotate = rotate

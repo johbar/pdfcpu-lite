@@ -24,13 +24,13 @@ import (
 	"sort"
 	"unicode/utf8"
 
-	"github.com/pdfcpu/pdfcpu/pkg/font"
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/draw"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/johbar/pdfcpu-lite/pkg/font"
+	"github.com/johbar/pdfcpu-lite/pkg/log"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/color"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/draw"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -109,7 +109,7 @@ func columnsLabel(xRefTable *model.XRefTable, td model.TextDescriptor, baseFontN
 
 	td.FontName, td.FontKey = baseFontName, baseFontKey
 
-	for i := 0; i < 256; i++ {
+	for i := range 256 {
 		s := fmt.Sprintf("#%02X", i)
 		td.X, td.Y, td.Text, td.FontSize = float64(70+i*30), y, s, 14
 		td.StrokeCol, td.FillCol = color.Black, color.SimpleColor{B: .8}
@@ -159,12 +159,12 @@ func writeUserFontDemoContent(xRefTable *model.XRefTable, p model.Page, fontName
 
 	columnsLabel(xRefTable, td, baseFontName, baseFontKey, p.Buf, p.MediaBox, true)
 	base := rune(plane * 0x10000)
-	for j := 0; j < 256; j++ {
+	for j := range 256 {
 		rowLabel(xRefTable, j, td, baseFontName, baseFontKey, p.Buf, p.MediaBox, true)
 		buf := make([]byte, 4)
 		td.StrokeCol, td.FillCol = color.Black, color.Black
 		td.FontName, td.FontKey, td.FontSize = fontName, fontKey, fontSize-2
-		for i := 0; i < 256; i++ {
+		for i := range 256 {
 			r := base + rune(j*256+i)
 			s = " "
 			if !surrogate(r) {

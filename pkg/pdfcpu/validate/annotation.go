@@ -18,13 +18,14 @@ package validate
 
 import (
 	"fmt"
+	"slices"
 	"strconv"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/johbar/pdfcpu-lite/pkg/log"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -686,12 +687,7 @@ func validateAnnotationDictPolyLine(xRefTable *model.XRefTable, d types.Dict, di
 
 	// IC, optional, array of numbers [0.0 .. 1.0], len:1,3,4
 	ensureArrayLength := func(a types.Array, lengths ...int) bool {
-		for _, length := range lengths {
-			if len(a) == length {
-				return true
-			}
-		}
-		return false
+		return slices.Contains(lengths, len(a))
 	}
 	if _, err := validateNumberArrayEntry(xRefTable, d, dictName, "IC", OPTIONAL, model.V14, func(a types.Array) bool { return ensureArrayLength(a, 1, 3, 4) }); err != nil {
 		return err
@@ -1413,7 +1409,7 @@ func validateDashPatternArray(xRefTable *model.XRefTable, arr types.Array) bool 
 	}
 
 	all0 := true
-	for j := 0; j < len(arr); j++ {
+	for j := range arr {
 		o, err := xRefTable.Dereference(arr[j])
 		if err != nil || o == nil {
 			return false
@@ -1465,7 +1461,7 @@ func validateBorderArray(xRefTable *model.XRefTable, a types.Array) bool {
 		return false
 	}
 
-	for i := 0; i < len(a); i++ {
+	for i := range a {
 
 		if i == 3 {
 			// validate dash pattern array

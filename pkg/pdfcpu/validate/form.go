@@ -21,8 +21,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -133,7 +133,7 @@ func validateDA(s string) bool {
 	// A sequence of valid page-content graphics or text state operators.
 	// At a minimum, the string shall include a Tf (text font) operator along with its two operands, font and size.
 	da := strings.Fields(s)
-	for i := 0; i < len(da); i++ {
+	for i := range da {
 		if da[i] == "Tf" {
 			if i < 2 {
 				return false
@@ -181,7 +181,7 @@ func validateDARelaxed(s string) bool {
 	// A sequence of valid page-content graphics or text state operators.
 	// At a minimum, the string shall include a Tf (text font) operator along with its two operands, font and size.
 	da := strings.Fields(s)
-	for i := 0; i < len(da); i++ {
+	for i := range da {
 		if da[i] == "Tf" {
 			if i < 2 {
 				return false

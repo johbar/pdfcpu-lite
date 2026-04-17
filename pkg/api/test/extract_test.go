@@ -24,9 +24,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/pdfcpu/pdfcpu/pkg/api"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/johbar/pdfcpu-lite/pkg/api"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 )
 
 func TestExtractImages(t *testing.T) {
@@ -79,7 +79,7 @@ func compare(t *testing.T, fn1, fn2 string) {
 		return
 	}
 
-	for i := 0; i < len(bb1); i++ {
+	for i := range bb1 {
 		if bb1[i] != bb2[i] {
 			t.Errorf("%s <-> %s: mismatch at %d, 0x%02x != 0x%02x\n", fn1, fn2, i, bb1[i], bb2[i])
 			return

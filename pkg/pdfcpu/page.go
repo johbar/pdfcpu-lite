@@ -20,8 +20,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -106,9 +106,9 @@ func ParsePageConfiguration(s string, u types.DisplayUnit) (*PageConfiguration, 
 	pageConf := DefaultPageConfiguration()
 	pageConf.InpUnit = u
 
-	ss := strings.Split(s, ",")
+	ss := strings.SplitSeq(s, ",")
 
-	for _, s := range ss {
+	for s := range ss {
 
 		ss1 := strings.Split(s, ":")
 		if len(ss1) != 2 {

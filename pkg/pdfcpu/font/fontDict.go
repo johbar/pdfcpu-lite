@@ -29,10 +29,10 @@ import (
 	"time"
 	"unicode/utf16"
 
-	"github.com/pdfcpu/pdfcpu/pkg/font"
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/johbar/pdfcpu-lite/pkg/font"
+	"github.com/johbar/pdfcpu-lite/pkg/log"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -508,10 +508,7 @@ func calcWidthArray(xRefTable *model.XRefTable, ttf font.TTFLight, fontName stri
 			if g-g0 > 1 {
 				// switch from non equalW to equalW
 				a = append(a, types.Integer(g0)) // write non-contiguous width block
-				tru := gl - 1
-				if tru < g0 {
-					tru = g0
-				}
+				tru := max(gl-1, g0)
 				a1 := wArr(ttf, g0, tru)
 				a = append(a, a1)
 				g0, w0 = gl, wl
@@ -574,15 +571,12 @@ func bf(b *bytes.Buffer, ttf font.TTFLight, usedGIDs map[uint16]bool, subFont bo
 	}
 	sort.Ints(gids)
 
-	c := 100
-	if len(gids) < 100 {
-		c = len(gids)
-	}
+	c := min(len(gids), 100)
 	l := c
 
 	fmt.Fprintf(b, "%d beginbfchar\n", c)
 	j := 1
-	for i := 0; i < l; i++ {
+	for i := range l {
 		gid := gids[i]
 		fmt.Fprintf(b, "<%04X> <", gid)
 		u := ttf.ToUnicode[uint16(gid)]
@@ -697,7 +691,7 @@ func usedGIDsFromCMap(cMap string) ([]uint16, error) {
 		lastBlock = i < 100
 
 		// scan i lines:
-		for j := 0; j < i; j++ {
+		for range i {
 			scanner.Scan()
 			s1 := scanner.Text()
 			if s1[0] != '<' {

@@ -21,7 +21,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -155,7 +155,7 @@ func ParseBoxList(s string) (*PageBoundaries, error) {
 		return nil, nil
 	}
 	pb := &PageBoundaries{}
-	for _, s := range strings.Split(s, ",") {
+	for s := range strings.SplitSeq(s, ",") {
 		if err := pb.ResolveBox(strings.TrimSpace(s)); err != nil {
 			return nil, err
 		}
@@ -206,7 +206,7 @@ func ParsePageBoundaries(s string, unit types.DisplayUnit) (*PageBoundaries, err
 		return nil, errors.New("pdfcpu: missing page boundaries in the form of box definitions/assignments")
 	}
 	pb := &PageBoundaries{}
-	for _, s := range strings.Split(s, ",") {
+	for s := range strings.SplitSeq(s, ",") {
 
 		s1 := strings.Split(s, ":")
 		if len(s1) != 2 {

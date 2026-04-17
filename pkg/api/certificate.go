@@ -19,7 +19,7 @@ package api
 import (
 	"fmt"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu"
 )
 
 // ImportCertificates validates and installs found certificate files to pdfcpu config dir.

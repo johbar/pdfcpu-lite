@@ -22,10 +22,10 @@ import (
 	"io"
 	"unicode/utf8"
 
-	"github.com/pdfcpu/pdfcpu/pkg/font"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/johbar/pdfcpu-lite/pkg/font"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/color"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -441,7 +441,7 @@ func (lb *ListBox) renderN(xRefTable *model.XRefTable) ([]byte, error) {
 
 	f, ind := lb.Font, lb.Ind
 	selCol := color.SimpleColor{R: 0.600006, G: 0.756866, B: 0.854904}
-	for i := 0; i < len(ind); i++ {
+	for i := range ind {
 		j := ind[i].(types.Integer).Value()
 		selectItem(buf, j, w, h, f.Name, f.Size, boWidth, selCol)
 	}
@@ -454,7 +454,7 @@ func (lb *ListBox) renderN(xRefTable *model.XRefTable) ([]byte, error) {
 	lh := font.LineHeight(f.Name, f.Size)
 
 	opts := lb.Options
-	for i := 0; i < len(opts); i++ {
+	for i := range opts {
 		s := opts[i]
 		if font.IsCoreFont(f.Name) && utf8.ValidString(s) {
 			s = model.DecodeUTF8ToByte(s)

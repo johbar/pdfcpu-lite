@@ -18,10 +18,11 @@ package model
 
 import (
 	"fmt"
+	"slices"
 	"sort"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 )
 
 // FontObject represents a font used in a PDF file.
@@ -37,10 +38,8 @@ type FontObject struct {
 
 // AddResourceName adds a resourceName referring to this font.
 func (fo *FontObject) AddResourceName(resourceName string) {
-	for _, resName := range fo.ResourceNames {
-		if resName == resourceName {
-			return
-		}
+	if slices.Contains(fo.ResourceNames, resourceName) {
+		return
 	}
 	fo.ResourceNames = append(fo.ResourceNames, resourceName)
 }

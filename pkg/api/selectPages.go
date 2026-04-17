@@ -23,8 +23,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/johbar/pdfcpu-lite/pkg/log"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -691,7 +691,7 @@ func PagesForPageCollection(pageCount int, pageSelection []string) ([]int, error
 // PagesForPageRange returns a slice of page numbers for a page range.
 func PagesForPageRange(from, thru int) []int {
 	s := make([]int, thru-from+1)
-	for i := 0; i < len(s); i++ {
+	for i := range s {
 		s[i] = from + i
 	}
 	return s

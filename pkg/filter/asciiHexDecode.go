@@ -59,7 +59,7 @@ func (f asciiHexDecode) DecodeLength(r io.Reader, maxLen int64) (io.Reader, erro
 	var p []byte
 
 	// Remove any white space and cut off on eod
-	for i := 0; i < len(bb); i++ {
+	for i := range bb {
 		if bb[i] == eodHexDecode {
 			break
 		}

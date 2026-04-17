@@ -25,11 +25,11 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/pdfcpu/pdfcpu/pkg/font"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/draw"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/matrix"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/johbar/pdfcpu-lite/pkg/font"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/color"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/draw"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/matrix"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 )
 
 // TextDescriptor contains all attributes needed for rendering a text column in PDF user space.
@@ -257,7 +257,7 @@ func prepJustifiedLine(xRefTable *XRefTable, lines *[]string, strbuf []string, s
 	sb.WriteString("[")
 	wc := len(strbuf)
 	dx := font.GlyphSpaceUnits(float64((w-strWidth))/float64(wc-1), fontSize)
-	for i := 0; i < wc; i++ {
+	for i := range wc {
 		j := i
 		if rtl {
 			j = wc - 1 - i
@@ -379,7 +379,7 @@ func preRenderJustifiedText(
 	l := []string{}
 	for i, s := range *lines {
 		linefeeds := prepJustifiedString(&l, s, ww, td.FontName, fontSize, false, td.ParIndent, td.Embed, td.RTL)
-		for j := 0; j < linefeeds; j++ {
+		for range linefeeds {
 			l = append(l, "")
 		}
 		isLastLine := i == len(*lines)-1
