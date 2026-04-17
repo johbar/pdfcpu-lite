@@ -291,13 +291,10 @@ var ConfigPath string = "default"
 
 var loadedDefaultConfig *Configuration
 
-//go:embed resources/config.yml
 var configFileBytes []byte
 
-//go:embed resources/Roboto-Regular.ttf
 var robotoFontFileBytes []byte
 
-//go:embed resources/certs/*.p7c
 var certFilesEU embed.FS
 
 func ensureConfigFileAt(path string, override bool) error {
