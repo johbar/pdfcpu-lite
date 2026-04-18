@@ -19,10 +19,11 @@ package filter
 
 import (
 	"bytes"
+	"errors"
+	"fmt"
 	"io"
 
 	"github.com/johbar/pdfcpu-lite/pkg/log"
-	"github.com/pkg/errors"
 )
 
 // PDF defines the following filters. See also 7.4 in the PDF spec.
@@ -88,7 +89,7 @@ func NewFilter(filterName string, parms map[string]int) (filter Filter, err erro
 		err = ErrUnsupportedFilter
 
 	default:
-		err = errors.Errorf("Invalid filter: <%s>", filterName)
+		err = fmt.Errorf("Invalid filter: <%s>", filterName)
 	}
 
 	return filter, err

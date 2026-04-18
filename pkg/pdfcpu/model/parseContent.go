@@ -17,12 +17,12 @@ limitations under the License.
 package model
 
 import (
+	"errors"
 	"strings"
 	"unicode"
 
 	"github.com/johbar/pdfcpu-lite/pkg/log"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
-	"github.com/pkg/errors"
 )
 
 var (

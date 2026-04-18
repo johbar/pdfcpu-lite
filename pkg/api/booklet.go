@@ -17,6 +17,7 @@
 package api
 
 import (
+	"errors"
 	"io"
 	"os"
 
@@ -24,7 +25,6 @@ import (
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
-	"github.com/pkg/errors"
 )
 
 // BookletFromImages creates a booklet from images.

@@ -17,13 +17,14 @@
 package api
 
 import (
+	"errors"
+	"fmt"
 	"io"
 	"os"
 
 	"github.com/johbar/pdfcpu-lite/pkg/log"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
-	"github.com/pkg/errors"
 )
 
 // Optimize reads a PDF stream from rs and writes the optimized PDF stream to w.
@@ -53,7 +54,7 @@ func Optimize(rs io.ReadSeeker, w io.Writer, conf *model.Configuration) error {
 	if ctx.StatsFileName != "" {
 		err = pdfcpu.AppendStatsFile(ctx)
 		if err != nil {
-			return errors.Wrap(err, "Write stats failed.")
+			return fmt.Errorf("%s: %w", "Write stats failed.", err)
 		}
 	}
 

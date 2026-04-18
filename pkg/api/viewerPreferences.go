@@ -19,13 +19,13 @@ package api
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"io"
 	"os"
 	"time"
 
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
-	"github.com/pkg/errors"
 )
 
 var ErrNoOp = errors.New("pdfcpu: no operation")

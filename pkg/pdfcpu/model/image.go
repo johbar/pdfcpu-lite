@@ -19,6 +19,7 @@ package model
 import (
 	"bytes"
 	"encoding/binary"
+	"errors"
 	"fmt"
 	"image"
 	"image/color"
@@ -36,7 +37,6 @@ import (
 
 	"github.com/johbar/pdfcpu-lite/pkg/filter"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
-	"github.com/pkg/errors"
 	_ "golang.org/x/image/webp"
 )
 
@@ -565,7 +565,7 @@ func encodeJPEG(img image.Image) ([]byte, string, error) {
 	case *image.CMYK:
 		cs = DeviceCMYKCS
 	default:
-		return nil, "", errors.Errorf("pdfcpu: unexpected color model for JPEG: %s", cs)
+		return nil, "", fmt.Errorf("pdfcpu: unexpected color model for JPEG: %s", cs)
 	}
 	var buf bytes.Buffer
 	err := jpeg.Encode(&buf, img, nil)
@@ -679,7 +679,7 @@ func createImageBuf(xRefTable *XRefTable, img image.Image, imgA image.Image, for
 		return handleCMYKImage(im)
 
 	default:
-		return nil, nil, 0, "", errors.Errorf("pdfcpu: unsupported image type: %T", im)
+		return nil, nil, 0, "", fmt.Errorf("pdfcpu: unsupported image type: %T", im)
 	}
 }
 

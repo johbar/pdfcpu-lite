@@ -17,11 +17,11 @@
 package api
 
 import (
+	"errors"
 	"io"
 	"os"
 
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
-	"github.com/pkg/errors"
 )
 
 // Encrypt reads a PDF stream from rs and writes the encrypted PDF stream to w.

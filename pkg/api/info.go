@@ -17,11 +17,11 @@
 package api
 
 import (
+	"errors"
 	"io"
 
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
-	"github.com/pkg/errors"
 )
 
 // PDFInfo returns information about rs.

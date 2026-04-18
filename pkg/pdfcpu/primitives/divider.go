@@ -17,11 +17,12 @@
 package primitives
 
 import (
+	"fmt"
+
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/color"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/draw"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
-	"github.com/pkg/errors"
 )
 
 // Divider is a positioned separator between two regions from p to q.
@@ -36,10 +37,10 @@ type Divider struct {
 
 func (d *Divider) validate() error {
 	if d.Pos <= 0 || d.Pos >= 1 {
-		return errors.Errorf("pdfcpu: div at(%.1f) needs to be between 0 and 1", d.Pos)
+		return fmt.Errorf("pdfcpu: div at(%.1f) needs to be between 0 and 1", d.Pos)
 	}
 	if d.Width < 0 || d.Width > 10 {
-		return errors.Errorf("pdfcpu: div width(%d) needs to be between 0 and 10", d.Width)
+		return fmt.Errorf("pdfcpu: div width(%d) needs to be between 0 and 10", d.Width)
 	}
 	if d.Color != "" {
 		sc, err := d.pdf.parseColor(d.Color)

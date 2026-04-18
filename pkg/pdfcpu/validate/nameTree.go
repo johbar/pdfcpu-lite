@@ -17,9 +17,10 @@ limitations under the License.
 package validate
 
 import (
+	"errors"
+	"fmt"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
-	"github.com/pkg/errors"
 )
 
 func validateDestsNameTreeValue(xRefTable *model.XRefTable, o types.Object, sinceVersion model.Version) error {
@@ -545,7 +546,7 @@ func validateIDTreeValue(xRefTable *model.XRefTable, o types.Object, sinceVersio
 			return err
 		}
 	} else {
-		return errors.Errorf("pdfcpu: validateIDTreeValue: invalid dictType %s (should be \"StructElem\")\n", *dictType)
+		return fmt.Errorf("pdfcpu: validateIDTreeValue: invalid dictType %s (should be \"StructElem\")\n", *dictType)
 	}
 
 	return nil
@@ -584,7 +585,7 @@ func validateNameTreeValue(name string, xRefTable *model.XRefTable, o types.Obje
 		}
 	}
 
-	return errors.Errorf("pdfcpu: validateNameTreeDictNamesEntry: unknown dict name: %s", name)
+	return fmt.Errorf("pdfcpu: validateNameTreeDictNamesEntry: unknown dict name: %s", name)
 }
 
 func validateNameTreeDictNamesEntry(xRefTable *model.XRefTable, d types.Dict, name string, node *model.Node) (string, string, error) {
@@ -594,7 +595,7 @@ func validateNameTreeDictNamesEntry(xRefTable *model.XRefTable, d types.Dict, na
 	// Names: array of the form [key1 value1 key2 value2 ... key n value n]
 	o, found := d.Find("Names")
 	if !found {
-		return "", "", errors.Errorf("pdfcpu: validateNameTreeDictNamesEntry: missing \"Kids\" or \"Names\" entry.")
+		return "", "", fmt.Errorf("pdfcpu: validateNameTreeDictNamesEntry: missing \"Kids\" or \"Names\" entry.")
 	}
 
 	a, err := xRefTable.DereferenceArray(o)
@@ -602,12 +603,12 @@ func validateNameTreeDictNamesEntry(xRefTable *model.XRefTable, d types.Dict, na
 		return "", "", err
 	}
 	if a == nil {
-		return "", "", errors.Errorf("pdfcpu: validateNameTreeDictNamesEntry: missing \"Names\" array.")
+		return "", "", fmt.Errorf("pdfcpu: validateNameTreeDictNamesEntry: missing \"Names\" array.")
 	}
 
 	// arr length needs to be even because of contained key value pairs.
 	if len(a)%2 == 1 {
-		return "", "", errors.Errorf("pdfcpu: validateNameTreeDictNamesEntry: Names array entry length needs to be even, length=%d\n", len(a))
+		return "", "", fmt.Errorf("pdfcpu: validateNameTreeDictNamesEntry: Names array entry length needs to be even, length=%d\n", len(a))
 	}
 
 	var key, firstKey, lastKey string
@@ -693,7 +694,7 @@ func validateNameTreeDictLimitsEntry(xRefTable *model.XRefTable, d types.Dict, f
 	}
 
 	if firstKey != fkv || lastKey != lkv {
-		return errors.Errorf("pdfcpu: validateNameTreeDictLimitsEntry: invalid leaf node (firstKey: %s vs %s) (lastKey: %s vs %s)\n", firstKey, fkv, lastKey, lkv)
+		return fmt.Errorf("pdfcpu: validateNameTreeDictLimitsEntry: invalid leaf node (firstKey: %s vs %s) (lastKey: %s vs %s)\n", firstKey, fkv, lastKey, lkv)
 	}
 
 	return nil

@@ -17,12 +17,12 @@
 package api
 
 import (
+	"errors"
 	"io"
 	"os"
 
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
-	"github.com/pkg/errors"
 )
 
 var (

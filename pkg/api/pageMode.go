@@ -17,12 +17,12 @@
 package api
 
 import (
+	"errors"
 	"io"
 	"os"
 
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
-	"github.com/pkg/errors"
 )
 
 // PageMode returns rs's page mode.

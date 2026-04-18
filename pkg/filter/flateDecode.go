@@ -19,12 +19,13 @@ package filter
 import (
 	"bytes"
 	"compress/zlib"
+	"errors"
+	"fmt"
 	"io"
 	"slices"
 	"strings"
 
 	"github.com/johbar/pdfcpu-lite/pkg/log"
-	"github.com/pkg/errors"
 )
 
 // Portions of this code are based on ideas of image/png: reader.go:readImagePass
@@ -246,7 +247,7 @@ func (f flate) parameters() (colors, bpc, columns int, err error) {
 	if !found {
 		colors = 1
 	} else if colors == 0 {
-		return 0, 0, 0, errors.Errorf("pdfcpu: filter FlateDecode: \"Colors\" must be > 0")
+		return 0, 0, 0, fmt.Errorf("pdfcpu: filter FlateDecode: \"Colors\" must be > 0")
 	}
 
 	// BitsPerComponent, int
@@ -257,7 +258,7 @@ func (f flate) parameters() (colors, bpc, columns int, err error) {
 	if !found {
 		bpc = 8
 	} else if !intMemberOf(bpc, []int{1, 2, 4, 8, 16}) {
-		return 0, 0, 0, errors.Errorf("pdfcpu: filter FlateDecode: Unexpected \"BitsPerComponent\": %d", bpc)
+		return 0, 0, 0, fmt.Errorf("pdfcpu: filter FlateDecode: Unexpected \"BitsPerComponent\": %d", bpc)
 	}
 
 	// Columns, int
@@ -302,7 +303,7 @@ func (f flate) decodePostProcess(r io.Reader, maxLen int64) (io.Reader, error) {
 			PredictorPaeth,
 			PredictorOptimum,
 		}) {
-		return nil, errors.Errorf("pdfcpu: filter FlateDecode: undefined \"Predictor\" %d", predictor)
+		return nil, fmt.Errorf("pdfcpu: filter FlateDecode: undefined \"Predictor\" %d", predictor)
 	}
 
 	colors, bpc, columns, err := f.parameters()
@@ -341,7 +342,7 @@ func (f flate) decodePostProcess(r io.Reader, maxLen int64) (io.Reader, error) {
 		}
 
 		if n != m {
-			return nil, errors.Errorf("pdfcpu: filter FlateDecode: read error, expected %d bytes, got: %d", m, n)
+			return nil, fmt.Errorf("pdfcpu: filter FlateDecode: read error, expected %d bytes, got: %d", m, n)
 		}
 
 		if err := process(&b, pr, cr, predictor, colors, bytesPerPixel); err != nil {

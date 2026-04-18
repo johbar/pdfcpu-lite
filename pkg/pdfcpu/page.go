@@ -17,12 +17,12 @@ limitations under the License.
 package pdfcpu
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
-	"github.com/pkg/errors"
 )
 
 type pagesParamMap map[string]func(string, *PageConfiguration) error
@@ -39,13 +39,13 @@ func (m pagesParamMap) Handle(paramPrefix, paramValueStr string, pageConf *PageC
 			continue
 		}
 		if len(param) > 0 {
-			return errors.Errorf("pdfcpu: ambiguous parameter prefix \"%s\"", paramPrefix)
+			return fmt.Errorf("pdfcpu: ambiguous parameter prefix \"%s\"", paramPrefix)
 		}
 		param = k
 	}
 
 	if param == "" {
-		return errors.Errorf("pdfcpu: unknown parameter prefix \"%s\"", paramPrefix)
+		return fmt.Errorf("pdfcpu: unknown parameter prefix \"%s\"", paramPrefix)
 	}
 
 	return m[param](paramValueStr, pageConf)
@@ -155,7 +155,7 @@ func addPages(
 			return err
 		}
 		if d == nil {
-			return errors.Errorf("pdfcpu: unknown page number: %d\n", i)
+			return fmt.Errorf("pdfcpu: unknown page number: %d\n", i)
 		}
 
 		obj, err := migrateIndRef(pageIndRef, ctxSrc, ctxDest, migrated)

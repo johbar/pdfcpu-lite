@@ -17,13 +17,13 @@ limitations under the License.
 package api
 
 import (
+	"errors"
 	"io"
 	"os"
 
 	"github.com/johbar/pdfcpu-lite/pkg/log"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
-	"github.com/pkg/errors"
 )
 
 // PageBoundariesFromBoxList parses a list of box types.

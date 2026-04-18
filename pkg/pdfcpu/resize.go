@@ -18,6 +18,7 @@ package pdfcpu
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"math"
 	"strings"
@@ -28,7 +29,6 @@ import (
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/matrix"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
-	"github.com/pkg/errors"
 )
 
 // ParseResizeConfig parses a Resize command string into an internal structure.

@@ -19,6 +19,8 @@ package pdfcpu
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
+	"fmt"
 	"io"
 	"path/filepath"
 	"strings"
@@ -28,7 +30,6 @@ import (
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/color"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
-	"github.com/pkg/errors"
 )
 
 var (
@@ -132,7 +133,7 @@ func destArray(ctx *model.Context, dest types.Object) (types.Array, error) {
 	case types.Array:
 		return dest, nil
 	}
-	return nil, errors.Errorf("unable to resolve destination array %v\n", dest)
+	return nil, fmt.Errorf("unable to resolve destination array %v\n", dest)
 }
 
 // PageNrFromDestination returns the page number of a destination.
@@ -150,7 +151,7 @@ func PageNrFromDestination(ctx *model.Context, dest types.Object) (int, error) {
 		return ctx.PageNumber(ir.ObjectNumber.Value())
 	}
 
-	return 0, errors.Errorf("unable to extract dest pageNr of %v\n", dest)
+	return 0, fmt.Errorf("unable to extract dest pageNr of %v\n", dest)
 }
 
 func title(ctx *model.Context, d types.Dict) (string, error) {
@@ -625,7 +626,7 @@ func addBookmarkTree(ctx *model.Context, bmTree *BookmarkTree, replace bool) err
 func parseBookmarksFromJSON(bb []byte) (*BookmarkTree, error) {
 
 	if !json.Valid(bb) {
-		return nil, errors.Errorf("pdfcpu: invalid JSON encoding detected.")
+		return nil, fmt.Errorf("pdfcpu: invalid JSON encoding detected.")
 	}
 
 	bmTree := &BookmarkTree{}

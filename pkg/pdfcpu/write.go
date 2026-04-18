@@ -20,6 +20,7 @@ import (
 	"bufio"
 	"bytes"
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -30,7 +31,6 @@ import (
 	"github.com/johbar/pdfcpu-lite/pkg/log"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
-	"github.com/pkg/errors"
 )
 
 func writeObjects(ctx *model.Context) error {
@@ -72,7 +72,7 @@ func WriteContext(ctx *model.Context) (err error) {
 
 		file, err := os.Create(fileName)
 		if err != nil {
-			return errors.Wrapf(err, "can't create %s\n%s", fileName, err)
+			return fmt.Errorf("can't create %s\\n%s: %w", fileName, err, err)
 		}
 
 		ctx.Write.Writer = bufio.NewWriter(file)
@@ -349,7 +349,7 @@ func writeRootObject(ctx *model.Context) error {
 	}
 
 	if d == nil {
-		return errors.Errorf("pdfcpu: writeRootObject: unable to dereference root dict")
+		return fmt.Errorf("pdfcpu: writeRootObject: unable to dereference root dict")
 	}
 
 	dictName := "rootDict"
@@ -739,7 +739,7 @@ func createXRefStream(ctx *model.Context, i1, i2, i3 int, objNrs []int) ([]byte,
 
 			off, found := ctx.Write.Table[j]
 			if !found {
-				return nil, nil, errors.Errorf("pdfcpu: createXRefStream: missing write offset for obj #%d\n", i)
+				return nil, nil, fmt.Errorf("pdfcpu: createXRefStream: missing write offset for obj #%d\n", i)
 			}
 
 			// in use, uncompressed

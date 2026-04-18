@@ -17,13 +17,13 @@ limitations under the License.
 package validate
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
 	"strings"
 
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
-	"github.com/pkg/errors"
 )
 
 // func validateSignatureDict(xRefTable *model.XRefTable, o pdf.Object) error {

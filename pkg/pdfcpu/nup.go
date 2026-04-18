@@ -18,6 +18,7 @@ package pdfcpu
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -31,7 +32,6 @@ import (
 	pdffont "github.com/johbar/pdfcpu-lite/pkg/pdfcpu/font"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
-	"github.com/pkg/errors"
 )
 
 var (
@@ -84,13 +84,13 @@ func (m nUpParamMap) Handle(paramPrefix, paramValueStr string, nup *model.NUp) e
 			continue
 		}
 		if len(param) > 0 {
-			return errors.Errorf("pdfcpu: ambiguous parameter prefix \"%s\"", paramPrefix)
+			return fmt.Errorf("pdfcpu: ambiguous parameter prefix \"%s\"", paramPrefix)
 		}
 		param = k
 	}
 
 	if param == "" {
-		return errors.Errorf("pdfcpu: ambiguous parameter prefix \"%s\"", paramPrefix)
+		return fmt.Errorf("pdfcpu: ambiguous parameter prefix \"%s\"", paramPrefix)
 	}
 
 	return m[param](paramValueStr, nup)
@@ -126,7 +126,7 @@ func parseOrientation(s string, nup *model.NUp) error {
 	case "dl":
 		nup.Orient = model.DownLeft
 	default:
-		return errors.Errorf("pdfcpu: unknown nUp orientation: %s", s)
+		return fmt.Errorf("pdfcpu: unknown nUp orientation: %s", s)
 	}
 
 	return nil
@@ -170,7 +170,7 @@ func parseElementBorderOnCropbox(s string, nup *model.NUp) error {
 
 	b := strings.Split(s, " ")
 	if len(b) == 0 || len(b) > 5 {
-		return errors.Errorf("pdfcpu: borders: need 1,2,3,4 or 5 int values, %s\n", s)
+		return fmt.Errorf("pdfcpu: borders: need 1,2,3,4 or 5 int values, %s\n", s)
 	}
 
 	switch b[0] {
@@ -239,7 +239,7 @@ func parseBookletMultifolio(s string, nup *model.NUp) error {
 func parseBookletFolioSize(s string, nup *model.NUp) error {
 	i, err := strconv.Atoi(s)
 	if err != nil {
-		return errors.Errorf("pdfcpu: illegal folio size: must be an numeric value, %s\n", s)
+		return fmt.Errorf("pdfcpu: illegal folio size: must be an numeric value, %s\n", s)
 	}
 
 	nup.FolioSize = i
@@ -339,7 +339,7 @@ func PDFNUpConfig(val int, desc string, conf *model.Configuration) (*model.NUp, 
 		for i, v := range NUpValues {
 			ss[i] = strconv.Itoa(v)
 		}
-		return nil, errors.Errorf("pdfcpu: n must be one of %s", strings.Join(ss, ", "))
+		return nil, fmt.Errorf("pdfcpu: n must be one of %s", strings.Join(ss, ", "))
 	}
 	return nup, ParseNUpValue(val, nup)
 }
@@ -775,7 +775,7 @@ func NUpFromPDF(ctx *model.Context, selectedPages types.IntSet, nup *model.NUp) 
 			return err
 		}
 		if d == nil {
-			return errors.Errorf("unknown page number: %d\n", 1)
+			return fmt.Errorf("unknown page number: %d\n", 1)
 		}
 
 		cropBox := inhPAttrs.MediaBox

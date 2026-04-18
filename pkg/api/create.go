@@ -17,6 +17,7 @@
 package api
 
 import (
+	"errors"
 	"io"
 	"os"
 
@@ -25,7 +26,6 @@ import (
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/create"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
-	"github.com/pkg/errors"
 )
 
 // CreatePDFFile creates a PDF file for an xRefTable and writes it to outFile.

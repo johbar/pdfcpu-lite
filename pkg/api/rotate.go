@@ -17,12 +17,12 @@
 package api
 
 import (
+	"errors"
 	"io"
 	"os"
 
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
-	"github.com/pkg/errors"
 )
 
 // Rotate rotates selected pages of rs clockwise by rotation degrees and writes the result to w.

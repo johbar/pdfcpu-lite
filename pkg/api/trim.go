@@ -17,6 +17,7 @@
 package api
 
 import (
+	"errors"
 	"io"
 	"os"
 	"sort"
@@ -24,7 +25,6 @@ import (
 	"github.com/johbar/pdfcpu-lite/pkg/log"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
-	"github.com/pkg/errors"
 )
 
 // Trim generates a trimmed version of rs

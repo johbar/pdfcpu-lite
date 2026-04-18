@@ -17,6 +17,7 @@
 package api
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -25,7 +26,6 @@ import (
 	"github.com/johbar/pdfcpu-lite/pkg/log"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
-	"github.com/pkg/errors"
 )
 
 // Validate validates a PDF stream read from rs.
@@ -54,7 +54,7 @@ func Validate(rs io.ReadSeeker, conf *model.Configuration) error {
 		if conf.ValidationMode == model.ValidationStrict {
 			s = " (try -mode=relaxed)"
 		}
-		err = errors.Wrap(err, fmt.Sprintf("validation error (obj#:%d)%s", ctx.CurObj, s))
+		err = fmt.Errorf("%s: %w", fmt.Sprintf("validation error (obj#:%d)%s", ctx.CurObj, s), err)
 	}
 
 	if err == nil {
@@ -149,7 +149,7 @@ func DumpObject(rs io.ReadSeeker, mode, objNr int, conf *model.Configuration) er
 		if conf.ValidationMode == model.ValidationStrict {
 			s = " (try -mode=relaxed)"
 		}
-		return errors.Wrap(err, fmt.Sprintf("validation error (obj#:%d)%s", ctx.CurObj, s))
+		return fmt.Errorf("%s: %w", fmt.Sprintf("validation error (obj#:%d)%s", ctx.CurObj, s), err)
 	}
 
 	ctx.DumpObject(objNr, mode)

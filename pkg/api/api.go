@@ -35,6 +35,7 @@ package api
 
 import (
 	"bufio"
+	"errors"
 	"io"
 	"os"
 	"sync"
@@ -43,7 +44,6 @@ import (
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/validate"
-	"github.com/pkg/errors"
 )
 
 func logDisclaimerPDF20() {

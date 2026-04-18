@@ -17,6 +17,7 @@ limitations under the License.
 package form
 
 import (
+	"errors"
 	"fmt"
 	"slices"
 	"sort"
@@ -30,7 +31,6 @@ import (
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/primitives"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 	"github.com/mattn/go-runewidth"
-	"github.com/pkg/errors"
 )
 
 // FieldType represents a form field type.
@@ -124,7 +124,7 @@ func fullyQualifiedFieldName(xRefTable *model.XRefTable, indRef types.IndirectRe
 		return false, err
 	}
 	if len(d) == 0 {
-		return false, errors.Errorf("pdfcpu: corrupt field")
+		return false, fmt.Errorf("pdfcpu: corrupt field")
 	}
 
 	thisID := indRef.ObjectNumber.String()
@@ -695,7 +695,7 @@ func collectPageField(
 	if ft == nil {
 		ft = d.NameEntry("FT")
 		if ft == nil {
-			return errors.Errorf("pdfcpu: corrupt form field %s: missing entry \"FT\"\n%s", f.ID, d)
+			return fmt.Errorf("pdfcpu: corrupt form field %s: missing entry \"FT\"\n%s", f.ID, d)
 		}
 	}
 
@@ -1601,7 +1601,7 @@ func resetPageFields(
 		if ft == nil {
 			ft = d.NameEntry("FT")
 			if ft == nil {
-				return errors.Errorf("pdfcpu: corrupt form field %s: missing entry \"FT\"\n%s", fi.id, d)
+				return fmt.Errorf("pdfcpu: corrupt form field %s: missing entry \"FT\"\n%s", fi.id, d)
 			}
 		}
 
@@ -1684,7 +1684,7 @@ func ensureAP(ctx *model.Context, d types.Dict, fi *fieldInfo, fonts map[string]
 	if ft == nil {
 		ft = d.NameEntry("FT")
 		if ft == nil {
-			return errors.Errorf("pdfcpu: corrupt form field %s: missing entry \"FT\"\n%s", fi.id, d)
+			return fmt.Errorf("pdfcpu: corrupt form field %s: missing entry \"FT\"\n%s", fi.id, d)
 		}
 	}
 
@@ -1831,7 +1831,7 @@ func deleteAP(d types.Dict, fi *fieldInfo) error {
 	if ft == nil {
 		ft = d.NameEntry("FT")
 		if ft == nil {
-			return errors.Errorf("pdfcpu: corrupt form field %s: missing entry \"FT\"\n%s", fi.id, d)
+			return fmt.Errorf("pdfcpu: corrupt form field %s: missing entry \"FT\"\n%s", fi.id, d)
 		}
 	}
 	if *ft == "Ch" {

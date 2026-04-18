@@ -19,13 +19,12 @@ package types
 import (
 	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"io"
 
 	"github.com/johbar/pdfcpu-lite/pkg/filter"
 	"github.com/johbar/pdfcpu-lite/pkg/log"
-
-	"github.com/pkg/errors"
 )
 
 // PDFFilter represents a PDF stream filter object.
@@ -427,7 +426,7 @@ func (sd *StreamDict) DecodeLength(maxLen int64) ([]byte, error) {
 // IndexedObject returns the object at given index from a ObjectStreamDict.
 func (osd *ObjectStreamDict) IndexedObject(index int) (Object, error) {
 	if osd.ObjArray == nil || index < 0 || index >= len(osd.ObjArray) {
-		return nil, errors.Errorf("IndexedObject(%d): object not available", index)
+		return nil, fmt.Errorf("IndexedObject(%d): object not available", index)
 	}
 	return osd.ObjArray[index], nil
 }

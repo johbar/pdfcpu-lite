@@ -20,6 +20,7 @@ import (
 	"bytes"
 	"encoding/csv"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -32,7 +33,6 @@ import (
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/form"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
-	"github.com/pkg/errors"
 )
 
 var (
@@ -431,7 +431,7 @@ func validateComboBoxValues(f form.Form) error {
 				if err == nil && i < len(cb.Options) {
 					return nil
 				}
-				return errors.Errorf("pdfcpu: fill field name: \"%s\" unknown value: \"%s\" - options: [%v]\n", cb.Name, cb.Value, strings.Join(cb.Options, ", "))
+				return fmt.Errorf("pdfcpu: fill field name: \"%s\" unknown value: \"%s\" - options: [%v]\n", cb.Name, cb.Value, strings.Join(cb.Options, ", "))
 			}
 		}
 	}
@@ -450,7 +450,7 @@ func validateListBoxValues(f form.Form) error {
 					if err == nil && i < len(lb.Options) {
 						return nil
 					}
-					return errors.Errorf("pdfcpu: fill field name: \"%s\" unknown value: \"%s\" - options: [%v]\n", lb.Name, v, strings.Join(lb.Options, ", "))
+					return fmt.Errorf("pdfcpu: fill field name: \"%s\" unknown value: \"%s\" - options: [%v]\n", lb.Name, v, strings.Join(lb.Options, ", "))
 				}
 			}
 		}
@@ -469,7 +469,7 @@ func validateRadioButtonGroupValues(f form.Form) error {
 				if err == nil && i < len(rbg.Options) {
 					return nil
 				}
-				return errors.Errorf("pdfcpu: fill field name: \"%s\" unknown value: \"%s\" - options: [%v]\n", rbg.Name, rbg.Value, strings.Join(rbg.Options, ", "))
+				return fmt.Errorf("pdfcpu: fill field name: \"%s\" unknown value: \"%s\" - options: [%v]\n", rbg.Name, rbg.Value, strings.Join(rbg.Options, ", "))
 			}
 		}
 	}

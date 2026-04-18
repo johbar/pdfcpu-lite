@@ -17,6 +17,7 @@
 package api
 
 import (
+	"errors"
 	"io"
 	"os"
 	"sort"
@@ -25,7 +26,6 @@ import (
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
-	"github.com/pkg/errors"
 )
 
 // InsertPages inserts a blank page before or after every page selected of rs and writes the result to w.

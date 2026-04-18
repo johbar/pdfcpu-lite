@@ -18,10 +18,10 @@ package filter
 
 import (
 	"bytes"
+	"errors"
 	"io"
 
 	"github.com/johbar/pdfcpu-lite/pkg/log"
-	"github.com/pkg/errors"
 	"golang.org/x/image/ccitt"
 )
 
