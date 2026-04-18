@@ -1,16 +1,25 @@
 # pdfcpu-lite a Go PDF processor lib
 
 
-[pdfcpu](https://github.com/pdfcpu/pdfcpu) is a PDF processing library written in [Go](https://go.dev/) that supports encryption and offers both an API and a command-line interface (CLI). It is compatible with all PDF versions with basic support and ongoing improvement for PDF 2.0 (ISO-32000-2).
+[pdfcpu-lite](https://github.com/johbar/pdfcpu-lite) is a PDF processing library written in [Go](https://go.dev/). It is compatible with all PDF versions with basic support and ongoing improvement for PDF 2.0 (ISO-32000-2).
 
 ## Motivation for this fork
 
-This fork removes test data and bundled certificates from the codebase in order to facilitate faster builds and smaller binaries for lib users.
-If you are interested in the CLI, stick with upstream repository.
+This opinionated fork aims at faster builds and smaller binaries for library users of [pdfcpu.io](https://pdfcpu.io).
+
+pdfcpu-lite
+
+* removes all test data and bundled certificates
+* drops support for certificates and signing
+* omits the CLI/CMD packages
+* drops handling and creation of config.yaml files
+* avoids some dependencies entirely
+
+If you are interested in the CLI or removed functionality, stick with the upstream repository and Go module [pdfcpu](https://github.com/pdfcpu/pdfcpu)
 
 ## Documentation
 
-* [pdfcpu.io](https://pdfcpu.io)
+See upstream docs of [pdfcpu.io](https://pdfcpu.io)
 
 ## Contributors
 
