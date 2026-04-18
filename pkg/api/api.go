@@ -237,13 +237,6 @@ func WriteIncr(ctx *model.Context, rws io.ReadWriteSeeker, conf *model.Configura
 	return WriteIncrement(ctx, rws)
 }
 
-// EnsureDefaultConfigAt switches to the pdfcpu config dir located at path.
-// If path/pdfcpu is not existent, it will be created including config.yml
-func EnsureDefaultConfigAt(path string) error {
-	// Call if you have specific requirements regarding the location of the pdfcpu config dir.
-	return model.EnsureDefaultConfigAt(path, false)
-}
-
 var (
 	// mutexDisableConfigDir protects DisableConfigDir from concurrent access.
 	// NOTE Not a guard for model.ConfigPath!

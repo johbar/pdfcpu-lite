@@ -19,9 +19,7 @@ package model
 import (
 	"embed"
 	_ "embed"
-	"fmt"
 	"os"
-	"path/filepath"
 	"strings"
 	"time"
 
@@ -297,40 +295,6 @@ var robotoFontFileBytes []byte
 
 var certFilesEU embed.FS
 
-func ensureConfigFileAt(path string, override bool) error {
-	f, err := os.Open(path)
-	if err != nil || override {
-		f.Close()
-
-		s := fmt.Sprintf(`
-#############################
-#   Default configuration   #
-#############################
-
-# Creation date
-created: %s 
-
-# version (Do not edit!)
-version: %s 
-
-`,
-			time.Now().Format("2006-01-02 15:04"),
-			VersionStr)
-
-		bb := append([]byte(s), configFileBytes...)
-		if err := os.WriteFile(path, bb, os.ModePerm); err != nil {
-			return err
-		}
-		f, err = os.Open(path)
-		if err != nil {
-			return err
-		}
-	}
-	defer f.Close()
-	// Load configuration into loadedDefaultConfig.
-	return parseConfigFile(f, path)
-}
-
 func onlyHidden(files []os.DirEntry) bool {
 	for _, file := range files {
 		if !strings.HasPrefix(file.Name(), ".") {
@@ -358,93 +322,6 @@ func ensureFontDirInitialized() error {
 			return err
 		}
 	}
-
-	return nil
-}
-
-func initCertificates() error {
-	// Install certs managed by The European Union Trusted Lists (EUTL) (https://eidas.ec.europa.eu/efda/trust-services/browse/eidas/tls).
-	// The embedded files are unpacked and stored into the pdfcpu config dir.
-	// Additional certificates may be loaded using the corresponding CLI command: pdfcpu certificates import
-	// Certificates are loaded into memory lazily.
-
-	files, err := os.ReadDir(CertDir)
-	if err != nil {
-		return err
-	}
-	if !onlyHidden(files) {
-		return nil
-	}
-
-	files, err = certFilesEU.ReadDir("resources/certs")
-	if err != nil {
-		return err
-	}
-
-	euDir := filepath.Join(CertDir, "eu")
-	if err := os.MkdirAll(euDir, os.ModePerm); err != nil {
-		return err
-	}
-
-	for _, file := range files {
-		//fmt.Println("Embedded file:", file.Name())
-
-		content, err := certFilesEU.ReadFile("resources/certs/" + file.Name())
-		if err != nil {
-			return err
-		}
-
-		path := filepath.Join(euDir, file.Name())
-		//fmt.Printf("writing to %s\n", path)
-
-		destFile, err := os.Create(path)
-		if err != nil {
-			return err
-		}
-		defer destFile.Close()
-
-		_, err = destFile.Write(content)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-// EnsureDefaultConfigAt tries to load the default configuration from path.
-// If path/pdfcpu/config.yaml is not found, it will be created.
-func EnsureDefaultConfigAt(path string, override bool) error {
-	configDir := filepath.Join(path, "pdfcpu")
-	if err := os.MkdirAll(configDir, os.ModePerm); err != nil {
-		return err
-	}
-	if err := ensureConfigFileAt(filepath.Join(configDir, "config.yml"), override); err != nil {
-		return err
-	}
-
-	// Initialize pdfcpu config/fonts dir for userfonts then extract and install Roboto as default Unicode font for form filling.
-	// Other userfonts have to be installed via `pdfcpu font install` or copied over from another pdfcpu config dir.
-	// Userfonts are loaded into memory lazily.
-	font.UserFontDir = filepath.Join(configDir, "fonts")
-	if err := os.MkdirAll(font.UserFontDir, os.ModePerm); err != nil {
-		return err
-	}
-	if err := ensureFontDirInitialized(); err != nil {
-		return err
-	}
-
-	// Initialize pdfcpu config/cert dir, then extract and install certificates.
-	// Certificates are loaded into memory lazily.
-	CertDir = filepath.Join(configDir, "certs")
-	if err := os.MkdirAll(CertDir, os.ModePerm); err != nil {
-		return err
-	}
-	if err := initCertificates(); err != nil {
-		return err
-	}
-
-	//fmt.Println(loadedDefaultConfig)
 
 	return nil
 }
@@ -484,31 +361,8 @@ func newDefaultConfiguration() *Configuration {
 	}
 }
 
-func ResetConfig() error {
-	path, err := os.UserConfigDir()
-	if err != nil {
-		path = os.TempDir()
-	}
-	return EnsureDefaultConfigAt(path, true)
-}
-
 // NewDefaultConfiguration returns the default pdfcpu configuration.
 func NewDefaultConfiguration() *Configuration {
-	if loadedDefaultConfig != nil {
-		c := *loadedDefaultConfig
-		return &c
-	}
-	if ConfigPath != "disable" {
-		path, err := os.UserConfigDir()
-		if err != nil {
-			path = os.TempDir()
-		}
-		if err = EnsureDefaultConfigAt(path, false); err == nil {
-			c := *loadedDefaultConfig
-			return &c
-		}
-		panic(fmt.Sprintf("pdfcpu: config problem: %v", err))
-	}
 	// Bypass config.yml
 	return newDefaultConfiguration()
 }
