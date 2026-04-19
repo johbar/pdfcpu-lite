@@ -432,7 +432,7 @@ func (xRefTable *XRefTable) dereferenceDestArray(o types.Object) (types.Array, e
 		}
 		arr, ok := o1.(types.Array)
 		if !ok {
-			fmt.Errorf("pdfcpu: invalid dest array:\n%s\n", o)
+			return nil, fmt.Errorf("pdfcpu: invalid dest array:\n%s\n", o)
 		}
 		return arr, nil
 	}
