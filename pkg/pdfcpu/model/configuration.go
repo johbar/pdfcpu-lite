@@ -17,14 +17,11 @@ limitations under the License.
 package model
 
 import (
-	"embed"
 	_ "embed"
 	"os"
 	"strings"
 	"time"
 
-	"github.com/johbar/pdfcpu-lite/pkg/font"
-	"github.com/johbar/pdfcpu-lite/pkg/log"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 )
 
@@ -287,13 +284,7 @@ type Configuration struct {
 // you are encouraged to use api.DisableConfigDir().
 var ConfigPath string = "default"
 
-var loadedDefaultConfig *Configuration
-
-var configFileBytes []byte
-
 var robotoFontFileBytes []byte
-
-var certFilesEU embed.FS
 
 func onlyHidden(files []os.DirEntry) bool {
 	for _, file := range files {
@@ -302,28 +293,6 @@ func onlyHidden(files []os.DirEntry) bool {
 		}
 	}
 	return true
-}
-
-// ensureFontDirInitialized sets up the font directory without loading fonts.
-// Font loading is deferred until fonts are actually needed.
-func ensureFontDirInitialized() error {
-	files, err := os.ReadDir(font.UserFontDir)
-	if err != nil {
-		return err
-	}
-
-	if onlyHidden(files) {
-		// Ensure Roboto font for form filling.
-		fontname := "Roboto-Regular"
-		if log.CLIEnabled() {
-			log.CLI.Printf("installing user font:")
-		}
-		if err := font.InstallFontFromBytes(font.UserFontDir, fontname, robotoFontFileBytes); err != nil {
-			return err
-		}
-	}
-
-	return nil
 }
 
 func newDefaultConfiguration() *Configuration {
