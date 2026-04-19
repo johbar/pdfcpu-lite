@@ -18,8 +18,8 @@ jobs:
           - goos: linux
             goarch: amd64
         go:
-          - '1.24.x'
           - '1.25.x'
+          - '1.26.x'
 
     runs-on: ubuntu-latest
 
