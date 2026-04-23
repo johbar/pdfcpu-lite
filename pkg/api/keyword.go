@@ -22,11 +22,14 @@ import (
 	"os"
 
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/fault"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
 )
 
 // Keywords returns the keywords of rs's info dict.
-func Keywords(rs io.ReadSeeker, conf *model.Configuration) ([]string, error) {
+func Keywords(rs io.ReadSeeker, conf *model.Configuration) (ss []string, err error) {
+	defer fault.Catch(&err)
+
 	if rs == nil {
 		return nil, errors.New("pdfcpu: ListKeywords: missing rs")
 	}
@@ -47,7 +50,9 @@ func Keywords(rs io.ReadSeeker, conf *model.Configuration) ([]string, error) {
 }
 
 // AddKeywords adds keywords to rs's infodict and writes the result to w.
-func AddKeywords(rs io.ReadSeeker, w io.Writer, files []string, conf *model.Configuration) error {
+func AddKeywords(rs io.ReadSeeker, w io.Writer, files []string, conf *model.Configuration) (err error) {
+	defer fault.Catch(&err)
+
 	if rs == nil {
 		return errors.New("pdfcpu: AddKeywords: missing rs")
 	}
@@ -110,7 +115,9 @@ func AddKeywordsFile(inFile, outFile string, files []string, conf *model.Configu
 }
 
 // RemoveKeywords deletes keywords from rs's infodict and writes the result to w.
-func RemoveKeywords(rs io.ReadSeeker, w io.Writer, keywords []string, conf *model.Configuration) error {
+func RemoveKeywords(rs io.ReadSeeker, w io.Writer, keywords []string, conf *model.Configuration) (err error) {
+	defer fault.Catch(&err)
+
 	if rs == nil {
 		return errors.New("pdfcpu: RemoveKeywords: missing rs")
 	}

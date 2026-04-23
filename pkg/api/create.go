@@ -24,6 +24,7 @@ import (
 	"github.com/johbar/pdfcpu-lite/pkg/log"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/create"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/fault"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 )
@@ -42,7 +43,9 @@ func CreatePDFFile(xRefTable *model.XRefTable, outFile string, conf *model.Confi
 // Create renders the PDF structure represented by rs into w.
 // If rs is present, new PDF content will be appended including any empty pages needed.
 // rd is a JSON representation of PDF page content which may include form data.
-func Create(rs io.ReadSeeker, rd io.Reader, w io.Writer, conf *model.Configuration) error {
+func Create(rs io.ReadSeeker, rd io.Reader, w io.Writer, conf *model.Configuration) (err error) {
+	defer fault.Catch(&err)
+
 	if rd == nil {
 		return errors.New("pdfcpu: Create: missing rd")
 	}
@@ -52,10 +55,7 @@ func Create(rs io.ReadSeeker, rd io.Reader, w io.Writer, conf *model.Configurati
 	}
 	conf.Cmd = model.CREATE
 
-	var (
-		ctx *model.Context
-		err error
-	)
+	var ctx *model.Context
 
 	if rs != nil {
 		ctx, err = ReadValidateAndOptimize(rs, conf)

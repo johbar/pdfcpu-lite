@@ -24,11 +24,15 @@ import (
 
 	"github.com/johbar/pdfcpu-lite/pkg/log"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/fault"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
 )
 
 // Optimize reads a PDF stream from rs and writes the optimized PDF stream to w.
-func Optimize(rs io.ReadSeeker, w io.Writer, conf *model.Configuration) error {
+// noEncryption ensures w writes without encryption.
+func Optimize(rs io.ReadSeeker, w io.Writer, conf *model.Configuration) (err error) {
+	defer fault.Catch(&err)
+
 	if rs == nil {
 		return errors.New("pdfcpu: Optimize: missing rs")
 	}
@@ -64,6 +68,7 @@ func Optimize(rs io.ReadSeeker, w io.Writer, conf *model.Configuration) error {
 // OptimizeFile reads inFile and writes the optimized PDF to outFile.
 // If outFile is not provided then inFile gets overwritten
 // which leads to the same result as when inFile equals outFile.
+// noEncryption ensures outFile is not encrypted.
 func OptimizeFile(inFile, outFile string, conf *model.Configuration) (err error) {
 	var f1, f2 *os.File
 

@@ -21,11 +21,14 @@ import (
 	"io"
 
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/fault"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
 )
 
 // PDFInfo returns information about rs.
-func PDFInfo(rs io.ReadSeeker, fileName string, selectedPages []string, fonts bool, conf *model.Configuration) (*pdfcpu.PDFInfo, error) {
+func PDFInfo(rs io.ReadSeeker, fileName string, selectedPages []string, fonts bool, conf *model.Configuration) (info *pdfcpu.PDFInfo, err error) {
+	defer fault.Catch(&err)
+
 	if rs == nil {
 		return nil, errors.New("pdfcpu: PDFInfo: missing rs")
 	}

@@ -23,11 +23,14 @@ import (
 
 	"github.com/johbar/pdfcpu-lite/pkg/log"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/fault"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
 )
 
 // Resize applies resizeConf for selected pages of rs and writes result to w.
-func Resize(rs io.ReadSeeker, w io.Writer, selectedPages []string, resize *model.Resize, conf *model.Configuration) error {
+func Resize(rs io.ReadSeeker, w io.Writer, selectedPages []string, resize *model.Resize, conf *model.Configuration) (err error) {
+	defer fault.Catch(&err)
+
 	if rs == nil {
 		return errors.New("pdfcpu: Resize: missing rs")
 	}

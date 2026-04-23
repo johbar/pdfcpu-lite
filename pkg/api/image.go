@@ -26,11 +26,14 @@ import (
 	"strings"
 
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/fault"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
 )
 
 // Images returns all embedded images of rs.
-func Images(rs io.ReadSeeker, selectedPages []string, conf *model.Configuration) ([]map[int]model.Image, error) {
+func Images(rs io.ReadSeeker, selectedPages []string, conf *model.Configuration) (ii []map[int]model.Image, err error) {
+	defer fault.Catch(&err)
+
 	if rs == nil {
 		return nil, errors.New("pdfcpu: ListImages: missing rs")
 	}
@@ -50,13 +53,14 @@ func Images(rs io.ReadSeeker, selectedPages []string, conf *model.Configuration)
 		return nil, err
 	}
 
-	ii, _, err := pdfcpu.Images(ctx, pages)
+	ii, _, err = pdfcpu.Images(ctx, pages)
 
 	return ii, err
 }
 
 // UpdateImages replaces the XObject identified by objNr or (pageNr and resourceId).
-func UpdateImages(rs io.ReadSeeker, rd io.Reader, w io.Writer, objNr, pageNr int, id string, conf *model.Configuration) error {
+func UpdateImages(rs io.ReadSeeker, rd io.Reader, w io.Writer, objNr, pageNr int, id string, conf *model.Configuration) (err error) {
+	defer fault.Catch(&err)
 
 	if rs == nil {
 		return errors.New("pdfcpu: UpdateImages: missing rs")

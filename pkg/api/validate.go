@@ -25,11 +25,14 @@ import (
 
 	"github.com/johbar/pdfcpu-lite/pkg/log"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/fault"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
 )
 
 // Validate validates a PDF stream read from rs.
-func Validate(rs io.ReadSeeker, conf *model.Configuration) error {
+func Validate(rs io.ReadSeeker, conf *model.Configuration) (err error) {
+	defer fault.Catch(&err)
+
 	if rs == nil {
 		return errors.New("pdfcpu: Validate: missing rs")
 	}
@@ -52,7 +55,7 @@ func Validate(rs io.ReadSeeker, conf *model.Configuration) error {
 	if err = ValidateContext(ctx); err != nil {
 		s := ""
 		if conf.ValidationMode == model.ValidationStrict {
-			s = " (try -mode=relaxed)"
+			s = " (try --mode=relaxed)"
 		}
 		err = fmt.Errorf("%s: %w", fmt.Sprintf("validation error (obj#:%d)%s", ctx.CurObj, s), err)
 	}
@@ -147,7 +150,7 @@ func DumpObject(rs io.ReadSeeker, mode, objNr int, conf *model.Configuration) er
 	if err = ValidateContext(ctx); err != nil {
 		s := ""
 		if conf.ValidationMode == model.ValidationStrict {
-			s = " (try -mode=relaxed)"
+			s = " (try --mode=relaxed)"
 		}
 		return fmt.Errorf("%s: %w", fmt.Sprintf("validation error (obj#:%d)%s", ctx.CurObj, s), err)
 	}

@@ -23,9 +23,10 @@ See upstream docs of [pdfcpu.io](https://pdfcpu.io)
 
 ## Contributors
 
-Thanks 💚 goes to these wonderful people:
+Thanks 💚 to all contributors:
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+
 ||||||||
 | :---: | :---: | :---: | :---: | :---: |  :---: | :---: |
 | [<img src="https://avatars1.githubusercontent.com/u/11322155?v=4" width="100px"/><br/><sub><b>Horst Rutter</b></sub>](https://github.com/hhrutter) | [<img src="https://avatars0.githubusercontent.com/u/5140211?v=4" width="100px"/><br/><sub><b>haldyr</b></sub>](https://github.com/haldyr) | [<img src="https://avatars3.githubusercontent.com/u/20608155?v=4" width="100px"/><br/><sub><b>Vyacheslav</b></sub>](https://github.com/SimePel) | [<img src="https://avatars1.githubusercontent.com/u/617459?v=4" width="100px"/><br/><sub><b>Erik Unger</b></sub>](https://github.com/ungerik) | [<img src="https://avatars1.githubusercontent.com/u/13079058?v=4" width="100px"/><br/><sub><b>Richard Wilkes</b></sub>](https://github.com/richardwilkes) | [<img src="https://avatars1.githubusercontent.com/u/16303386?s=400&v=4" width="100px"/><br/><sub><b>minenok-tutu</b></sub>](https://github.com/minenok-tutu) | [<img src="https://avatars0.githubusercontent.com/u/1965445?s=400&v=4" width="100px"/><br/><sub><b>Mateusz Burniak</b></sub>](https://github.com/matbur) |
@@ -35,25 +36,24 @@ Thanks 💚 goes to these wonderful people:
 | [<img src="https://avatars.githubusercontent.com/u/59667587?v=4" width="100px"/><br/><sub><b>Juan Iscar</b></sub>](https://github.com/juaismar) | [<img src="https://avatars.githubusercontent.com/u/20135478?v=4" width="100px"/><br/><sub><b>Eng Zer Jun</b></sub>](https://github.com/Juneezee) | [<img src="https://avatars.githubusercontent.com/u/28459131?v=4" width="100px"/><br/><sub><b>Dmitry Ivanov</b></sub>](https://github.com/hant0508)|[<img src="https://avatars.githubusercontent.com/u/16866547?v=4" width="100px"/><br/><sub><b>Rene Kaufmann</b></sub>](https://github.com/HeavyHorst)|[<img src="https://avatars.githubusercontent.com/u/26827864?v=4" width="100px"/><br/><sub><b>Christian Heusel</b></sub>](https://github.com/christian-heusel) | [<img src="https://avatars.githubusercontent.com/u/305673?v=4" width="100px"/><br/><sub><b>Chris</b></sub>](https://github.com/freshteapot) | [<img src="https://avatars.githubusercontent.com/u/2892794?v=4" width="100px"/><br/><sub><b>Lukasz Czaplinski</b></sub>](https://github.com/scoiatael) |
 [<img src="https://avatars.githubusercontent.com/u/49206635?v=4" width="100px"/><br/><sub><b>Joel Silva Schutz</b></sub>](https://github.com/joelschutz) | [<img src="https://avatars.githubusercontent.com/u/28219076?v=4" width="100px"/><br/><sub><b>semvis123</b></sub>](https://github.com/semvis123) | [<img src="https://avatars.githubusercontent.com/u/8717479?v=4"  width="100px"/><br/><sub><b>guangwu</b></sub>](https://github.com/testwill) | [<img src="https://avatars.githubusercontent.com/u/4014912?v=4"  width="100px"/><br/><sub><b>Yoshiki Nakagawa</b></sub>](https://github.com/yyoshiki41) | [<img src="https://avatars.githubusercontent.com/u/432860?v=4"  width="100px"/><br/><sub><b>Steve van Loben Sels</b></sub>](https://github.com/stevevls) | [<img src="https://avatars.githubusercontent.com/u/6083533?v=4" width="100px"/><br/><sub><b>Yaofu</b></sub>](https://github.com/mygityf) | [<img src="https://avatars.githubusercontent.com/u/15724278?v=4" width="100px"/><br/><sub><b>vsenko</b></sub>](https://github.com/vsenko) |
 [<img src="https://avatars.githubusercontent.com/u/16507?v=4" width="100px"/><br/><sub><b>Alexis Hildebrandt</b></sub>](https://github.com/afh) | [<img src="https://avatars.githubusercontent.com/u/1395040?v=4" width="100px"/><br/><sub><b>Sivukhin Nikita</b></sub>](https://github.com/sivukhin)  | [<img src="https://avatars.githubusercontent.com/u/247730?v=4"  width="100px"/><br/><sub><b>Joachim Bauch</b></sub>](https://github.com/fancycode) | [<img src="https://avatars.githubusercontent.com/u/127291996?v=4"  width="100px"/><br/><sub><b>kalimit</b></sub>](https://github.com/kalimit) | [<img src="https://avatars.githubusercontent.com/u/5080535?v=4"  width="100px"/><br/><sub><b>Andreas Erhard</b></sub>](https://github.com/xelan) | [<img src="https://avatars.githubusercontent.com/u/32378535?v=4"  width="100px"/><br/><sub><b>Matsumoto Toshi</b></sub>](https://github.com/toshi1127) | [<img src="https://avatars.githubusercontent.com/u/440634?v=4"  width="100px"/><br/><sub><b>Carl Wilson</b></sub>](https://github.com/carlwilson) |
-[<img src="https://avatars.githubusercontent.com/u/9918222?v=4" width="100px"/><br/><sub><b>LNAhri</b></sub>](https://github.com/LNAhri) | [<img src="https://avatars.githubusercontent.com/u/142796877?v=4" width="100px"/><br/><sub><b>vishal</b></sub>](https://github.com/vishal-at) | [<img src="https://avatars.githubusercontent.com/u/18169566?v=4" width="100px"/><br/><sub><b>Andreas Deininger</b></sub>](https://github.com/deining) | [<img src="https://avatars.githubusercontent.com/u/5825735?v=4" width="100px"/><br/><sub><b>Robert Raines</b></sub>](https://github.com/solintllc-robert) | [<img src="https://avatars.githubusercontent.com/u/316176?v=4" width="100px"/><br/><sub><b>Frank Anderson</b></sub>](https://github.com/frob) |  [<img src="https://avatars.githubusercontent.com/u/20972350?v=4" width="100px"/><br/><sub><b>Sven Lilienthal</b></sub>](https://github.com/SveLil) |  [<img src="https://avatars.githubusercontent.com/u/1900106?v=4" width="100px"/><br/><sub><b>Florian Kinder</b></sub>](https://github.com/fank)
-
-
-
-
-
-
-
-
-
-
+[<img src="https://avatars.githubusercontent.com/u/9918222?v=4" width="100px"/><br/><sub><b>LNAhri</b></sub>](https://github.com/LNAhri) | [<img src="https://avatars.githubusercontent.com/u/142796877?v=4" width="100px"/><br/><sub><b>vishal</b></sub>](https://github.com/vishal-at) | [<img src="https://avatars.githubusercontent.com/u/18169566?v=4" width="100px"/><br/><sub><b>Andreas Deininger</b></sub>](https://github.com/deining) | [<img src="https://avatars.githubusercontent.com/u/5825735?v=4" width="100px"/><br/><sub><b>Robert Raines</b></sub>](https://github.com/solintllc-robert) | [<img src="https://avatars.githubusercontent.com/u/316176?v=4" width="100px"/><br/><sub><b>Frank Anderson</b></sub>](https://github.com/frob) |  [<img src="https://avatars.githubusercontent.com/u/20972350?v=4" width="100px"/><br/><sub><b>Sven Lilienthal</b></sub>](https://github.com/SveLil) |  [<img src="https://avatars.githubusercontent.com/u/1900106?v=4" width="100px"/><br/><sub><b>Florian Kinder</b></sub>](https://github.com/fank) |
+[<img src="https://avatars.githubusercontent.com/u/113192632?v=4" width="100px"/><br/><sub><b>mdmcconnell</b></sub>](https://github.com/mdmcconnell) | [<img src="https://avatars.githubusercontent.com/u/195061?v=4" width="100px"/><br/><sub><b>Bradley Erickson</b></sub>](https://github.com/13rac1) | [<img src="https://avatars.githubusercontent.com/u/10998835?v=4" width="100px"/><br/><sub><b>doronbehar</b></sub>](https://github.com/doronbehar) |[<img src="https://avatars.githubusercontent.com/u/48005710?v=4" width="100px"/><br/><sub><b>joeyave</b></sub>](https://github.com/joeyave) ||||
 
 <!-- ALL-CONTRIBUTORS-LIST:END - Do not remove or modify this section -->
 
+---
 ## Disclaimer
 
-Usage of pdfcpu assumes you know about and respect all copyrights of any PDF content you may be processing. This applies to the PDF files as such, their content and in particular all embedded resources like font files or images. Credit goes to [Renee French](https://instagram.com/reneefrench) for creating our beloved Gopher.
+Use of pdfcpu assumes compliance with all applicable copyrights for any processed PDF content, including embedded resources such as fonts and images.
+
+Gopher artwork by [Renee French](https://www.instagram.com/reneefrenchphoto)
+
+---
 
 ## License
 
-Apache-2.0
+Apache License 2.0
 
+---
+
+<img referrerpolicy="no-referrer-when-downgrade" src="https://static.scarf.sh/a.png?x-pxid=592f747a-ac99-42e3-802a-80dbf2b94519" width="1" height="1" />

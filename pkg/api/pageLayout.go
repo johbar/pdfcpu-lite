@@ -21,12 +21,15 @@ import (
 	"io"
 	"os"
 
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/fault"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 )
 
 // PageLayout returns rs's page layout.
-func PageLayout(rs io.ReadSeeker, conf *model.Configuration) (*model.PageLayout, error) {
+func PageLayout(rs io.ReadSeeker, conf *model.Configuration) (pl *model.PageLayout, err error) {
+	defer fault.Catch(&err)
+
 	if rs == nil {
 		return nil, errors.New("pdfcpu: PageLayout: missing rs")
 	}
@@ -58,7 +61,9 @@ func PageLayoutFile(inFile string, conf *model.Configuration) (*model.PageLayout
 }
 
 // ListPageLayout lists rs's page layout.
-func ListPageLayout(rs io.ReadSeeker, conf *model.Configuration) ([]string, error) {
+func ListPageLayout(rs io.ReadSeeker, conf *model.Configuration) (ss []string, err error) {
+	defer fault.Catch(&err)
+
 	if rs == nil {
 		return nil, errors.New("pdfcpu: ListPageLayout: missing rs")
 	}
@@ -94,7 +99,9 @@ func ListPageLayoutFile(inFile string, conf *model.Configuration) ([]string, err
 }
 
 // SetPageLayout sets rs's page layout and writes the result to w.
-func SetPageLayout(rs io.ReadSeeker, w io.Writer, val model.PageLayout, conf *model.Configuration) error {
+func SetPageLayout(rs io.ReadSeeker, w io.Writer, val model.PageLayout, conf *model.Configuration) (err error) {
+	defer fault.Catch(&err)
+
 	if rs == nil {
 		return errors.New("pdfcpu: SetPageLayout: missing rs")
 	}
@@ -155,7 +162,9 @@ func SetPageLayoutFile(inFile, outFile string, val model.PageLayout, conf *model
 }
 
 // ResetPageLayout resets rs's page layout and writes the result to w.
-func ResetPageLayout(rs io.ReadSeeker, w io.Writer, conf *model.Configuration) error {
+func ResetPageLayout(rs io.ReadSeeker, w io.Writer, conf *model.Configuration) (err error) {
+	defer fault.Catch(&err)
+
 	if rs == nil {
 		return errors.New("pdfcpu: ResetPageLayout: missing rs")
 	}

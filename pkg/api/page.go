@@ -24,12 +24,15 @@ import (
 
 	"github.com/johbar/pdfcpu-lite/pkg/log"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/fault"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/types"
 )
 
 // InsertPages inserts a blank page before or after every page selected of rs and writes the result to w.
-func InsertPages(rs io.ReadSeeker, w io.Writer, selectedPages []string, before bool, pageConf *pdfcpu.PageConfiguration, conf *model.Configuration) error {
+func InsertPages(rs io.ReadSeeker, w io.Writer, selectedPages []string, before bool, pageConf *pdfcpu.PageConfiguration, conf *model.Configuration) (err error) {
+	defer fault.Catch(&err)
+
 	if rs == nil {
 		return errors.New("pdfcpu: InsertPages: missing rs")
 	}
@@ -106,7 +109,9 @@ func InsertPagesFile(inFile, outFile string, selectedPages []string, before bool
 }
 
 // RemovePages removes selected pages from rs and writes the result to w.
-func RemovePages(rs io.ReadSeeker, w io.Writer, selectedPages []string, conf *model.Configuration) error {
+func RemovePages(rs io.ReadSeeker, w io.Writer, selectedPages []string, conf *model.Configuration) (err error) {
+	defer fault.Catch(&err)
+
 	if rs == nil {
 		return errors.New("pdfcpu: RemovePages: missing rs")
 	}
@@ -191,7 +196,9 @@ func RemovePagesFile(inFile, outFile string, selectedPages []string, conf *model
 }
 
 // PageCount returns rs's page count.
-func PageCount(rs io.ReadSeeker, conf *model.Configuration) (int, error) {
+func PageCount(rs io.ReadSeeker, conf *model.Configuration) (count int, err error) {
+	defer fault.Catch(&err)
+
 	if rs == nil {
 		return 0, errors.New("pdfcpu: PageCount: missing rs")
 	}
@@ -216,7 +223,9 @@ func PageCountFile(inFile string) (int, error) {
 }
 
 // PageDims returns a sorted slice of mediaBox dimensions for rs.
-func PageDims(rs io.ReadSeeker, conf *model.Configuration) ([]types.Dim, error) {
+func PageDims(rs io.ReadSeeker, conf *model.Configuration) (pd []types.Dim, err error) {
+	defer fault.Catch(&err)
+
 	if rs == nil {
 		return nil, errors.New("pdfcpu: PageDims: missing rs")
 	}
@@ -226,7 +235,7 @@ func PageDims(rs io.ReadSeeker, conf *model.Configuration) ([]types.Dim, error) 
 		return nil, err
 	}
 
-	pd, err := ctx.PageDims()
+	pd, err = ctx.PageDims()
 	if err != nil {
 		return nil, err
 	}

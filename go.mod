@@ -2,12 +2,12 @@ module github.com/johbar/pdfcpu-lite
 
 go 1.25.0
 
-toolchain go1.26.2
+toolchain go1.25.9
 
 require (
 	github.com/hhrutter/lzw v1.0.0
-	github.com/hhrutter/tiff v1.0.2
-	github.com/mattn/go-runewidth v0.0.19
+	github.com/hhrutter/tiff v1.0.3
+	github.com/mattn/go-runewidth v0.0.23
 	golang.org/x/image v0.39.0
 	golang.org/x/text v0.36.0
 )

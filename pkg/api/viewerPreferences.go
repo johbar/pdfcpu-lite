@@ -25,13 +25,16 @@ import (
 	"time"
 
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu"
+	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/fault"
 	"github.com/johbar/pdfcpu-lite/pkg/pdfcpu/model"
 )
 
 var ErrNoOp = errors.New("pdfcpu: no operation")
 
 // ViewerPreferences returns rs's viewer preferences.
-func ViewerPreferences(rs io.ReadSeeker, conf *model.Configuration) (*model.ViewerPreferences, *model.Version, error) {
+func ViewerPreferences(rs io.ReadSeeker, conf *model.Configuration) (vp *model.ViewerPreferences, v *model.Version, err error) {
+	defer fault.Catch(&err)
+
 	if rs == nil {
 		return nil, nil, errors.New("pdfcpu: ViewerPreferences: missing rs")
 	}
@@ -48,9 +51,9 @@ func ViewerPreferences(rs io.ReadSeeker, conf *model.Configuration) (*model.View
 		return nil, nil, err
 	}
 
-	v := ctx.XRefTable.Version()
+	version := ctx.XRefTable.Version()
 
-	return ctx.ViewerPref, &v, nil
+	return ctx.ViewerPref, &version, nil
 }
 
 // ViewerPreferences returns inFile's viewer preferences.
@@ -74,7 +77,9 @@ func ViewerPreferencesFile(inFile string, all bool, conf *model.Configuration) (
 }
 
 // ListViewerPreferences returns rs's viewer preferences.
-func ListViewerPreferences(rs io.ReadSeeker, all bool, conf *model.Configuration) ([]string, error) {
+func ListViewerPreferences(rs io.ReadSeeker, all bool, conf *model.Configuration) (ss []string, err error) {
+	defer fault.Catch(&err)
+
 	if rs == nil {
 		return nil, errors.New("pdfcpu: ListViewerPreferences: missing rs")
 	}
@@ -162,7 +167,9 @@ func ListViewerPreferencesFile(inFile string, all, json bool, conf *model.Config
 }
 
 // SetViewerPreferences sets rs's viewer preferences and writes the result to w.
-func SetViewerPreferences(rs io.ReadSeeker, w io.Writer, vp model.ViewerPreferences, conf *model.Configuration) error {
+func SetViewerPreferences(rs io.ReadSeeker, w io.Writer, vp model.ViewerPreferences, conf *model.Configuration) (err error) {
+	defer fault.Catch(&err)
+
 	if rs == nil {
 		return errors.New("pdfcpu: SetViewerPreferences: missing rs")
 	}
@@ -336,7 +343,9 @@ func SetViewerPreferencesFileFromJSONFile(inFilePDF, outFilePDF, inFileJSON stri
 }
 
 // ResetViewerPreferences resets rs's viewer preferences and writes the result to w.
-func ResetViewerPreferences(rs io.ReadSeeker, w io.Writer, conf *model.Configuration) error {
+func ResetViewerPreferences(rs io.ReadSeeker, w io.Writer, conf *model.Configuration) (err error) {
+	defer fault.Catch(&err)
+
 	if rs == nil {
 		return errors.New("pdfcpu: ResetViewerPreferences: missing rs")
 	}
