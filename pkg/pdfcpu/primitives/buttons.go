@@ -27,12 +27,12 @@ import (
 
 type Buttons struct {
 	pdf         *PDF
-	Values      []string
 	Label       *TextFieldLabel
-	Gap         int // horizontal space between radio button and its value
-	widths      []float64
-	maxWidth    float64
 	boundingBox *types.Rectangle
+	Values      []string
+	widths      []float64
+	Gap         int // horizontal space between radio button and its value
+	maxWidth    float64
 }
 
 func (b *Buttons) Rtl() bool {

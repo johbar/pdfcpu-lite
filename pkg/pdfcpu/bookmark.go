@@ -42,25 +42,25 @@ type Header struct {
 	Source   string   `json:"source,omitempty"`
 	Version  string   `json:"version"`
 	Creation string   `json:"creation"`
-	ID       []string `json:"id,omitempty"`
 	Title    string   `json:"title,omitempty"`
 	Author   string   `json:"author,omitempty"`
 	Creator  string   `json:"creator,omitempty"`
 	Producer string   `json:"producer,omitempty"`
 	Subject  string   `json:"subject,omitempty"`
 	Keywords string   `json:"keywords,omitempty"`
+	ID       []string `json:"id,omitempty"`
 }
 
 // Bookmark represents an outline item tree.
 type Bookmark struct {
+	Color    *color.SimpleColor `json:"color,omitempty"`
+	Parent   *Bookmark          `json:"-"`
 	Title    string             `json:"title"`
+	Kids     []Bookmark         `json:"kids,omitempty"`
 	PageFrom int                `json:"page"`
 	PageThru int                `json:"-"` // for extraction only; >= pageFrom and reaches until before pageFrom of the next bookmark.
 	Bold     bool               `json:"bold,omitempty"`
 	Italic   bool               `json:"italic,omitempty"`
-	Color    *color.SimpleColor `json:"color,omitempty"`
-	Kids     []Bookmark         `json:"kids,omitempty"`
-	Parent   *Bookmark          `json:"-"`
 }
 
 type BookmarkTree struct {

@@ -36,8 +36,6 @@ import (
 type TextDescriptor struct {
 	Text           string              // A multi line string using \n for line breaks.
 	FontName       string              // Name of the core or user font to be used.
-	RTL            bool                // Right to left user font.
-	Embed          bool                // Embed font.
 	FontKey        string              // Resource id registered for FontName.
 	FontSize       int                 // Fontsize in points.
 	X, Y           float64             // Position of first char's baseline.
@@ -46,20 +44,22 @@ type TextDescriptor struct {
 	MLeft, MRight  float64             // Left and right margins applied to text bounding box.
 	MinHeight      float64             // The minimum height of this text's bounding box.
 	Rotation       float64             // 0..360 degree rotation angle.
-	ScaleAbs       bool                // Scaling type, true=absolute, false=relative to container dimensions.
 	Scale          float64             // font scaling factor > 0 (and <= 1 for relative scaling).
 	HAlign         types.HAlignment    // Horizontal text alignment.
 	VAlign         types.VAlignment    // Vertical text alignment.
 	RMode          draw.RenderMode     // Text render mode
-	StrokeCol      color.SimpleColor   // Stroke color to be used for rendering text corresponding to RMode.
-	FillCol        color.SimpleColor   // Fill color to be used for rendering text corresponding to RMode.
-	ShowTextBB     bool                // Render bounding box including BackgroundCol, border and margins.
-	ShowBackground bool                // Render background of bounding box using BackgroundCol.
-	BackgroundCol  color.SimpleColor   // Bounding box fill color.
-	ShowBorder     bool                // Render border using BorderCol, BorderWidth and BorderStyle.
 	BorderWidth    float64             // Border width, visibility depends on ShowBorder.
 	BorderStyle    types.LineJoinStyle // Border style, also visible if ShowBorder is false as long as ShowBackground is true.
+	StrokeCol      color.SimpleColor   // Stroke color to be used for rendering text corresponding to RMode.
+	FillCol        color.SimpleColor   // Fill color to be used for rendering text corresponding to RMode.
+	BackgroundCol  color.SimpleColor   // Bounding box fill color.
 	BorderCol      color.SimpleColor   // Border color.
+	RTL            bool                // Right to left user font.
+	Embed          bool                // Embed font.
+	ScaleAbs       bool                // Scaling type, true=absolute, false=relative to container dimensions.
+	ShowTextBB     bool                // Render bounding box including BackgroundCol, border and margins.
+	ShowBackground bool                // Render background of bounding box using BackgroundCol.
+	ShowBorder     bool                // Render border using BorderCol, BorderWidth and BorderStyle.
 	ParIndent      bool                // Indent first line of paragraphs or space between paragraphs.
 	ShowLineBB     bool                // Render line bounding boxes in black (for HAlign != AlignJustify only)
 	ShowMargins    bool                // Render margins in light gray.

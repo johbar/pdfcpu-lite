@@ -26,18 +26,18 @@ import (
 )
 
 type Resource struct {
-	ID     string
 	IndRef *types.IndirectRef
+	ID     string
 }
 
 // FontResource represents an existing PDF font resource.
 type FontResource struct {
 	Res       Resource
-	Lang      string
 	CIDSet    *types.IndirectRef
 	FontFile  *types.IndirectRef
 	ToUnicode *types.IndirectRef
 	W         *types.IndirectRef
+	Lang      string
 }
 
 // FontMap maps font names to font resources.
@@ -69,9 +69,9 @@ type ImageMap map[string]ImageResource
 type FieldAnnotation struct {
 	Dict   types.Dict
 	IndRef *types.IndirectRef
+	Kids   types.Array
 	Ind    int
 	Field  bool
-	Kids   types.Array
 }
 
 // Page represents rendered page content.

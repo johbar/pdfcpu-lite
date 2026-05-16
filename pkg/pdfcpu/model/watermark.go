@@ -49,68 +49,70 @@ const (
 type formCache map[types.Rectangle]*types.IndirectRef
 
 type PdfResources struct {
-	Content []byte
 	ResDict *types.IndirectRef
 	Bb      *types.Rectangle // visible region in user space
+	Content []byte
 }
 
 // Watermark represents the basic structure and command details for the commands "Stamp" and "Watermark".
 type Watermark struct {
-	OnTop                     bool                // if true STAMP else WATERMARK.
-	Mode                      int                 // WMText, WMImage or WMPDF
-	FileName                  string              // image or PDF file name
-	Image                     io.Reader           // image reader
-	PDF                       io.ReadSeeker       // PDF read seeker
-	TextString                string              // raw display text.
-	TextLines                 []string            // display multiple lines of text.
-	URL                       string              // overlay link annotation for stamps.
-	InpUnit                   types.DisplayUnit   // input display unit.
-	Pos                       types.Anchor        // position anchor, one of tl,tc,tr,l,c,r,bl,bc,br.
-	Dx, Dy                    float64             // anchor offset.
-	HAlign                    *types.HAlignment   // horizontal alignment for text watermarks.
-	FontName                  string              // supported are Adobe base fonts only. (as of now: Helvetica, Times-Roman, Courier)
-	FontSize                  int                 // font scaling factor.
-	ScaledFontSize            int                 // font scaling factor for a specific page
-	ScriptName                string              // ISO 15924: Hans, Hant, Hira, Kana, Jpan, Hang, Kore: if set, font will not be embedded.
-	RTL                       bool                // if true, render text from right to left
-	Color                     color.SimpleColor   // text fill color(=non stroking color) for backwards compatibility.
-	FillColor                 color.SimpleColor   // text fill color(=non stroking color).
-	StrokeColor               color.SimpleColor   // text stroking color
-	BgColor                   *color.SimpleColor  // text bounding box background color
-	MLeft, MRight             float64             // left and right bounding box margin
-	MTop, MBot                float64             // top and bottom bounding box margin
-	BorderWidth               float64             // Border width, visible if BgColor is set.
-	BorderStyle               types.LineJoinStyle // Border style (bounding box corner style), visible if BgColor is set.
-	BorderColor               *color.SimpleColor  // border color
-	Rotation                  float64             // rotation to apply in degrees. -180 <= x <= 180
-	Diagonal                  int                 // paint along the diagonal.
-	UserRotOrDiagonal         bool                // true if one of rotation or diagonal provided overriding the default.
-	Opacity                   float64             // opacity of the watermark. 0 <= x <= 1
-	RenderMode                draw.RenderMode     // fill=0, stroke=1 fill&stroke=2
-	Scale                     float64             // relative scale factor: 0 <= x <= 1, absolute scale factor: 0 <= x
-	ScaleEff                  float64             // effective scale factor
-	ScaleAbs                  bool                // true for absolute scaling.
-	Update                    bool                // true for updating instead of adding a page watermark.
-	Ocg, ExtGState, Font, Img *types.IndirectRef  // resources
-	Width, Height             int                 // image or page dimensions
+	Image                     io.Reader          // image reader
+	PDF                       io.ReadSeeker      // PDF read seeker
+	HAlign                    *types.HAlignment  // horizontal alignment for text watermarks.
+	BgColor                   *color.SimpleColor // text bounding box background color
+	BorderColor               *color.SimpleColor // border color
+	Ocg, ExtGState, Font, Img *types.IndirectRef // resources
 
 	// PDF stamp
-	bbPDF                   *types.Rectangle     // bounding box
-	PdfRes                  map[int]PdfResources // content & corresponding resources
-	PdfPageNrSrc            int                  // page number of the source PDF file serving as stamp provider, 0 for multi stamping
-	PdfMultiStartPageNrSrc  int                  // start page number of the source PDF file serving as stamp provider.
-	PdfMultiStartPageNrDest int                  // start page number of the destination PDF file.
+	bbPDF  *types.Rectangle     // bounding box
+	PdfRes map[int]PdfResources // content & corresponding resources
 
 	// page specific
-	Bb      *types.Rectangle   // bounding box of the form representing this watermark.
-	BbTrans types.QuadLiteral  // Transformed bounding box.
-	Vp      *types.Rectangle   // view port, page dimensions.
-	PageRot int                // page rotation in effect.
-	Form    *types.IndirectRef // form dependent on given page dimensions.
+	Bb   *types.Rectangle   // bounding box of the form representing this watermark.
+	Vp   *types.Rectangle   // view port, page dimensions.
+	Form *types.IndirectRef // form dependent on given page dimensions.
 
 	// house keeping
-	Objs   types.IntSet // objects for which wm has been applied already.
-	FCache formCache    // form cache.
+	Objs           types.IntSet        // objects for which wm has been applied already.
+	FCache         formCache           // form cache.
+	FileName       string              // image or PDF file name
+	TextString     string              // raw display text.
+	URL            string              // overlay link annotation for stamps.
+	FontName       string              // supported are Adobe base fonts only. (as of now: Helvetica, Times-Roman, Courier)
+	ScriptName     string              // ISO 15924: Hans, Hant, Hira, Kana, Jpan, Hang, Kore: if set, font will not be embedded.
+	TextLines      []string            // display multiple lines of text.
+	BbTrans        types.QuadLiteral   // Transformed bounding box.
+	Mode           int                 // WMText, WMImage or WMPDF
+	InpUnit        types.DisplayUnit   // input display unit.
+	Pos            types.Anchor        // position anchor, one of tl,tc,tr,l,c,r,bl,bc,br.
+	Dx, Dy         float64             // anchor offset.
+	FontSize       int                 // font scaling factor.
+	ScaledFontSize int                 // font scaling factor for a specific page
+	MLeft, MRight  float64             // left and right bounding box margin
+	MTop, MBot     float64             // top and bottom bounding box margin
+	BorderWidth    float64             // Border width, visible if BgColor is set.
+	BorderStyle    types.LineJoinStyle // Border style (bounding box corner style), visible if BgColor is set.
+	Rotation       float64             // rotation to apply in degrees. -180 <= x <= 180
+	Diagonal       int                 // paint along the diagonal.
+	Opacity        float64             // opacity of the watermark. 0 <= x <= 1
+	RenderMode     draw.RenderMode     // fill=0, stroke=1 fill&stroke=2
+	Scale          float64             // relative scale factor: 0 <= x <= 1, absolute scale factor: 0 <= x
+	ScaleEff       float64             // effective scale factor
+	Width, Height  int                 // image or page dimensions
+
+	PdfPageNrSrc            int // page number of the source PDF file serving as stamp provider, 0 for multi stamping
+	PdfMultiStartPageNrSrc  int // start page number of the source PDF file serving as stamp provider.
+	PdfMultiStartPageNrDest int // start page number of the destination PDF file.
+
+	PageRot           int               // page rotation in effect.
+	Color             color.SimpleColor // text fill color(=non stroking color) for backwards compatibility.
+	FillColor         color.SimpleColor // text fill color(=non stroking color).
+	StrokeColor       color.SimpleColor // text stroking color
+	OnTop             bool              // if true STAMP else WATERMARK.
+	RTL               bool              // if true, render text from right to left
+	UserRotOrDiagonal bool              // true if one of rotation or diagonal provided overriding the default.
+	ScaleAbs          bool              // true for absolute scaling.
+	Update            bool              // true for updating instead of adding a page watermark.
 }
 
 // DefaultWatermarkConfig returns the default configuration.

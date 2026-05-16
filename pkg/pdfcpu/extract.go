@@ -636,9 +636,9 @@ func ExtractPageContent(ctx *model.Context, pageNr int) (io.Reader, error) {
 // Metadata is a Reader representing a metadata dict.
 type Metadata struct {
 	io.Reader          // metadata
+	ParentType  string // container dict type
 	ObjNr       int    // metadata dict objNr
 	ParentObjNr int    // container object number
-	ParentType  string // container dict type
 }
 
 func extractMetadataFromDict(ctx *model.Context, d types.Dict, parentObjNr int) (*Metadata, error) {
@@ -668,7 +668,7 @@ func extractMetadataFromDict(ctx *model.Context, d types.Dict, parentObjNr int) 
 	if err != nil {
 		return nil, err
 	}
-	return &Metadata{bytes.NewReader(sd.Content), mdObjNr, parentObjNr, dt}, nil
+	return &Metadata{Reader: bytes.NewReader(sd.Content), ParentType: dt, ObjNr: mdObjNr, ParentObjNr: parentObjNr}, nil
 }
 
 // ExtractMetadata returns all metadata of ctx.

@@ -244,16 +244,16 @@ type AnnotationRenderer interface {
 
 // Annotation represents a PDF annotation.
 type Annotation struct {
-	SubType          AnnotationType     // The type of annotation that this dictionary describes.
+	P                *types.IndirectRef // An indirect reference to the page object with which this annotation is associated.
+	C                *color.SimpleColor // The background color of the annotation’s icon when closed, pop up title bar color, link ann border color.
 	CustomSubType    string             // Out of spec annot type.
-	Rect             types.Rectangle    // The annotation rectangle, defining the location of the annotation on the page in default user space units.
-	APObjNr          int                // The objNr of the appearance stream dict.
 	Contents         string             // Text that shall be displayed for the annotation.
 	NM               string             // (Since V1.4) The annotation name, a text string uniquely identifying it among all the annotations on its page.
 	ModificationDate string             // M - The date and time when the annotation was most recently modified.
-	P                *types.IndirectRef // An indirect reference to the page object with which this annotation is associated.
+	Rect             types.Rectangle    // The annotation rectangle, defining the location of the annotation on the page in default user space units.
+	SubType          AnnotationType     // The type of annotation that this dictionary describes.
+	APObjNr          int                // The objNr of the appearance stream dict.
 	F                AnnotationFlags    // A set of flags specifying various characteristics of the annotation.
-	C                *color.SimpleColor // The background color of the annotation’s icon when closed, pop up title bar color, link ann border color.
 	BorderRadX       float64            // Border radius X
 	BorderRadY       float64            // Border radius Y
 	BorderWidth      float64            // Border width
@@ -405,9 +405,9 @@ func (ann Annotation) RenderDict(xRefTable *XRefTable, pageIndRef *types.Indirec
 
 // PopupAnnotation represents PDF Popup annotations.
 type PopupAnnotation struct {
-	Annotation
 	ParentIndRef *types.IndirectRef // The optional parent markup annotation with which this pop-up annotation shall be associated.
-	Open         bool               // A flag specifying whether the annotation shall initially be displayed open.
+	Annotation
+	Open bool // A flag specifying whether the annotation shall initially be displayed open.
 }
 
 // NewPopupAnnotation returns a new popup annotation.
@@ -460,13 +460,13 @@ func (ann PopupAnnotation) RenderDict(xRefTable *XRefTable, pageIndRef *types.In
 
 // LinkAnnotation represents a PDF link annotation.
 type LinkAnnotation struct {
+	Dest *Destination     // internal link
+	URI  string           // external link
+	Quad types.QuadPoints // shall be ignored if any coordinate lies outside the region specified by Rect.
 	Annotation
-	Dest        *Destination     // internal link
-	URI         string           // external link
-	Quad        types.QuadPoints // shall be ignored if any coordinate lies outside the region specified by Rect.
-	Border      bool             // render border using borderColor.
 	BorderWidth float64
 	BorderStyle BorderStyle
+	Border      bool // render border using borderColor.
 }
 
 // NewLinkAnnotation returns a new link annotation.
@@ -564,13 +564,13 @@ func (ann LinkAnnotation) RenderDict(xRefTable *XRefTable, pageIndRef *types.Ind
 
 // MarkupAnnotation represents a PDF markup annotation.
 type MarkupAnnotation struct {
-	Annotation
-	T            string             // The text label that shall be displayed in the title bar of the annotation’s pop-up window when open and active. This entry shall identify the user who added the annotation.
 	PopupIndRef  *types.IndirectRef // An indirect reference to a pop-up annotation for entering or editing the text associated with this annotation.
 	CA           *float64           // (Default: 1.0) The constant opacity value that shall be used in painting the annotation.
+	T            string             // The text label that shall be displayed in the title bar of the annotation’s pop-up window when open and active. This entry shall identify the user who added the annotation.
 	RC           string             // A rich text string that shall be displayed in the pop-up window when the annotation is opened.
 	CreationDate string             // The date and time when the annotation was created.
 	Subj         string             // Text representing a short description of the subject being addressed by the annotation.
+	Annotation
 }
 
 // NewMarkupAnnotation returns a new markup annotation.
@@ -658,8 +658,8 @@ func (ann MarkupAnnotation) RenderDict(xRefTable *XRefTable, pageIndRef *types.I
 // TextAnnotation represents a PDF text annotation aka "Sticky Note".
 type TextAnnotation struct {
 	MarkupAnnotation
-	Open bool   // A flag specifying whether the annotation shall initially be displayed open.
 	Name string // The name of an icon that shall be used in displaying the annotation. Comment, Key, (Note), Help, NewParagraph, Paragraph, Insert
+	Open bool   // A flag specifying whether the annotation shall initially be displayed open.
 }
 
 // NewTextAnnotation returns a new text annotation.
@@ -730,21 +730,21 @@ func FreeTextIntentName(fti FreeTextIntent) string {
 
 // FreeText Annotation displays text directly on the page.
 type FreeTextAnnotation struct {
+	FontCol *color.SimpleColor // font color
 	MarkupAnnotation
-	Text                   string             // Rich text string, see XFA 3.3
-	HAlign                 types.HAlignment   // Code specifying the form of quadding (justification)
-	FontName               string             // font name
-	FontSize               int                // font size
-	FontCol                *color.SimpleColor // font color
-	DS                     string             // Default style string
-	Intent                 string             // Description of the intent of the free text annotation
-	CallOutLine            types.Array        // if intent is FreeTextCallout
+	Text                   string // Rich text string, see XFA 3.3
+	FontName               string // font name
+	DS                     string // Default style string
+	Intent                 string // Description of the intent of the free text annotation
 	CallOutLineEndingStyle string
+	CallOutLine            types.Array // if intent is FreeTextCallout
 	Margins                types.Array
+	HAlign                 types.HAlignment // Code specifying the form of quadding (justification)
+	FontSize               int              // font size
 	BorderWidth            float64
 	BorderStyle            BorderStyle
-	CloudyBorder           bool
 	CloudyBorderIntensity  int // 0,1,2
+	CloudyBorder           bool
 }
 
 // XFA conform rich text string examples:
@@ -911,21 +911,21 @@ func LineIntentName(li LineIntent) string {
 
 // LineAnnotation represents a line annotation.
 type LineAnnotation struct {
+	Measure types.Dict // Optional measure dictionary that shall specify the scale and units that apply to the line annotation.
+	FillCol *color.SimpleColor
 	MarkupAnnotation
-	P1, P2                    types.Point // Two points in default user space.
+	Intent                    string      // Optional description of the intent of the line annotation.
 	LineEndings               types.Array // Optional array of two names that shall specify the line ending styles.
+	P1, P2                    types.Point // Two points in default user space.
 	LeaderLineLength          float64     // Length of leader lines in default user space that extend from each endpoint of the line perpendicular to the line itself.
 	LeaderLineOffset          float64     // Non-negative number that shall represent the length of the leader line offset, which is the amount of empty space between the endpoints of the annotation and the beginning of the leader lines.
 	LeaderLineExtensionLength float64     // Non-negative number that shall represents the length of leader line extensions that extend from the line proper 180 degrees from the leader lines,
-	Intent                    string      // Optional description of the intent of the line annotation.
-	Measure                   types.Dict  // Optional measure dictionary that shall specify the scale and units that apply to the line annotation.
-	Caption                   bool        // Use text specified by "Contents" or "RC" as caption.
-	CaptionPositionTop        bool        // if true the caption shall be on top of the line else caption shall be centred inside the line.
 	CaptionOffsetX            float64
 	CaptionOffsetY            float64
-	FillCol                   *color.SimpleColor
 	BorderWidth               float64
 	BorderStyle               BorderStyle
+	Caption                   bool // Use text specified by "Contents" or "RC" as caption.
+	CaptionPositionTop        bool // if true the caption shall be on top of the line else caption shall be centred inside the line.
 }
 
 // NewLineAnnotation returns a new line annotation.
@@ -1245,16 +1245,16 @@ func PolygonIntentName(pi PolygonIntent) string {
 
 // PolygonAnnotation represents a polygon annotation.
 type PolygonAnnotation struct {
+	Measure types.Dict // Optional measure dictionary that shall specify the scale and units that apply to the annotation.
+	FillCol *color.SimpleColor
 	MarkupAnnotation
+	Intent                string      // Optional description of the intent of the polygon annotation.
 	Vertices              types.Array // Array of numbers specifying the alternating horizontal and vertical coordinates, respectively, of each vertex, in default user space.
 	Path                  types.Array // Array of n arrays, each supplying the operands for a path building operator (m, l or c).
-	Intent                string      // Optional description of the intent of the polygon annotation.
-	Measure               types.Dict  // Optional measure dictionary that shall specify the scale and units that apply to the annotation.
-	FillCol               *color.SimpleColor
 	BorderWidth           float64
 	BorderStyle           BorderStyle
-	CloudyBorder          bool
 	CloudyBorderIntensity int // 0,1,2
+	CloudyBorder          bool
 }
 
 // NewPolygonAnnotation returns a new polygon annotation.
@@ -1367,15 +1367,15 @@ func PolyLineIntentName(pi PolyLineIntent) string {
 }
 
 type PolyLineAnnotation struct {
+	Measure types.Dict // Optional measure dictionary that shall specify the scale and units that apply to the annotation.
+	FillCol *color.SimpleColor
 	MarkupAnnotation
+	Intent      string      // Optional description of the intent of the polyline annotation.
 	Vertices    types.Array // Array of numbers specifying the alternating horizontal and vertical coordinates, respectively, of each vertex, in default user space.
 	Path        types.Array // Array of n arrays, each supplying the operands for a path building operator (m, l or c).
-	Intent      string      // Optional description of the intent of the polyline annotation.
-	Measure     types.Dict  // Optional measure dictionary that shall specify the scale and units that apply to the annotation.
-	FillCol     *color.SimpleColor
+	LineEndings types.Array // Optional array of two names that shall specify the line ending styles.
 	BorderWidth float64
 	BorderStyle BorderStyle
-	LineEndings types.Array // Optional array of two names that shall specify the line ending styles.
 }
 
 // NewPolyLineAnnotation returns a new polyline annotation.
@@ -1621,9 +1621,9 @@ func NewStrikeOutAnnotation(
 }
 
 type CaretAnnotation struct {
+	RD *types.Rectangle // A set of four numbers that shall describe the numerical differences between two rectangles: the Rect entry of the annotation and the actual boundaries of the underlying caret.
 	MarkupAnnotation
-	RD        *types.Rectangle // A set of four numbers that shall describe the numerical differences between two rectangles: the Rect entry of the annotation and the actual boundaries of the underlying caret.
-	Paragraph bool             // A new paragraph symbol (¶) shall be associated with the caret.
+	Paragraph bool // A new paragraph symbol (¶) shall be associated with the caret.
 }
 
 func NewCaretAnnotation(

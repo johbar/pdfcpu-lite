@@ -27,12 +27,12 @@ import (
 )
 
 type Zoom struct {
+	BgColor *color.SimpleColor // background color when zooming out
 	Factor  float64            // zoom factor x > 0, x > 1 zooms in, x < 1 zooms out
 	HMargin float64            // horizontal margin implying some (usually negative) scale factor
 	VMargin float64            // vertical margin implying some (usually negative) scale factor
 	Unit    types.DisplayUnit  // display unit
 	Border  bool               // border around page content when zooming out
-	BgColor *color.SimpleColor // background color when zooming out
 }
 
 func (z *Zoom) EnsureFactorAndMargins(w, h float64) error {

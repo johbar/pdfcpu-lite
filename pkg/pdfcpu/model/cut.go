@@ -27,17 +27,17 @@ import (
 )
 
 type Cut struct {
+	PageDim  *types.Dim         // page dimensions in display unit
+	BgColor  *color.SimpleColor // background color
+	PageSize string             // paper/form size eg. A2,A3,A4,Legal,Ledger,...
 	Hor      []float64          // Horizontal cut points
 	Vert     []float64          // Vertical cut points
 	Scale    float64            // scale factor x > 1 (poster)
-	PageSize string             // paper/form size eg. A2,A3,A4,Legal,Ledger,...
-	PageDim  *types.Dim         // page dimensions in display unit
 	Unit     types.DisplayUnit  // display unit
+	Margin   float64            // glue area in display unit
+	Origin   types.Corner       // one of 4 page corners, default = UpperLeft
 	UserDim  bool               // true if dimensions set by dim rather than formsize
 	Border   bool               // true to render crop box
-	Margin   float64            // glue area in display unit
-	BgColor  *color.SimpleColor // background color
-	Origin   types.Corner       // one of 4 page corners, default = UpperLeft
 }
 
 type cutParameterMap map[string]func(string, *Cut) error

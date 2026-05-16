@@ -34,11 +34,19 @@ type ListBox struct {
 	pdf             *PDF
 	content         *Content
 	Label           *TextFieldLabel
+	BoundingBox     *types.Rectangle `json:"-"`
+	Font            *FormFont
+	Margin          *Margin
+	Border          *Border
+	BgCol           *color.SimpleColor `json:"-"`
 	ID              string
 	Tip             string
 	Default         string
-	Defaults        []string
 	Value           string
+	fontID          string
+	BackgroundColor string `json:"bgCol"`
+	Alignment       string `json:"align"` // "Left", "Center", "Right"
+	Defaults        []string
 	Values          []string
 	Ind             types.Array `json:"-"`
 	Options         []string
@@ -47,18 +55,10 @@ type ListBox struct {
 	Width           float64
 	Height          float64
 	Dx, Dy          float64
-	BoundingBox     *types.Rectangle `json:"-"`
-	Multi           bool             `json:"multi"`
-	Font            *FormFont
-	fontID          string
-	Margin          *Margin
-	Border          *Border
-	BackgroundColor string             `json:"bgCol"`
-	BgCol           *color.SimpleColor `json:"-"`
-	Alignment       string             `json:"align"` // "Left", "Center", "Right"
-	HorAlign        types.HAlignment   `json:"-"`
-	RTL             bool
+	HorAlign        types.HAlignment `json:"-"`
 	Tab             int
+	Multi           bool `json:"multi"`
+	RTL             bool
 	Locked          bool
 	Debug           bool
 	Hide            bool

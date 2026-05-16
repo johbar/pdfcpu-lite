@@ -32,9 +32,9 @@ import (
 )
 
 type PageSpan struct {
+	Reader io.Reader
 	From   int
 	Thru   int
-	Reader io.Reader
 }
 
 func pageSpan(ctx *model.Context, from, thru int) (*PageSpan, error) {

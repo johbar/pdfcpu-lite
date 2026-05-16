@@ -28,11 +28,11 @@ import (
 // Divider is a positioned separator between two regions from p to q.
 type Divider struct {
 	pdf   *PDF
-	Pos   float64     `json:"at"` // fraction 0..1
-	p, q  types.Point // Endpoints
-	Width int         // 1..10
-	Color string      `json:"col"`
 	col   *color.SimpleColor
+	Color string      `json:"col"`
+	p, q  types.Point // Endpoints
+	Pos   float64     `json:"at"` // fraction 0..1
+	Width int         // 1..10
 }
 
 func (d *Divider) validate() error {

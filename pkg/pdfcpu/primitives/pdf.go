@@ -71,26 +71,15 @@ const (
 
 // PDF is the central structure for PDF generation.
 type PDF struct {
-	Paper           string               // default paper size
 	mediaBox        *types.Rectangle     // default media box
-	Crop            string               // default crop box
 	cropBox         *types.Rectangle     // default crop box
-	Origin          string               // origin of the coordinate system
-	origin          types.Corner         // one of 4 page corners
-	Guides          bool                 // render guides for layouting
-	ContentBox      bool                 // render contentBox = cropBox - header - footer
-	Debug           bool                 // highlight element positions
-	BackgroundColor string               `json:"bgCol"`
 	bgCol           *color.SimpleColor   // default background color
 	Fonts           map[string]*FormFont // global fonts
 	FormFonts       map[string]*FormFont
 	FieldIDs        types.StringSet
-	Fields          types.Array
-	InheritedDA     string
 	Header          *HorizontalBand
 	Footer          *HorizontalBand
 	Pages           map[string]*PDFPage
-	pages           []*PDFPage
 	Margin          *Margin                // the global margin named "margin"
 	Border          *Border                // the global border named "border"
 	Padding         *Padding               // the global padding named "padding"
@@ -106,8 +95,6 @@ type PDF struct {
 	colors          map[string]color.SimpleColor
 	DirNames        map[string]string          `json:"dirs"`
 	FileNames       map[string]string          `json:"files"`
-	TimestampFormat string                     `json:"timestamp"`
-	DateFormat      string                     `json:"dateFormat"`
 	Conf            *model.Configuration       `json:"-"`
 	XRefTable       *model.XRefTable           `json:"-"`
 	Optimize        *model.OptimizationContext `json:"-"`
@@ -115,11 +102,24 @@ type PDF struct {
 	XObjectResIDs   map[int]types.Dict         `json:"-"`
 	CheckBoxAPs     map[float64]*AP            `json:"-"`
 	RadioBtnAPs     map[float64]*AP            `json:"-"`
-	HasForm         bool                       `json:"-"`
 	OldFieldIDs     types.StringSet            `json:"-"`
-	Offline         bool                       `json:"-"`
-	Timeout         int                        `json:"-"`
 	httpClient      *http.Client
+	Paper           string // default paper size
+	Crop            string // default crop box
+	Origin          string // origin of the coordinate system
+	BackgroundColor string `json:"bgCol"`
+	InheritedDA     string
+	TimestampFormat string `json:"timestamp"`
+	DateFormat      string `json:"dateFormat"`
+	Fields          types.Array
+	pages           []*PDFPage
+	origin          types.Corner // one of 4 page corners
+	Timeout         int          `json:"-"`
+	Guides          bool         // render guides for layouting
+	ContentBox      bool         // render contentBox = cropBox - header - footer
+	Debug           bool         // highlight element positions
+	HasForm         bool         `json:"-"`
+	Offline         bool         `json:"-"`
 }
 
 func (pdf *PDF) Update() bool {

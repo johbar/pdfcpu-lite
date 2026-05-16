@@ -31,10 +31,10 @@ import (
 // Attachment is a Reader representing a PDF attachment.
 type Attachment struct {
 	io.Reader            // attachment data
+	ModTime   *time.Time // time of last modification (optional)
 	ID        string     // id
 	FileName  string     // filename
 	Desc      string     // description
-	ModTime   *time.Time // time of last modification (optional)
 }
 
 func (a Attachment) String() string {
@@ -186,7 +186,7 @@ func (ctx *Context) ListAttachments() ([]Attachment, error) {
 		if err != nil {
 			return err
 		}
-		aa = append(aa, Attachment{nil, id, fileName, desc, modTime})
+		aa = append(aa, Attachment{nil, modTime, id, fileName, desc})
 		return nil
 	}
 

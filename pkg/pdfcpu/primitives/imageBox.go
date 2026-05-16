@@ -47,27 +47,27 @@ type ImageData struct {
 type ImageBox struct {
 	pdf             *PDF
 	content         *Content
-	Name            string
-	Src             string     `json:"src"` // path of image file name
 	Data            *ImageData // TODO Implement
-	Position        [2]float64 `json:"pos"` // x,y
-	x, y            float64
-	Dx, Dy          float64
 	dest            *types.Rectangle
-	Anchor          string
-	anchor          types.Anchor
-	anchored        bool
-	Width           float64
-	Height          float64
 	Margin          *Margin
 	Border          *Border
 	Padding         *Padding
-	BackgroundColor string `json:"bgCol"`
 	bgCol           *color.SimpleColor
-	Rotation        float64 `json:"rot"`
+	Name            string
+	Src             string `json:"src"` // path of image file name
+	Anchor          string
+	BackgroundColor string `json:"bgCol"`
 	Url             string
+	PageNr          string     `json:"-"`
+	Position        [2]float64 `json:"pos"` // x,y
+	x, y            float64
+	Dx, Dy          float64
+	anchor          types.Anchor
+	Width           float64
+	Height          float64
+	Rotation        float64 `json:"rot"`
+	anchored        bool
 	Hide            bool
-	PageNr          string `json:"-"`
 }
 
 func (ib *ImageBox) resolveFileName(s string) (string, error) {

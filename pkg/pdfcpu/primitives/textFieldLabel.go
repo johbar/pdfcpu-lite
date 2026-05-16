@@ -26,13 +26,13 @@ import (
 
 // TextFieldLabel represents a label for an input field.
 type TextFieldLabel struct {
-	TextField
-	Width    int
-	height   float64
-	Gap      int    // horizontal space between textfield and label
-	Position string `json:"pos"` // relative to textfield
-	relPos   types.RelPosition
 	td       *model.TextDescriptor
+	Position string `json:"pos"` // relative to textfield
+	TextField
+	Width  int
+	height float64
+	Gap    int // horizontal space between textfield and label
+	relPos types.RelPosition
 }
 
 func (tfl *TextFieldLabel) validate() error {

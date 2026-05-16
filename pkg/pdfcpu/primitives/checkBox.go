@@ -32,19 +32,19 @@ type CheckBox struct {
 	pdf             *PDF
 	content         *Content
 	Label           *TextFieldLabel
+	boundingBox     *types.Rectangle
+	Margin          *Margin // applied to content box
+	bgCol           *color.SimpleColor
 	ID              string
 	Tip             string
-	Value           bool // checked state
-	Default         bool
+	BackgroundColor string     `json:"bgCol"`
 	Position        [2]float64 `json:"pos"` // x,y
 	x, y            float64
 	Width           float64
 	Dx, Dy          float64
-	boundingBox     *types.Rectangle
-	Margin          *Margin // applied to content box
-	BackgroundColor string  `json:"bgCol"`
-	bgCol           *color.SimpleColor
 	Tab             int
+	Value           bool // checked state
+	Default         bool
 	Locked          bool
 	Debug           bool
 	Hide            bool

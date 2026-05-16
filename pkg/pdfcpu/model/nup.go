@@ -69,23 +69,23 @@ type BorderStyling struct {
 // NUp represents the command details for the command "NUp".
 type NUp struct {
 	PageDim         *types.Dim         // Page dimensions in display unit.
-	PageSize        string             // Paper size eg. A4L, A4P, A4(=default=A4P), see paperSize.go
-	UserDim         bool               // true if one of dimensions or paperSize provided overriding the default.
-	Orient          orientation        // One of rd(=default),dr,ld,dl - grid orientation
-	Enforce         bool               // enforce best-fit orientation of individual content on grid.
 	Grid            *types.Dim         // Intra page grid dimensions eg (2,2)
-	PageGrid        bool               // Create a m x n grid of pages for PDF inputfiles only (think "extra page n-Up").
-	ImgInputFile    bool               // Process image or PDF input files.
-	Margin          float64            // Cropbox for n-Up content.
-	Border          bool               // Draw bounding box.
 	BorderOnCropbox *BorderStyling     // Draw bounding box around crop box.
-	BookletGuides   bool               // Draw folding and cutting lines.
-	MultiFolio      bool               // Render booklet as sequence of folios.
+	BgColor         *color.SimpleColor // background color
+	PageSize        string             // Paper size eg. A4L, A4P, A4(=default=A4P), see paperSize.go
+	Orient          orientation        // One of rd(=default),dr,ld,dl - grid orientation
+	Margin          float64            // Cropbox for n-Up content.
 	FolioSize       int                // Booklet multifolio folio size: default: 8
 	BookletType     BookletType        // Is this a booklet or booklet cover layout
 	BookletBinding  BookletBinding     // Does the booklet have short or long-edge binding
 	InpUnit         types.DisplayUnit  // input display unit.
-	BgColor         *color.SimpleColor // background color
+	UserDim         bool               // true if one of dimensions or paperSize provided overriding the default.
+	Enforce         bool               // enforce best-fit orientation of individual content on grid.
+	PageGrid        bool               // Create a m x n grid of pages for PDF inputfiles only (think "extra page n-Up").
+	ImgInputFile    bool               // Process image or PDF input files.
+	Border          bool               // Draw bounding box.
+	BookletGuides   bool               // Draw folding and cutting lines.
+	MultiFolio      bool               // Render booklet as sequence of folios.
 }
 
 // DefaultNUpConfig returns the default NUp configuration.

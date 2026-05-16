@@ -43,26 +43,26 @@ const (
 )
 
 type ttf struct {
-	PostscriptName     string            // name: NameID 6
-	Protected          bool              // OS/2: fsType
-	UnitsPerEm         int               // head: unitsPerEm
-	Ascent             int               // OS/2: sTypoAscender
-	Descent            int               // OS/2: sTypoDescender
-	CapHeight          int               // OS/2: sCapHeight
-	FirstChar          uint16            // OS/2: fsFirstCharIndex
-	LastChar           uint16            // OS/2: fsLastCharIndex
-	UnicodeRange       [4]uint32         // OS/2: Unicode Character Range
-	LLx, LLy, URx, URy float64           // head: xMin, yMin, xMax, yMax (fontbox)
-	ItalicAngle        float64           // post: italicAngle
-	FixedPitch         bool              // post: isFixedPitch
-	Bold               bool              // OS/2: usWeightClass == 7
-	HorMetricsCount    int               // hhea: numOfLongHorMetrics
-	GlyphCount         int               // maxp: numGlyphs
-	GlyphWidths        []int             // hmtx: fd.HorMetricsCount.advanceWidth
 	Chars              map[uint32]uint16 // cmap: Unicode character to glyph index
 	ToUnicode          map[uint16]uint32 // map glyph index to unicode character
 	Planes             map[int]bool      // used Unicode planes
+	PostscriptName     string            // name: NameID 6
+	GlyphWidths        []int             // hmtx: fd.HorMetricsCount.advanceWidth
 	FontFile           []byte
+	UnitsPerEm         int       // head: unitsPerEm
+	Ascent             int       // OS/2: sTypoAscender
+	Descent            int       // OS/2: sTypoDescender
+	CapHeight          int       // OS/2: sCapHeight
+	LLx, LLy, URx, URy float64   // head: xMin, yMin, xMax, yMax (fontbox)
+	ItalicAngle        float64   // post: italicAngle
+	HorMetricsCount    int       // hhea: numOfLongHorMetrics
+	GlyphCount         int       // maxp: numGlyphs
+	UnicodeRange       [4]uint32 // OS/2: Unicode Character Range
+	FirstChar          uint16    // OS/2: fsFirstCharIndex
+	LastChar           uint16    // OS/2: fsLastCharIndex
+	Protected          bool      // OS/2: fsType
+	FixedPitch         bool      // post: isFixedPitch
+	Bold               bool      // OS/2: usWeightClass == 7
 }
 
 func (fd ttf) String() string {
@@ -144,11 +144,11 @@ func (fd ttf) PrintChars() string {
 }
 
 type table struct {
+	data   []byte
 	chksum uint32
 	off    uint32
 	size   uint32
 	padded uint32
-	data   []byte
 }
 
 func (t table) uint16(off int) uint16 {

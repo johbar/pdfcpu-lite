@@ -180,22 +180,22 @@ func (ctx *Context) ConvertToUnit(d types.Dim) types.Dim {
 
 // ReadContext represents the context for reading a PDF file.
 type ReadContext struct {
+	RS                  io.ReadSeeker // Input read seeker.
+	ObjectStreams       types.IntSet  // All object numbers of any object streams found which need to be decoded.
+	XRefStreams         types.IntSet  // All object numbers of any xref streams found.
 	FileName            string        // Input PDF-File.
 	FileSize            int64         // Input file size.
-	RS                  io.ReadSeeker // Input read seeker.
 	EolCount            int           // 1 or 2 characters used for eol.
 	RepairOffset        int64
-	BinaryTotalSize     int64        // total stream data
-	BinaryImageSize     int64        // total image stream data
-	BinaryFontSize      int64        // total font stream data (fontfiles)
-	BinaryImageDuplSize int64        // total obsolet image stream data after optimization
-	BinaryFontDuplSize  int64        // total obsolet font stream data after optimization
-	Linearized          bool         // File is linearized.
-	Hybrid              bool         // File is a hybrid PDF file.
-	UsingObjectStreams  bool         // File is using object streams.
-	ObjectStreams       types.IntSet // All object numbers of any object streams found which need to be decoded.
-	UsingXRefStreams    bool         // File is using xref streams.
-	XRefStreams         types.IntSet // All object numbers of any xref streams found.
+	BinaryTotalSize     int64 // total stream data
+	BinaryImageSize     int64 // total image stream data
+	BinaryFontSize      int64 // total font stream data (fontfiles)
+	BinaryImageDuplSize int64 // total obsolet image stream data after optimization
+	BinaryFontDuplSize  int64 // total obsolet font stream data after optimization
+	Linearized          bool  // File is linearized.
+	Hybrid              bool  // File is a hybrid PDF file.
+	UsingObjectStreams  bool  // File is using object streams.
+	UsingXRefStreams    bool  // File is using xref streams.
 }
 
 func newReadContext(rs io.ReadSeeker) (*ReadContext, error) {
@@ -282,18 +282,11 @@ func (rc *ReadContext) ReadFileSize() int {
 
 // OptimizationContext represents the context for the optimization of a PDF file.
 type OptimizationContext struct {
-
-	// Font section
-	PageFonts           []types.IntSet      // For each page a registry of font object numbers.
-	FontObjects         map[int]*FontObject // FontObject lookup table by font object number.
-	FormFontObjects     map[int]*FontObject // FormFontObject lookup table by font object number.
-	Fonts               map[string][]int    // All font object numbers registered for a font name.
-	DuplicateFonts      map[int]types.Dict  // Registry of duplicate font dicts.
-	DuplicateFontObjs   types.IntSet        // The set of objects that represents the union of the object graphs of all duplicate font dicts.
-	CorruptFontResDicts []types.Dict        // Corrupted fontDicts encountered during bypassing xreftable.
-
-	// Image section
-	PageImages         []types.IntSet                // For each page a registry of image object numbers.
+	FontObjects        map[int]*FontObject           // FontObject lookup table by font object number.
+	FormFontObjects    map[int]*FontObject           // FormFontObject lookup table by font object number.
+	Fonts              map[string][]int              // All font object numbers registered for a font name.
+	DuplicateFonts     map[int]types.Dict            // Registry of duplicate font dicts.
+	DuplicateFontObjs  types.IntSet                  // The set of objects that represents the union of the object graphs of all duplicate font dicts.
 	ImageObjects       map[int]*ImageObject          // ImageObject lookup table by image object number.
 	DuplicateImages    map[int]*DuplicateImageObject // Registry of duplicate image dicts.
 	DuplicateImageObjs types.IntSet                  // The set of objects that represents the union of the object graphs of all duplicate image dicts.
@@ -302,10 +295,18 @@ type OptimizationContext struct {
 	FormStreamCache    map[int]*types.StreamDict
 
 	DuplicateInfoObjects types.IntSet // Possible result of manual info dict modification.
-	NonReferencedObjs    []int        // Objects that are not referenced.
 
 	Cache     map[int]bool // For visited objects during optimization.
 	NullObjNr *int         // objNr of a regular null object, to be used for fixing references to free objects.
+
+	// Font section
+	PageFonts           []types.IntSet // For each page a registry of font object numbers.
+	CorruptFontResDicts []types.Dict   // Corrupted fontDicts encountered during bypassing xreftable.
+
+	// Image section
+	PageImages        []types.IntSet // For each page a registry of image object numbers.
+	NonReferencedObjs []int          // Objects that are not referenced.
+
 }
 
 func newOptimizationContext() *OptimizationContext {
@@ -575,23 +576,23 @@ type WriteContext struct {
 	// The PDF-File which gets generated.
 	*bufio.Writer                     // writer associated with Fp
 	Fp                  *os.File      // file pointer needed for detecting FileSize
-	FileSize            int64         // size of the written file
+	SelectedPages       types.IntSet  // for split, trim and extract
+	Table               map[int]int64 // object write offsets
+	CurrentObjStream    *int          // if not nil, any new non-stream-object gets added to the object stream with this object number
+	OffsetPrevXRef      *int64        // increment trailer entry "Prev"
 	DirName             string        // output directory
 	FileName            string        // output file name
-	SelectedPages       types.IntSet  // for split, trim and extract
+	Eol                 string        // end of line char sequence
+	ObjNrs              []int         // increment candidate object numbers
+	FileSize            int64         // size of the written file
 	BinaryTotalSize     int64         // total stream data, counts 100% all stream data written
 	BinaryImageSize     int64         // total image stream data written = Read.BinaryImageSize
 	BinaryFontSize      int64         // total font stream data (fontfiles) = copy of Read.BinaryFontSize
-	Table               map[int]int64 // object write offsets
 	Offset              int64         // current write offset
 	OffsetSigByteRange  int64         // write offset of signature dict value for "ByteRange"
 	OffsetSigContents   int64         // write offset of signature dict value for "Contents"
 	WriteToObjectStream bool          // if true start to embed objects into object streams and obey ObjectStreamMaxObjects
-	CurrentObjStream    *int          // if not nil, any new non-stream-object gets added to the object stream with this object number
-	Eol                 string        // end of line char sequence
 	Increment           bool          // write context as PDF increment
-	ObjNrs              []int         // increment candidate object numbers
-	OffsetPrevXRef      *int64        // increment trailer entry "Prev"
 }
 
 // NewWriteContext returns a new WriteContext.

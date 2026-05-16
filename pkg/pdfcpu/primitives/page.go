@@ -29,17 +29,12 @@ import (
 
 // PDFPage represents a PDF page with content for generation.
 type PDFPage struct {
-	pdf             *PDF
-	number          int                  // page number
-	Paper           string               // page size
-	mediaBox        *types.Rectangle     // page media box
-	Crop            string               // page crop box
-	cropBox         *types.Rectangle     // page crop box
-	BackgroundColor string               `json:"bgCol"`
-	bgCol           *color.SimpleColor   // page background color
-	Fonts           map[string]*FormFont // default fonts
 	DA              types.Object
-	Guides          []*Guide               // hor/vert guidelines for layout
+	pdf             *PDF
+	mediaBox        *types.Rectangle       // page media box
+	cropBox         *types.Rectangle       // page crop box
+	bgCol           *color.SimpleColor     // page background color
+	Fonts           map[string]*FormFont   // default fonts
 	Margin          *Margin                // page margin
 	Border          *Border                // page border
 	Padding         *Padding               // page padding
@@ -54,6 +49,11 @@ type PDFPage struct {
 	FileNames       map[string]string      `json:"files"`
 	Tabs            types.IntSet           `json:"-"`
 	Content         *Content
+	Paper           string   // page size
+	Crop            string   // page crop box
+	BackgroundColor string   `json:"bgCol"`
+	Guides          []*Guide // hor/vert guidelines for layout
+	number          int      // page number
 }
 
 func (page *PDFPage) resolveFileName(s string) (string, error) {

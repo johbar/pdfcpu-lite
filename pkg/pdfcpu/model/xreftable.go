@@ -47,15 +47,15 @@ var zero int64 = 0
 // Dict, StreamDict, ObjectStreamDict, PDFXRefStreamDict,
 // Array, Integer, Float, Name, StringLiteral, HexLiteral, Boolean
 type XRefTableEntry struct {
-	Free            bool
+	Object          types.Object
 	Offset          *int64
 	Generation      *int
-	Incr            int // TODO
-	RefCount        int
-	Object          types.Object
-	Compressed      bool
 	ObjectStream    *int
 	ObjectStreamInd *int
+	Incr            int // TODO
+	RefCount        int
+	Free            bool
+	Compressed      bool
 	Valid           bool
 	BeingValidated  bool
 }
@@ -83,9 +83,9 @@ type Enc struct {
 	O, U       []byte
 	OE, UE     []byte
 	Perms      []byte
+	ID         []byte
 	L, P, R, V int
 	Emd        bool // encrypt meta data
-	ID         []byte
 }
 
 // AnnotMap represents annotations by object number of the corresponding annotation dict.
@@ -101,37 +101,26 @@ type PgAnnots map[AnnotationType]Annot
 
 // XRefTable represents a PDF cross reference table plus stats for a PDF file.
 type XRefTable struct {
-	Table               map[int]*XRefTableEntry
-	Size                *int               // from trailer dict.
-	MaxObjNr            int                // after reading in all objects from xRef table.
-	PageCount           int                // Number of pages.
-	Root                *types.IndirectRef // Pointer to catalog (reference to root object).
-	RootDict            types.Dict         // Catalog
-	Names               map[string]*Node   // Cache for name trees as found in catalog.
-	Dests               types.Dict         // Named destinations
-	NameRefs            map[string]NameMap // Name refs for merging only
-	Encrypt             *types.IndirectRef // Encrypt dict.
-	E                   *Enc
-	EncKey              []byte // Encrypt key.
-	AES4Strings         bool
-	AES4Streams         bool
-	AES4EmbeddedStreams bool
+	DTS time.Time // trusted document timestamp
+
+	// Statistics
+	Stats PDFStats
+
+	Table    map[int]*XRefTableEntry
+	Size     *int               // from trailer dict.
+	Root     *types.IndirectRef // Pointer to catalog (reference to root object).
+	RootDict types.Dict         // Catalog
+	Names    map[string]*Node   // Cache for name trees as found in catalog.
+	Dests    types.Dict         // Named destinations
+	NameRefs map[string]NameMap // Name refs for merging only
+	Encrypt  *types.IndirectRef // Encrypt dict.
+	E        *Enc
 
 	// PDF Version
 	HeaderVersion *Version // The PDF version the source is claiming to us as per its header.
 	RootVersion   *Version // Optional PDF version taking precedence over the header version.
 
-	// Document information section
-	ID             types.Array        // from trailer
 	Info           *types.IndirectRef // Infodict (reference to info dict object)
-	Title          string
-	Subject        string
-	Author         string
-	Creator        string
-	Producer       string
-	CreationDate   string
-	ModDate        string
-	Keywords       string
 	KeywordList    types.StringSet
 	Properties     map[string]string
 	CatalogXMPMeta *XMPMeta
@@ -151,40 +140,56 @@ type XRefTable struct {
 	// Thumbnail images
 	PageThumbs map[int]types.IndirectRef
 
-	Signatures        map[int]map[int]Signature // form signatures and signatures located via page annotations only keyed by increment #.
-	URSignature       types.Dict                // usage rights signature
-	CertifiedSigObjNr int                       //
-	DSS               types.Dict                // document security store
-	DTS               time.Time                 // trusted document timestamp
+	Signatures  map[int]map[int]Signature // form signatures and signatures located via page annotations only keyed by increment #.
+	URSignature types.Dict                // usage rights signature
+	DSS         types.Dict                // document security store
 
 	// Offspec section
 	AdditionalStreams *types.Array // array of IndirectRef - trailer :e.g., Oasis "Open Doc"
 
-	// Statistics
-	Stats PDFStats
+	Conf *Configuration            // current command being executed
+	URIs map[int]map[string]string // URIs for link checking
+
+	Form     types.Dict
+	Outlines types.Dict
+
+	// Fonts
+	UsedGIDs     map[string]map[uint16]bool
+	FillFonts    map[string]types.IndirectRef
+	Title        string
+	Subject      string
+	Author       string
+	Creator      string
+	Producer     string
+	CreationDate string
+	ModDate      string
+	Keywords     string
+	EncKey       []byte // Encrypt key.
+
+	// Document information section
+	ID                types.Array // from trailer
+	MaxObjNr          int         // after reading in all objects from xRef table.
+	PageCount         int         // Number of pages.
+	CertifiedSigObjNr int         //
+
+	// Validation
+	CurPage             int // current page during validation
+	CurObj              int // current object during validation, the last dereferenced object
+	ValidationMode      int // see Configuration
+	AES4Strings         bool
+	AES4Streams         bool
+	AES4EmbeddedStreams bool
 
 	Tagged           bool // File is using tags.
 	CustomExtensions bool // File is using custom extensions for annotations and/or keywords.
 
-	// Validation
-	CurPage        int                       // current page during validation
-	CurObj         int                       // current object during validation, the last dereferenced object
-	Conf           *Configuration            // current command being executed
-	ValidationMode int                       // see Configuration
-	ValidateLinks  bool                      // check for broken links in LinkAnnotations/URIDicts.
-	Valid          bool                      // true means successful validated against ISO 32000.
-	URIs           map[int]map[string]string // URIs for link checking
+	ValidateLinks bool // check for broken links in LinkAnnotations/URIDicts.
+	Valid         bool // true means successful validated against ISO 32000.
 
 	Optimized      bool
 	Watermarked    bool
-	Form           types.Dict
-	Outlines       types.Dict
 	SignatureExist bool
 	AppendOnly     bool
-
-	// Fonts
-	UsedGIDs  map[string]map[uint16]bool
-	FillFonts map[string]types.IndirectRef
 }
 
 // NewXRefTable creates a new XRefTable.

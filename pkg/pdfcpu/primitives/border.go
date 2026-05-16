@@ -26,11 +26,11 @@ import (
 
 type Border struct {
 	pdf   *PDF
-	Name  string
-	Width int
-	Color string `json:"col"`
 	col   *color.SimpleColor
+	Name  string
+	Color string `json:"col"`
 	Style string
+	Width int
 	style types.LineJoinStyle
 }
 

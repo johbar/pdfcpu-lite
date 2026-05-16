@@ -36,16 +36,16 @@ const maxEntries = 3
 // Once maxEntries has been reached a leaf node turns into an intermediary node with two kids,
 // which are leaf nodes each of them holding half of the sorted entries of the original leaf node.
 type Node struct {
+	D          types.Dict // The PDF dict representing this name tree node.
+	Kmin, Kmax string     // Mirror of the name tree's Limit array[Kmin,Kmax].
 	Kids       []*Node    // Mirror of the name tree's Kids array, an array of indirect references.
 	Names      []entry    // Mirror of the name tree's Names array.
-	Kmin, Kmax string     // Mirror of the name tree's Limit array[Kmin,Kmax].
-	D          types.Dict // The PDF dict representing this name tree node.
 }
 
 // entry is a key value pair.
 type entry struct {
-	k string
 	v types.Object
+	k string
 }
 
 func (n Node) leaf() bool {
@@ -121,9 +121,9 @@ func (n *Node) AppendToNames(k string, v types.Object) {
 				arr1[i] = v
 			}
 		}
-		n.Names = append(n.Names, entry{k, arr1})
+		n.Names = append(n.Names, entry{k: k, v: arr1})
 	} else {
-		n.Names = append(n.Names, entry{k, v})
+		n.Names = append(n.Names, entry{k: k, v: v})
 	}
 }
 
@@ -152,14 +152,14 @@ func (n *Node) insertIntoLeaf(k string, v types.Object, m NameMap) error {
 		// Insert entry(k,v) at i
 		n.Names = append(n.Names, entry{})
 		copy(n.Names[i+1:], n.Names[i:])
-		n.Names[i] = entry{k, v}
+		n.Names[i] = entry{k: k, v: v}
 		return nil
 	}
 	if log.DebugEnabled() {
 		log.Debug.Printf("Insert k:%s at end\n", k)
 	}
 	n.Kmax = k
-	n.Names = append(n.Names, entry{k, v})
+	n.Names = append(n.Names, entry{k: k, v: v})
 	return nil
 }
 
@@ -229,7 +229,7 @@ func (n *Node) HandleLeaf(xRefTable *XRefTable, k string, v types.Object, m Name
 	//fmt.Printf("HandleLeaf: %s %v\n\n", k, v)
 
 	if len(n.Names) == 0 {
-		n.Names = append(n.Names, entry{k, v})
+		n.Names = append(n.Names, entry{k: k, v: v})
 		n.Kmin, n.Kmax = k, k
 		if log.DebugEnabled() {
 			log.Debug.Printf("first key=%s\n", k)
@@ -249,14 +249,14 @@ func (n *Node) HandleLeaf(xRefTable *XRefTable, k string, v types.Object, m Name
 		n.Kmin = k
 		n.Names = append(n.Names, entry{})
 		copy(n.Names[1:], n.Names[0:])
-		n.Names[0] = entry{k, v}
+		n.Names[0] = entry{k: k, v: v}
 	} else if keyLess(n.Kmax, k) {
 		// Append (k,v).
 		if log.DebugEnabled() {
 			log.Debug.Printf("Insert k:%s at end\n", k)
 		}
 		n.Kmax = k
-		n.Names = append(n.Names, entry{k, v})
+		n.Names = append(n.Names, entry{k: k, v: v})
 	} else {
 		// Insert (k,v) while ensuring unique k.
 		ok, err := n.insertUniqueIntoLeaf(k, v, m, nameRefDictKeys)

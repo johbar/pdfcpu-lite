@@ -318,13 +318,12 @@ func pageInfo(info *PDFInfo, selectedPages types.IntSet) ([]string, error) {
 }
 
 type PDFInfo struct {
-	FileName           string                          `json:"source,omitempty"`
-	Version            string                          `json:"version"`
-	PageCount          int                             `json:"pageCount"`
-	PageBoundaries     []model.PageBoundaries          `json:"-"`
 	Boundaries         map[string]model.PageBoundaries `json:"pageBoundaries,omitempty"`
 	PageDimensions     map[types.Dim]bool              `json:"-"`
-	Dimensions         []types.Dim                     `json:"pageSizes,omitempty"`
+	ViewerPref         *model.ViewerPreferences        `json:"viewerPreferences,omitempty"`
+	Properties         map[string]string               `json:"properties"`
+	FileName           string                          `json:"source,omitempty"`
+	Version            string                          `json:"version"`
 	Title              string                          `json:"title"`
 	Author             string                          `json:"author"`
 	Subject            string                          `json:"subject"`
@@ -334,9 +333,15 @@ type PDFInfo struct {
 	ModificationDate   string                          `json:"modificationDate"`
 	PageMode           string                          `json:"pageMode,omitempty"`
 	PageLayout         string                          `json:"pageLayout,omitempty"`
-	ViewerPref         *model.ViewerPreferences        `json:"viewerPreferences,omitempty"`
+	UnitString         string                          `json:"unit"`
+	PageBoundaries     []model.PageBoundaries          `json:"-"`
+	Dimensions         []types.Dim                     `json:"pageSizes,omitempty"`
 	Keywords           []string                        `json:"keywords"`
-	Properties         map[string]string               `json:"properties"`
+	Attachments        []model.Attachment              `json:"attachments,omitempty"`
+	Fonts              []model.FontInfo                `json:"fonts,omitempty"`
+	PageCount          int                             `json:"pageCount"`
+	Permissions        int                             `json:"permissions"`
+	Unit               types.DisplayUnit               `json:"-"`
 	Tagged             bool                            `json:"tagged"`
 	Hybrid             bool                            `json:"hybrid"`
 	Linearized         bool                            `json:"linearized"`
@@ -350,11 +355,6 @@ type PDFInfo struct {
 	Outlines           bool                            `json:"bookmarks"`
 	Names              bool                            `json:"names"`
 	Encrypted          bool                            `json:"encrypted"`
-	Permissions        int                             `json:"permissions"`
-	Attachments        []model.Attachment              `json:"attachments,omitempty"`
-	Unit               types.DisplayUnit               `json:"-"`
-	UnitString         string                          `json:"unit"`
-	Fonts              []model.FontInfo                `json:"fonts,omitempty"`
 }
 
 func (info PDFInfo) renderKeywords(ss *[]string) error {

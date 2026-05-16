@@ -36,29 +36,29 @@ type TextField struct {
 	pdf             *PDF
 	content         *Content
 	Label           *TextFieldLabel
+	BoundingBox     *types.Rectangle `json:"-"`
+	Font            *FormFont
+	Margin          *Margin // applied to content box
+	Border          *Border
+	BgCol           *color.SimpleColor `json:"-"`
 	ID              string
 	Tip             string
 	Value           string
 	Default         string
-	Position        [2]float64 `json:"pos"` // x,y
+	fontID          string
+	BackgroundColor string     `json:"bgCol"`
+	Alignment       string     `json:"align"` // "Left", "Center", "Right"
+	Position        [2]float64 `json:"pos"`   // x,y
 	x, y            float64
 	Width           float64
 	Height          float64
 	Dx, Dy          float64
-	BoundingBox     *types.Rectangle `json:"-"`
-	Multiline       bool
-	Font            *FormFont
-	fontID          string
-	Margin          *Margin // applied to content box
-	Border          *Border
-	BackgroundColor string             `json:"bgCol"`
-	BgCol           *color.SimpleColor `json:"-"`
-	Alignment       string             `json:"align"` // "Left", "Center", "Right"
-	HorAlign        types.HAlignment   `json:"-"`
-	MaxLen          int                `json:"maxlen"`
-	Comb            bool               `json:"comb"`
-	RTL             bool
+	HorAlign        types.HAlignment `json:"-"`
+	MaxLen          int              `json:"maxlen"`
 	Tab             int
+	Multiline       bool
+	Comb            bool `json:"comb"`
+	RTL             bool
 	Locked          bool
 	Debug           bool
 	Hide            bool

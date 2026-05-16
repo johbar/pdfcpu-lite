@@ -29,30 +29,32 @@ import (
 
 // TextBox represents a form text input field including a positioned label.
 type TextBox struct {
-	pdf      *PDF
-	content  *Content
-	Name     string
-	Value    string     // text, content
-	Position [2]float64 `json:"pos"` // x,y
-	x, y     float64
-	Dx, Dy   float64
-	Anchor   string
-	anchor   types.Anchor
-	anchored bool
-	Width    float64
+	pdf     *PDF
+	content *Content
 
 	Font    *FormFont
 	Margin  *Margin // applied to content box
 	Border  *Border
 	Padding *Padding // applied to TextDescriptor marginx
 
-	BackgroundColor string `json:"bgCol"`
-	bgCol           *color.SimpleColor
-	Alignment       string `json:"align"` // "Left", "Center", "Right"
-	horAlign        types.HAlignment
-	RTL             bool
-	Rotation        float64 `json:"rot"`
-	Hide            bool
+	bgCol  *color.SimpleColor
+	Name   string
+	Value  string // text, content
+	Anchor string
+
+	BackgroundColor string     `json:"bgCol"`
+	Alignment       string     `json:"align"` // "Left", "Center", "Right"
+	Position        [2]float64 `json:"pos"`   // x,y
+	x, y            float64
+	Dx, Dy          float64
+	anchor          types.Anchor
+	Width           float64
+
+	horAlign types.HAlignment
+	Rotation float64 `json:"rot"`
+	anchored bool
+	RTL      bool
+	Hide     bool
 }
 
 func (tb *TextBox) validateAnchor() error {

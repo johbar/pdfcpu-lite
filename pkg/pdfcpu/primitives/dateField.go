@@ -36,25 +36,25 @@ type DateField struct {
 	pdf             *PDF
 	content         *Content
 	Label           *TextFieldLabel
+	dateFormat      *DateFormat
+	BoundingBox     *types.Rectangle `json:"-"`
+	Font            *FormFont
+	Margin          *Margin // applied to content box
+	Border          *Border
+	BgCol           *color.SimpleColor `json:"-"`
 	ID              string
 	Tip             string
 	Value           string
 	Default         string
 	DateFormat      string `json:"format"`
-	dateFormat      *DateFormat
-	Position        [2]float64 `json:"pos"` // x,y
+	fontID          string
+	BackgroundColor string     `json:"bgCol"`
+	Alignment       string     `json:"align"` // "Left", "Center", "Right"
+	Position        [2]float64 `json:"pos"`   // x,y
 	x, y            float64
 	Width           float64
 	Dx, Dy          float64
-	BoundingBox     *types.Rectangle `json:"-"`
-	Font            *FormFont
-	fontID          string
-	Margin          *Margin // applied to content box
-	Border          *Border
-	BackgroundColor string             `json:"bgCol"`
-	BgCol           *color.SimpleColor `json:"-"`
-	Alignment       string             `json:"align"` // "Left", "Center", "Right"
-	HorAlign        types.HAlignment   `json:"-"`
+	HorAlign        types.HAlignment `json:"-"`
 	Tab             int
 	Locked          bool
 	Debug           bool

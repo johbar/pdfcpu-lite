@@ -29,37 +29,37 @@ import (
 
 // PDFFilter represents a PDF stream filter object.
 type PDFFilter struct {
-	Name        string
 	DecodeParms Dict
+	Name        string
 }
 
 // StreamDict represents a PDF stream dict object.
 type StreamDict struct {
 	Dict
-	StreamOffset      int64
 	StreamLength      *int64
 	StreamLengthObjNr *int
 	FilterPipeline    []PDFFilter
 	Raw               []byte // Encoded
 	Content           []byte // Decoded
+	StreamOffset      int64
+	CSComponents      int
 	//DCTImage          image.Image
 	IsPageContent bool
-	CSComponents  int
 }
 
 // NewStreamDict creates a new PDFStreamDict for given PDFDict, stream offset and length.
 func NewStreamDict(d Dict, streamOffset int64, streamLength *int64, streamLengthObjNr *int, filterPipeline []PDFFilter) StreamDict {
 	return StreamDict{
-		d,
-		streamOffset,
-		streamLength,
-		streamLengthObjNr,
-		filterPipeline,
-		nil,
-		nil,
+		Dict: d,
+		StreamOffset : streamOffset,
+		StreamLength: streamLength,
+		StreamLengthObjNr: streamLengthObjNr,
+		FilterPipeline: filterPipeline,
+		Content: nil,
+		Raw: nil,
 		//nil,
-		false,
-		0,
+		IsPageContent: false,
+		CSComponents: 0,
 	}
 }
 
@@ -105,13 +105,13 @@ func (sd StreamDict) Image() bool {
 type DecodeLazyObjectStreamObjectFunc func(c context.Context, s string) (Object, error)
 
 type LazyObjectStreamObject struct {
-	osd         *ObjectStreamDict
-	startOffset int
-	endOffset   int
-
-	decodeFunc    DecodeLazyObjectStreamObjectFunc
 	decodedObject Object
 	decodedError  error
+	osd           *ObjectStreamDict
+
+	decodeFunc  DecodeLazyObjectStreamObjectFunc
+	startOffset int
+	endOffset   int
 }
 
 func NewLazyObjectStreamObject(osd *ObjectStreamDict, startOffset, endOffset int, decodeFunc DecodeLazyObjectStreamObjectFunc) Object {
@@ -188,11 +188,11 @@ func (l *LazyObjectStreamObject) DecodedObject(c context.Context) (Object, error
 
 // ObjectStreamDict represents a object stream dictionary.
 type ObjectStreamDict struct {
+	Prolog   []byte
+	ObjArray Array
 	StreamDict
-	Prolog         []byte
 	ObjCount       int
 	FirstObjOffset int
-	ObjArray       Array
 }
 
 // NewObjectStreamDict creates a new ObjectStreamDict object.
@@ -461,9 +461,9 @@ func (osd *ObjectStreamDict) Finalize() {
 
 // XRefStreamDict represents a cross reference stream dictionary.
 type XRefStreamDict struct {
-	StreamDict
-	Size           int
-	Objects        []int
-	W              [3]int
 	PreviousOffset *int64
+	Objects        []int
+	StreamDict
+	W    [3]int
+	Size int
 }

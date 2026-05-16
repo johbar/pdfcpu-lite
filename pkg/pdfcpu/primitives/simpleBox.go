@@ -32,20 +32,20 @@ import (
 type SimpleBox struct {
 	pdf       *PDF
 	content   *Content
+	Margin    *Margin
+	Border    *Border
+	fillCol   *color.SimpleColor
 	Name      string
+	Anchor    string
+	FillColor string     `json:"fillCol"`
 	Position  [2]float64 `json:"pos"` // x,y
 	x, y      float64
 	Dx, Dy    float64
-	Anchor    string
 	anchor    types.Anchor
-	anchored  bool
 	Width     float64
 	Height    float64
-	Margin    *Margin
-	Border    *Border
-	FillColor string `json:"fillCol"`
-	fillCol   *color.SimpleColor
 	Rotation  float64 `json:"rot"`
+	anchored  bool
 	Hide      bool
 }
 

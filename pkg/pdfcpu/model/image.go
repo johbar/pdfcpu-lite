@@ -45,21 +45,21 @@ type Image struct {
 	io.Reader
 	Name        string // Resource name
 	FileType    string
-	PageNr      int
-	ObjNr       int
-	Width       int    // "Width"
-	Height      int    // "Height"
-	Bpc         int    // "BitsPerComponent"
 	Cs          string // "ColorSpace"
-	Comp        int    // color component count
-	IsImgMask   bool   // "ImageMask"
-	HasImgMask  bool   // "Mask"
-	HasSMask    bool   // "SMask"
-	Thumb       bool   // "Thumbnail"
-	Interpol    bool   // "Interpolate"
-	Size        int64  // "Length"
 	Filter      string // filter pipeline
 	DecodeParms string
+	PageNr      int
+	ObjNr       int
+	Width       int   // "Width"
+	Height      int   // "Height"
+	Bpc         int   // "BitsPerComponent"
+	Comp        int   // color component count
+	Size        int64 // "Length"
+	IsImgMask   bool  // "ImageMask"
+	HasImgMask  bool  // "Mask"
+	HasSMask    bool  // "SMask"
+	Thumb       bool  // "Thumbnail"
+	Interpol    bool  // "Interpolate"
 }
 
 // ImageFileName returns true for supported image file types.

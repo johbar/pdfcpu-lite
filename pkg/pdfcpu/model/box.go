@@ -31,17 +31,17 @@ import (
 // Media box serves as parent box for crop box.
 // Crop box serves as parent box for trim, bleed and art box.
 type Box struct {
-	Rect      *types.Rectangle `json:"rect"` // Rectangle in user space.
-	Inherited bool             `json:"-"`    // Media box and Crop box may be inherited.
-	RefBox    string           `json:"-"`    // Use position of another box,
+	Rect *types.Rectangle `json:"rect"` // Rectangle in user space.
+	// Relative position within parent box
+	Dim    *types.Dim `json:"-"` // dimensions
+	RefBox string     `json:"-"` // Use position of another box,
 	// Margins to parent box in points.
 	// Relative to parent box if 0 < x < 0.5
-	MLeft, MRight float64 `json:"-"`
-	MTop, MBot    float64 `json:"-"`
-	// Relative position within parent box
-	Dim    *types.Dim   `json:"-"` // dimensions
-	Pos    types.Anchor `json:"-"` // position anchor within parent box, one of tl,tc,tr,l,c,r,bl,bc,br.
-	Dx, Dy int          `json:"-"` // anchor offset
+	MLeft, MRight float64      `json:"-"`
+	MTop, MBot    float64      `json:"-"`
+	Pos           types.Anchor `json:"-"` // position anchor within parent box, one of tl,tc,tr,l,c,r,bl,bc,br.
+	Dx, Dy        int          `json:"-"` // anchor offset
+	Inherited     bool         `json:"-"` // Media box and Crop box may be inherited.
 }
 
 // PageBoundaries represent the defined PDF page boundaries.
@@ -51,8 +51,8 @@ type PageBoundaries struct {
 	Trim        *Box   `json:"trimBox,omitempty"`
 	Bleed       *Box   `json:"bleedBox,omitempty"`
 	Art         *Box   `json:"artBox,omitempty"`
-	Rot         int    `json:"rot"` // The effective page rotation.
 	Orientation string `json:"orient"`
+	Rot         int    `json:"rot"` // The effective page rotation.
 }
 
 // SelectAll selects all page boundaries.

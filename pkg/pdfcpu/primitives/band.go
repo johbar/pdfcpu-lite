@@ -29,15 +29,15 @@ import (
 // HorizontalBand is a horizontal region used for header and footer.
 type HorizontalBand struct {
 	pdf             *PDF
+	bgCol           *color.SimpleColor
+	Font            *FormFont
 	Left            string
 	Center          string
 	Right           string
+	BackgroundColor string       `json:"bgCol"`
 	position        types.Anchor // topcenter, center, bottomcenter
 	Height          float64
 	Dx, Dy          int
-	BackgroundColor string `json:"bgCol"`
-	bgCol           *color.SimpleColor
-	Font            *FormFont
 	From            int
 	Thru            int
 	Border          bool

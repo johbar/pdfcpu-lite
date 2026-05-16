@@ -29,11 +29,11 @@ import (
 type Bar struct {
 	pdf     *PDF
 	content *Content
+	col     *color.SimpleColor
+	Color   string `json:"col"`
+	Style   string
 	X, Y    float64 // either or determines orientation.
 	Width   int
-	Color   string `json:"col"`
-	col     *color.SimpleColor
-	Style   string
 	style   types.LineJoinStyle
 	Hide    bool
 }

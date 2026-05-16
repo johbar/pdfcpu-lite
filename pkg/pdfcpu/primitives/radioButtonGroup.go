@@ -37,23 +37,23 @@ type RadioButtonGroup struct {
 	pdf             *PDF
 	content         *Content
 	Label           *TextFieldLabel
+	boundingBox     *types.Rectangle
+	Margin          *Margin // applied to content box
+	bgCol           *color.SimpleColor
+	Buttons         *Buttons
 	ID              string
 	Tip             string
 	Value           string // checked button
 	Default         string
+	Orientation     string
+	BackgroundColor string     `json:"bgCol"`
 	Position        [2]float64 `json:"pos"` // x,y
 	x, y            float64
 	Width           float64
-	boundingBox     *types.Rectangle
-	Orientation     string
-	hor             bool
 	Dx, Dy          float64
-	Margin          *Margin // applied to content box
-	BackgroundColor string  `json:"bgCol"`
-	bgCol           *color.SimpleColor
-	Buttons         *Buttons
-	RTL             bool
 	Tab             int
+	hor             bool
+	RTL             bool
 	Locked          bool
 	Debug           bool
 	Hide            bool

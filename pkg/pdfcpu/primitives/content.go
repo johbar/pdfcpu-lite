@@ -30,7 +30,6 @@ import (
 type Content struct {
 	parent          *Content
 	page            *PDFPage
-	BackgroundColor string               `json:"bgCol"`
 	bgCol           *color.SimpleColor   // page background color
 	Fonts           map[string]*FormFont // named fonts
 	Margins         map[string]*Margin   // named margins
@@ -43,25 +42,26 @@ type Content struct {
 	mediaBox        *types.Rectangle
 	borderRect      *types.Rectangle
 	box             *types.Rectangle
-	Guides          []*Guide              // hor/vert guidelines for layout
-	Bars            []*Bar                `json:"bar"`
-	SimpleBoxes     []*SimpleBox          `json:"box"`
-	SimpleBoxPool   map[string]*SimpleBox `json:"boxes"`
-	TextBoxes       []*TextBox            `json:"text"`
-	TextBoxPool     map[string]*TextBox   `json:"texts"`
-	ImageBoxes      []*ImageBox           `json:"image"`
-	ImageBoxPool    map[string]*ImageBox  `json:"images"`
-	Tables          []*Table              `json:"table"`
-	TablePool       map[string]*Table     `json:"tables"`
+	SimpleBoxPool   map[string]*SimpleBox  `json:"boxes"`
+	TextBoxPool     map[string]*TextBox    `json:"texts"`
+	ImageBoxPool    map[string]*ImageBox   `json:"images"`
+	TablePool       map[string]*Table      `json:"tables"`
+	FieldGroupPool  map[string]*FieldGroup `json:"fieldgroups"`
+	BackgroundColor string                 `json:"bgCol"`
+	Guides          []*Guide               // hor/vert guidelines for layout
+	Bars            []*Bar                 `json:"bar"`
+	SimpleBoxes     []*SimpleBox           `json:"box"`
+	TextBoxes       []*TextBox             `json:"text"`
+	ImageBoxes      []*ImageBox            `json:"image"`
+	Tables          []*Table               `json:"table"`
 	// Form elements
-	TextFields        []*TextField           `json:"textfield"`        // input text fields with optional label
-	DateFields        []*DateField           `json:"datefield"`        // input date fields with optional label
-	CheckBoxes        []*CheckBox            `json:"checkbox"`         // input checkboxes with optional label
-	RadioButtonGroups []*RadioButtonGroup    `json:"radiobuttongroup"` // input radiobutton groups with optional label
-	ComboBoxes        []*ComboBox            `json:"combobox"`
-	ListBoxes         []*ListBox             `json:"listbox"`
-	FieldGroups       []*FieldGroup          `json:"fieldgroup"` // rectangular container holding form elements
-	FieldGroupPool    map[string]*FieldGroup `json:"fieldgroups"`
+	TextFields        []*TextField        `json:"textfield"`        // input text fields with optional label
+	DateFields        []*DateField        `json:"datefield"`        // input date fields with optional label
+	CheckBoxes        []*CheckBox         `json:"checkbox"`         // input checkboxes with optional label
+	RadioButtonGroups []*RadioButtonGroup `json:"radiobuttongroup"` // input radiobutton groups with optional label
+	ComboBoxes        []*ComboBox         `json:"combobox"`
+	ListBoxes         []*ListBox          `json:"listbox"`
+	FieldGroups       []*FieldGroup       `json:"fieldgroup"` // rectangular container holding form elements
 }
 
 func (c *Content) validateBackgroundColor() error {

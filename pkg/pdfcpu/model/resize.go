@@ -27,14 +27,14 @@ import (
 )
 
 type Resize struct {
+	PageDim       *types.Dim         // page dimensions in display unit
+	BgColor       *color.SimpleColor // background color
+	PageSize      string             // paper size eg. A2,A3,A4,Legal,Ledger,...
 	Scale         float64            // scale factor x > 0, x > 1 enlarges, x < 1 shrinks down
 	Unit          types.DisplayUnit  // display unit
-	PageDim       *types.Dim         // page dimensions in display unit
-	PageSize      string             // paper size eg. A2,A3,A4,Legal,Ledger,...
 	EnforceOrient bool               // enforce orientation of PageDim
 	UserDim       bool               // true if dimensions set by dim rather than formsize
 	Border        bool               // true to render original crop box
-	BgColor       *color.SimpleColor // background color
 }
 
 func (r Resize) EnforceOrientation() bool {

@@ -31,12 +31,12 @@ import (
 
 type FormFont struct {
 	pdf      *PDF
+	col      *color.SimpleColor
 	Name     string
 	Lang     string // ISO-639
 	Script   string // ISO-15924
-	Size     int
 	Color    string `json:"col"`
-	col      *color.SimpleColor
+	Size     int
 	FillFont bool
 }
 

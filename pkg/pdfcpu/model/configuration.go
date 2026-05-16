@@ -168,6 +168,10 @@ func (cmd CommandMode) AllowRemoveSignatures() bool {
 
 // Configuration of a Context.
 type Configuration struct {
+	UserPWNew *string
+
+	OwnerPWNew *string
+
 	// Location of corresponding config.yml
 	Path string
 
@@ -175,54 +179,29 @@ type Configuration struct {
 
 	Version string
 
-	// Ensure .pdf input file extension.
-	CheckFileNameExt bool
-
-	// Enable PDF V1.5 compatible processing of object streams, xref streams, hybrid PDF files.
-	Reader15 bool
-
-	// Enable decoding of all streams (fontfiles, images..) for logging purposes.
-	DecodeAllStreams bool
-
-	// Validate against ISO-32000: strict or relaxed.
-	ValidationMode int
-
-	// Enable validation right before writing.
-	PostProcessValidate bool
-
-	// Check for broken links in LinkedAnnotations/URIActions.
-	ValidateLinks bool
-
 	// End of line char sequence for writing.
 	Eol string
-
-	// Turn on object stream generation.
-	// A signal for compressing any new non-stream-object into an object stream.
-	// true enforces WriteXRefStream to true.
-	// false does not prevent xRefStream generation.
-	WriteObjectStream bool
-
-	// Switch between xRefSection (<=V1.4) and objectStream/xRefStream (>=V1.5) writing.
-	WriteXRefStream bool
 
 	// CSV filename holding input file statistics.
 	StatsFileName string
 
 	// Supplied user password.
-	UserPW    string
-	UserPWNew *string
+	UserPW string
 
 	// Supplied owner password.
-	OwnerPW    string
-	OwnerPWNew *string
+	OwnerPW string
 
 	// Supplied private key password.
 	PrivateKeyPW string
 
-	// EncryptUsingAES ensures AES encryption.
-	// true: AES encryption
-	// false: RC4 encryption.
-	EncryptUsingAES bool
+	// Timestamp format.
+	TimestampFormat string
+
+	// Date format.
+	DateFormat string
+
+	// Validate against ISO-32000: strict or relaxed.
+	ValidationMode int
 
 	// AES:40,128,256 RC4:40,128
 	EncryptKeyLength int
@@ -236,11 +215,50 @@ type Configuration struct {
 	// Display unit in effect.
 	Unit types.DisplayUnit
 
-	// Timestamp format.
-	TimestampFormat string
+	// HTTP timeout in seconds.
+	Timeout int
 
-	// Date format.
-	DateFormat string
+	// Http timeout in seconds for CRL revocation checking.
+	TimeoutCRL int
+
+	// Http timeout in seconds for OCSP revocation checking.
+	TimeoutOCSP int
+
+	// Preferred certificate revocation checking mechanism: CRL, OSCP
+	PreferredCertRevocationChecker int
+
+	// Limit form field content for display purposes when using pdfcpu form list.
+	// If > 0 affects the columns AltName, Default and Value.
+	FormFieldListMaxColWidth int
+
+	// Ensure .pdf input file extension.
+	CheckFileNameExt bool
+
+	// Enable PDF V1.5 compatible processing of object streams, xref streams, hybrid PDF files.
+	Reader15 bool
+
+	// Enable decoding of all streams (fontfiles, images..) for logging purposes.
+	DecodeAllStreams bool
+
+	// Enable validation right before writing.
+	PostProcessValidate bool
+
+	// Check for broken links in LinkedAnnotations/URIActions.
+	ValidateLinks bool
+
+	// Turn on object stream generation.
+	// A signal for compressing any new non-stream-object into an object stream.
+	// true enforces WriteXRefStream to true.
+	// false does not prevent xRefStream generation.
+	WriteObjectStream bool
+
+	// Switch between xRefSection (<=V1.4) and objectStream/xRefStream (>=V1.5) writing.
+	WriteXRefStream bool
+
+	// EncryptUsingAES ensures AES encryption.
+	// true: AES encryption
+	// false: RC4 encryption.
+	EncryptUsingAES bool
 
 	// Optimize after reading and validating the xreftable but before processing.
 	Optimize bool
@@ -263,22 +281,6 @@ type Configuration struct {
 
 	// Internet availability.
 	Offline bool
-
-	// HTTP timeout in seconds.
-	Timeout int
-
-	// Http timeout in seconds for CRL revocation checking.
-	TimeoutCRL int
-
-	// Http timeout in seconds for OCSP revocation checking.
-	TimeoutOCSP int
-
-	// Preferred certificate revocation checking mechanism: CRL, OSCP
-	PreferredCertRevocationChecker int
-
-	// Limit form field content for display purposes when using pdfcpu form list.
-	// If > 0 affects the columns AltName, Default and Value.
-	FormFieldListMaxColWidth int
 
 	// Do not encrypt output files.
 	RemoveEncryption bool

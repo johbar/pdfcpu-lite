@@ -33,27 +33,27 @@ type ComboBox struct {
 	pdf             *PDF
 	content         *Content
 	Label           *TextFieldLabel
+	BoundingBox     *types.Rectangle `json:"-"`
+	Font            *FormFont
+	Margin          *Margin
+	Border          *Border
+	BgCol           *color.SimpleColor `json:"-"`
 	ID              string
 	Tip             string
 	Default         string
 	Value           string
+	fontID          string `json:"-"`
+	BackgroundColor string `json:"bgCol"`
+	Alignment       string `json:"align"` // "Left", "Center", "Right"
 	Options         []string
 	Position        [2]float64 `json:"pos"`
 	x, y            float64
 	Width           float64
 	Dx, Dy          float64
-	BoundingBox     *types.Rectangle `json:"-"`
-	Edit            bool
-	Font            *FormFont
-	fontID          string `json:"-"`
-	Margin          *Margin
-	Border          *Border
-	BackgroundColor string             `json:"bgCol"`
-	BgCol           *color.SimpleColor `json:"-"`
-	Alignment       string             `json:"align"` // "Left", "Center", "Right"
-	HorAlign        types.HAlignment   `json:"-"`
-	RTL             bool
+	HorAlign        types.HAlignment `json:"-"`
 	Tab             int
+	Edit            bool
+	RTL             bool
 	Locked          bool
 	Debug           bool
 	Hide            bool

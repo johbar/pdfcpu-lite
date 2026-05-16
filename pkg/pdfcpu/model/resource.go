@@ -27,12 +27,12 @@ import (
 
 // FontObject represents a font used in a PDF file.
 type FontObject struct {
-	ResourceNames []string
+	FontDict      types.Dict
 	Prefix        string
 	FontName      string
-	FontDict      types.Dict
-	Data          []byte
 	Extension     string
+	ResourceNames []string
+	Data          []byte
 	Embedded      bool
 }
 

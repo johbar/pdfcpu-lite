@@ -28,13 +28,13 @@ import (
 type Regions struct {
 	page        *PDFPage
 	parent      *Content
-	Name        string // unique
-	Orientation string `json:"orient"`
-	horizontal  bool
 	Divider     *Divider `json:"div"`
 	Left, Right *Content // 2 horizontal regions or
 	Top, Bottom *Content // 2 vertical regions
 	mediaBox    *types.Rectangle
+	Name        string // unique
+	Orientation string `json:"orient"`
+	horizontal  bool
 }
 
 func parseRegionOrientation(s string) (types.Orientation, error) {

@@ -44,23 +44,23 @@ type Header struct {
 	Source   string   `json:"source"`
 	Version  string   `json:"version"`
 	Creation string   `json:"creation"`
-	ID       []string `json:"id,omitempty"`
 	Title    string   `json:"title,omitempty"`
 	Author   string   `json:"author,omitempty"`
 	Creator  string   `json:"creator,omitempty"`
 	Producer string   `json:"producer,omitempty"`
 	Subject  string   `json:"subject,omitempty"`
 	Keywords string   `json:"keywords,omitempty"`
+	ID       []string `json:"id,omitempty"`
 }
 
 // TextField represents a form text field.
 type TextField struct {
-	Pages     []int  `json:"pages"`
 	ID        string `json:"id"`
 	Name      string `json:"name,omitempty"`
 	AltName   string `json:"altname,omitempty"`
 	Default   string `json:"default,omitempty"`
 	Value     string `json:"value"`
+	Pages     []int  `json:"pages"`
 	MaxLen    int    `json:"maxlen,omitempty"`
 	Multiline bool   `json:"multiline"`
 	Locked    bool   `json:"locked"`
@@ -68,22 +68,22 @@ type TextField struct {
 
 // DateField represents an Acroform date field.
 type DateField struct {
-	Pages   []int  `json:"pages"`
 	ID      string `json:"id"`
 	Name    string `json:"name,omitempty"`
 	AltName string `json:"altname,omitempty"`
 	Format  string `json:"format"`
 	Default string `json:"default,omitempty"`
 	Value   string `json:"value"`
+	Pages   []int  `json:"pages"`
 	Locked  bool   `json:"locked"`
 }
 
 // RadioButtonGroup represents a form checkbox.
 type CheckBox struct {
-	Pages   []int  `json:"pages"`
 	ID      string `json:"id"`
 	Name    string `json:"name,omitempty"`
 	AltName string `json:"altname,omitempty"`
+	Pages   []int  `json:"pages"`
 	Default bool   `json:"default"`
 	Value   bool   `json:"value"`
 	Locked  bool   `json:"locked"`
@@ -91,39 +91,39 @@ type CheckBox struct {
 
 // RadioButtonGroup represents a form radio button group.
 type RadioButtonGroup struct {
-	Pages   []int    `json:"pages"`
 	ID      string   `json:"id"`
 	Name    string   `json:"name,omitempty"`
 	AltName string   `json:"altname,omitempty"`
-	Options []string `json:"options"`
 	Default string   `json:"default,omitempty"`
 	Value   string   `json:"value"`
+	Pages   []int    `json:"pages"`
+	Options []string `json:"options"`
 	Locked  bool     `json:"locked"`
 }
 
 // ComboBox represents a form combobox.
 type ComboBox struct {
-	Pages    []int    `json:"pages"`
 	ID       string   `json:"id"`
 	Name     string   `json:"name,omitempty"`
 	AltName  string   `json:"altname,omitempty"`
-	Editable bool     `json:"editable"`
-	Options  []string `json:"options"`
 	Default  string   `json:"default,omitempty"`
 	Value    string   `json:"value"`
+	Pages    []int    `json:"pages"`
+	Options  []string `json:"options"`
+	Editable bool     `json:"editable"`
 	Locked   bool     `json:"locked"`
 }
 
 // ListBox represents a form listbox.
 type ListBox struct {
-	Pages    []int    `json:"pages"`
 	ID       string   `json:"id"`
 	Name     string   `json:"name,omitempty"`
 	AltName  string   `json:"altname,omitempty"`
-	Multi    bool     `json:"multi"`
+	Pages    []int    `json:"pages"`
 	Options  []string `json:"options"`
 	Defaults []string `json:"defaults,omitempty"`
 	Values   []string `json:"values,omitempty"`
+	Multi    bool     `json:"multi"`
 	Locked   bool     `json:"locked"`
 }
 
@@ -134,14 +134,14 @@ type Page struct {
 
 // Form represents a PDF form (aka. Acroform).
 type Form struct {
+	Pages             map[string]*Page    `json:"pages,omitempty"`
+	FileName          string              `json:"filename,omitempty"`
 	TextFields        []*TextField        `json:"textfield,omitempty"`
 	DateFields        []*DateField        `json:"datefield,omitempty"`
 	CheckBoxes        []*CheckBox         `json:"checkbox,omitempty"`
 	RadioButtonGroups []*RadioButtonGroup `json:"radiobuttongroup,omitempty"`
 	ComboBoxes        []*ComboBox         `json:"combobox,omitempty"`
 	ListBoxes         []*ListBox          `json:"listbox,omitempty"`
-	Pages             map[string]*Page    `json:"pages,omitempty"`
-	FileName          string              `json:"filename,omitempty"`
 }
 
 // FormGroup represents a JSON struct containing a sequence of form instances.

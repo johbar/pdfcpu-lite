@@ -78,16 +78,16 @@ type Creator struct {
 }
 
 type Description struct {
-	//XMLName      xml.Name `xml:"http://www.w3.org/1999/02/22-rdf-syntax-ns# Description"`
-	Title        Title    `xml:"http://purl.org/dc/elements/1.1/ title"`
-	Author       Creator  `xml:"http://purl.org/dc/elements/1.1/ creator"`
-	Subject      Desc     `xml:"http://purl.org/dc/elements/1.1/ description"`
-	Creator      string   `xml:"http://ns.adobe.com/xap/1.0/ CreatorTool"`
 	CreationDate UserDate `xml:"http://ns.adobe.com/xap/1.0/ CreateDate"`
 	ModDate      UserDate `xml:"http://ns.adobe.com/xap/1.0/ ModifyDate"`
+	Creator      string   `xml:"http://ns.adobe.com/xap/1.0/ CreatorTool"`
 	Producer     string   `xml:"http://ns.adobe.com/pdf/1.3/ Producer"`
-	Trapped      bool     `xml:"http://ns.adobe.com/pdf/1.3/ Trapped"`
 	Keywords     string   `xml:"http://ns.adobe.com/pdf/1.3/ Keywords"`
+	//XMLName      xml.Name `xml:"http://www.w3.org/1999/02/22-rdf-syntax-ns# Description"`
+	Title   Title   `xml:"http://purl.org/dc/elements/1.1/ title"`
+	Author  Creator `xml:"http://purl.org/dc/elements/1.1/ creator"`
+	Subject Desc    `xml:"http://purl.org/dc/elements/1.1/ description"`
+	Trapped bool    `xml:"http://ns.adobe.com/pdf/1.3/ Trapped"`
 }
 
 type RDF struct {

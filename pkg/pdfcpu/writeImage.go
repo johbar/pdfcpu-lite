@@ -47,13 +47,13 @@ type colValRange struct {
 
 // PDFImage represents a XObject of subtype image.
 type PDFImage struct {
-	objNr     int
 	sd        *types.StreamDict
+	softMask  []byte
+	decode    []colValRange
+	objNr     int
 	comp      int
 	bpc       int
 	w, h      int
-	softMask  []byte
-	decode    []colValRange
 	imageMask bool
 	thumb     bool
 }

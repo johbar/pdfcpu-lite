@@ -51,8 +51,8 @@ const (
 const SignTSFormat = "2006-01-02 15:04:05 -0700"
 
 type RevocationDetails struct {
-	Status int
 	Reason string
+	Status int
 }
 
 func (rd RevocationDetails) String() string {
@@ -65,9 +65,9 @@ func (rd RevocationDetails) String() string {
 }
 
 type TrustDetails struct {
-	Status                                int
 	Reason                                string
 	SourceObtainedFrom                    string
+	Status                                int
 	AllowSignDocuments                    bool
 	AllowCertifyDocuments                 bool
 	AllowExecuteDynamicContent            bool
@@ -93,23 +93,23 @@ func (td TrustDetails) String() string {
 }
 
 type CertificateDetails struct {
-	Leaf              bool
-	SelfSigned        bool
+	ValidFrom         time.Time
+	ValidThru         time.Time
+	IssuerCertificate *CertificateDetails
+	Revocation        RevocationDetails
 	Subject           string
 	Issuer            string
 	SerialNumber      string
-	ValidFrom         time.Time
-	ValidThru         time.Time
+	Usage             string
+	SignAlg           string
+	Trust             TrustDetails
+	Version           int
+	KeySize           int
+	Leaf              bool
+	SelfSigned        bool
 	Expired           bool
 	Qualified         bool
 	CA                bool
-	Usage             string
-	Version           int
-	SignAlg           string
-	KeySize           int
-	Revocation        RevocationDetails
-	Trust             TrustDetails
-	IssuerCertificate *CertificateDetails
 }
 
 func (cd CertificateDetails) String() string {
@@ -299,16 +299,16 @@ func (sr SignatureReason) String() string {
 }
 
 type Signer struct {
-	Certificate           *CertificateDetails
-	CertificatePathStatus int
-	HasTimestamp          bool
 	Timestamp             time.Time // signature timestamp attribute (which contains a timestamp token)
-	LTVEnabled            bool      // needs timestamp token & revocation info
-	PAdES                 string    // baseline level: B-B, B-T, B-LT, B-LTA
-	Certified             bool      // indicated by DocMDP entry
-	Authoritative         bool      // true if certified or first (youngest) signature
-	Permissions           int       // see table 257
+	Certificate           *CertificateDetails
+	PAdES                 string // baseline level: B-B, B-T, B-LT, B-LTA
 	Problems              []string
+	CertificatePathStatus int
+	Permissions           int // see table 257
+	HasTimestamp          bool
+	LTVEnabled            bool // needs timestamp token & revocation info
+	Certified             bool // indicated by DocMDP entry
+	Authoritative         bool // true if certified or first (youngest) signature
 }
 
 func (signer *Signer) AddProblem(s string) {
@@ -430,12 +430,12 @@ func (sd SignatureDetails) String() string {
 }
 
 type SignatureValidationResult struct {
+	Details  SignatureDetails
+	Problems []string
 	Signature
 	Status      SignatureStatus
 	Reason      SignatureReason
-	Details     SignatureDetails
 	DocModified int
-	Problems    []string
 }
 
 func (svr *SignatureValidationResult) AddProblem(s string) {

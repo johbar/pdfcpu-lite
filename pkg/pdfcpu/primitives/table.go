@@ -31,14 +31,14 @@ import (
 )
 
 type TableHeader struct {
+	bgCol           *color.SimpleColor
+	Font            *FormFont // defaults to table font
+	BackgroundColor string    `json:"bgCol"`
 	Values          []string
 	ColAnchors      []string
 	colAnchors      []types.Anchor
 	ColPaddings     []*Padding
-	LineHeight      int    `json:"lheight"` // defaults to table.LineHeight
-	BackgroundColor string `json:"bgCol"`
-	bgCol           *color.SimpleColor
-	Font            *FormFont // defaults to table font
+	LineHeight      int `json:"lheight"` // defaults to table.LineHeight
 	RTL             bool
 }
 
@@ -137,36 +137,36 @@ func (th *TableHeader) calcColumnPadding(td *model.TextDescriptor, col int) {
 type Table struct {
 	pdf             *PDF
 	content         *Content
-	Name            string
-	Values          [][]string
-	Position        [2]float64 `json:"pos"` // x,y
-	x, y            float64
-	Dx, Dy          float64
-	Anchor          string
-	anchor          types.Anchor
-	anchored        bool
-	Width           float64 // if < 1 then fraction of content width
-	Rows, Cols      int
-	ColWidths       []int // optional column width percentages
-	ColAnchors      []string
-	colAnchors      []types.Anchor
-	ColPaddings     []*Padding
-	LineHeight      int `json:"lheight"`
 	Font            *FormFont
 	Margin          *Margin
 	Border          *Border
 	Padding         *Padding
-	BackgroundColor string `json:"bgCol"`
-	OddColor        string `json:"oddCol"`
-	EvenColor       string `json:"evenCol"`
 	bgCol           *color.SimpleColor
 	oddCol          *color.SimpleColor
 	evenCol         *color.SimpleColor
-	RTL             bool
+	Header          *TableHeader
+	Name            string
+	Anchor          string
+	BackgroundColor string `json:"bgCol"`
+	OddColor        string `json:"oddCol"`
+	EvenColor       string `json:"evenCol"`
+	Values          [][]string
+	ColWidths       []int // optional column width percentages
+	ColAnchors      []string
+	colAnchors      []types.Anchor
+	ColPaddings     []*Padding
+	Position        [2]float64 `json:"pos"` // x,y
+	x, y            float64
+	Dx, Dy          float64
+	anchor          types.Anchor
+	Width           float64 // if < 1 then fraction of content width
+	Rows, Cols      int
+	LineHeight      int     `json:"lheight"`
 	Rotation        float64 `json:"rot"`
+	anchored        bool
+	RTL             bool
 	Grid            bool
 	Hide            bool
-	Header          *TableHeader
 }
 
 func (t *Table) Height() float64 {

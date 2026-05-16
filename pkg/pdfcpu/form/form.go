@@ -66,15 +66,15 @@ func (ft FieldType) String() string {
 
 // Field represents a form field for s particular page number.
 type Field struct {
-	Pages   []int
-	Locked  bool
-	Typ     FieldType
 	ID      string
 	Name    string
 	AltName string
 	Dv      string
 	V       string
 	Opts    string
+	Pages   []int
+	Typ     FieldType
+	Locked  bool
 }
 
 func (f Field) pageString() string {
@@ -165,10 +165,10 @@ func fullyQualifiedFieldName(xRefTable *model.XRefTable, indRef types.IndirectRe
 }
 
 type fieldInfo struct {
-	id     string
-	name   string
 	ft     *string
 	indRef *types.IndirectRef
+	id     string
+	name   string
 }
 
 func isField(xRefTable *model.XRefTable, indRef types.IndirectRef, fields types.Array) (bool, *fieldInfo, error) {
