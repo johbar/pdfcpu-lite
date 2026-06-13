@@ -360,7 +360,7 @@ func parseArray(c context.Context, line *string, level int) (*types.Array, error
 		return nil, errArrayNotTerminated
 	}
 
-	a := types.Array{}
+	a := make(types.Array, 0, 16)
 
 	for !strings.HasPrefix(l, "]") {
 

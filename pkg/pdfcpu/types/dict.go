@@ -30,7 +30,7 @@ type Dict map[string]Object
 
 // NewDict returns a new PDFDict object.
 func NewDict() Dict {
-	return map[string]Object{}
+	return make(map[string]Object)
 }
 
 // Len returns the length of this PDFDict.

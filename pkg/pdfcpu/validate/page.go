@@ -998,7 +998,7 @@ func detectPageNodeDict(xRefTable *model.XRefTable, indRef types.IndirectRef, ob
 }
 
 func processPagesKids(xRefTable *model.XRefTable, kids types.Array, parentObjNr int, hasResources bool, mediaBoxArr types.Array, curPage *int) (types.Array, error) {
-	var a types.Array
+	var a types.Array = make(types.Array, 0, len(kids))
 
 	for _, o := range kids {
 

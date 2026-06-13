@@ -472,7 +472,7 @@ func parseObjectStream(c context.Context, osd *types.ObjectStreamDict) error {
 
 	// e.g., 10 0 11 25 = 2 Objects: #10 @ offset 0, #11 @ offset 25
 
-	var objArray types.Array
+	var objArray types.Array = make(types.Array, 0, len(objs)/2)
 
 	var offsetOld int
 
