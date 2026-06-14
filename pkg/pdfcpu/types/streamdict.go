@@ -386,6 +386,10 @@ func (sd *StreamDict) decodeLength(maxLen int64) ([]byte, error) {
 
 		data = buf.Bytes()
 	}
+	// enure the bytes buffer goes back to the pool
+	if rc, ok := c.(io.Closer); ok {
+		rc.Close()
+	}
 
 	if maxLen < 0 {
 		sd.Content = data

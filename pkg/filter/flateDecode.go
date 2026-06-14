@@ -24,6 +24,7 @@ import (
 	"io"
 	"slices"
 	"strings"
+	"sync"
 
 	"github.com/johbar/pdfcpu-lite/pkg/log"
 )
@@ -53,6 +54,112 @@ const (
 	PNGAverage = 0x03
 	PNGPaeth   = 0x04
 )
+
+// rowBufPool recycles the per-row scratch slices used by decodePostProcess.
+// Each pool entry is a *[]byte so that the pointer itself can be stored and
+// retrieved without escaping the slice header to the heap on every get/put.
+var rowBufPool = sync.Pool{
+	New: func() any {
+		b := make([]byte, 256) // reasonable starting capacity for typical rows
+		return &b
+	},
+}
+
+// getRowBuf retrieves a zeroed []byte of exactly length n from the pool,
+// growing the backing array only when necessary.
+func getRowBuf(n int) *[]byte {
+	bp := rowBufPool.Get().(*[]byte)
+	if cap(*bp) >= n {
+		*bp = (*bp)[:n]
+	} else {
+		*bp = make([]byte, n)
+	}
+	clear(*bp) // zero so prior content never bleeds into a new stream
+	return bp
+}
+
+// putRowBuf returns a row buffer to the pool. The caller must not use the
+// slice after this call.
+func putRowBuf(bp *[]byte) {
+	rowBufPool.Put(bp)
+}
+
+// bufPool recycles bytes.Buffer objects used to collect decoded output.
+// Buffers are Reset() before reuse so no prior data leaks out.
+var bufPool = sync.Pool{
+	New: func() any { return new(bytes.Buffer) },
+}
+
+// pooledBuffer wraps a *bytes.Buffer that came from bufPool and returns it
+// to the pool when Close is called.  It exposes io.ReadCloser so callers
+// that only need io.Reader still work (io.ReadCloser satisfies io.Reader).
+type pooledBuffer struct {
+	*bytes.Buffer
+}
+
+// Close returns the underlying buffer to the pool. The caller must not read
+// from this pooledBuffer after Close returns.
+func (pb *pooledBuffer) Close() error {
+	pb.Buffer.Reset()
+	bufPool.Put(pb.Buffer)
+	pb.Buffer = nil
+	return nil
+}
+
+// validBPC lists the BitsPerComponent values permitted by the PDF spec.
+// Package-level to avoid a per-call heap allocation in parameters().
+var validBPC = []int{1, 2, 4, 8, 16}
+
+// zlibReaderPool recycles zlib.Reader instances across DecodeLength calls.
+//
+// zlib.NewReader internally calls flate.NewReader, which allocates a
+// decompressor carrying a ~32 KB sliding-window buffer plus Huffman decode
+// tables — by far the largest per-stream allocation in this pipeline.
+//
+// Both zlib.Reader and its embedded flate.Reader implement the Resetter
+// interface, so Reset(r, nil) re-reads the 2-byte zlib header from the new
+// reader and redirects the entire decompressor stack in-place with no new
+// heap allocation.
+//
+// Critical rule: do NOT call Close() before returning a reader to this pool.
+// Close() tears down the internal flate.Reader; a closed reader cannot be
+// Reset. Reinitialization via Reset is sufficient and replaces Close entirely.
+var zlibReaderPool sync.Pool
+
+// getZlibReader returns a zlib reader positioned at the start of r.
+// It prefers a pooled instance (reset via zlib.Resetter) over allocating a
+// new one. If Reset reports an invalid zlib header the pooled entry is
+// discarded and zlib.NewReader is used as fallback — keeping the fast path
+// allocation-free while still handling corrupt-header edge cases safely.
+func getZlibReader(r io.Reader) (io.ReadCloser, error) {
+	if v := zlibReaderPool.Get(); v != nil {
+		zr := v.(io.ReadCloser)
+		if err := zr.(zlib.Resetter).Reset(r, nil); err == nil {
+			return zr, nil
+		}
+		// Reset failed (e.g. pooled instance left in an unrecoverable state).
+		// Fall through to allocate a fresh reader; the discarded entry is GC'd.
+	}
+	return zlib.NewReader(r)
+}
+
+// putZlibReader returns zr to the pool without closing it.
+// The caller must not use zr after this call.
+func putZlibReader(zr io.ReadCloser) {
+	zlibReaderPool.Put(zr)
+}
+
+// validPredictors is a package-level slice so that decodePostProcess does not
+// allocate a fresh []int literal on every invocation.
+var validPredictors = []int{
+	PredictorTIFF,
+	PredictorNone,
+	PredictorSub,
+	PredictorUp,
+	PredictorAverage,
+	PredictorPaeth,
+	PredictorOptimum,
+}
 
 type flate struct {
 	baseFilter
@@ -92,23 +199,33 @@ func (f flate) DecodeLength(r io.Reader, maxLen int64) (io.Reader, error) {
 		log.Trace.Println("DecodeFlate begin")
 	}
 
-	rc, err := zlib.NewReader(r)
+	// Obtain a reusable zlib reader from the pool. Reset re-reads the
+	// 2-byte zlib header from r and reinitializes the flate decompressor
+	// in-place, avoiding the ~32 KB window-buffer allocation of NewReader.
+	rc, err := getZlibReader(r)
 	if err != nil {
 		return nil, err
 	}
-	defer rc.Close()
+	// Return rc to the pool instead of closing it.  Close would free the
+	// internal flate decompressor; we want Reset on the next call to reuse it.
+	defer putZlibReader(rc)
 
 	// Optional decode parameters need postprocessing.
 	return f.decodePostProcess(rc, maxLen)
 }
 
-func passThru(rin io.Reader, maxLen int64) (*bytes.Buffer, error) {
-	var b bytes.Buffer
+// passThru copies rin (up to maxLen bytes if ≥ 0) into a pooled buffer and
+// returns it as an io.ReadCloser. Callers that previously received a
+// *bytes.Buffer continue to work because *bytes.Buffer implements io.Reader;
+// callers that can call Close() will return the buffer to the pool.
+func passThru(rin io.Reader, maxLen int64) (*pooledBuffer, error) {
+	b := bufPool.Get().(*bytes.Buffer)
+	b.Reset()
 	var err error
 	if maxLen < 0 {
-		_, err = io.Copy(&b, rin)
+		_, err = io.Copy(b, rin)
 	} else {
-		_, err = io.CopyN(&b, rin, maxLen)
+		_, err = io.CopyN(b, rin, maxLen)
 	}
 	if err != nil && strings.Contains(err.Error(), "invalid checksum") {
 		if log.CLIEnabled() {
@@ -124,7 +241,12 @@ func passThru(rin io.Reader, maxLen int64) (*bytes.Buffer, error) {
 		}
 		err = nil
 	}
-	return &b, err
+	if err != nil {
+		b.Reset()
+		bufPool.Put(b)
+		return nil, err
+	}
+	return &pooledBuffer{b}, nil
 }
 
 func intMemberOf(i int, list []int) bool {
@@ -257,7 +379,7 @@ func (f flate) parameters() (colors, bpc, columns int, err error) {
 	bpc, found = f.parms["BitsPerComponent"]
 	if !found {
 		bpc = 8
-	} else if !intMemberOf(bpc, []int{1, 2, 4, 8, 16}) {
+	} else if !intMemberOf(bpc, validBPC) {
 		return 0, 0, 0, fmt.Errorf("pdfcpu: filter FlateDecode: Unexpected \"BitsPerComponent\": %d", bpc)
 	}
 
@@ -293,16 +415,8 @@ func (f flate) decodePostProcess(r io.Reader, maxLen int64) (io.Reader, error) {
 		return passThru(r, maxLen)
 	}
 
-	if !intMemberOf(
-		predictor,
-		[]int{PredictorTIFF,
-			PredictorNone,
-			PredictorSub,
-			PredictorUp,
-			PredictorAverage,
-			PredictorPaeth,
-			PredictorOptimum,
-		}) {
+	// Use the package-level slice to avoid a per-call []int allocation.
+	if !intMemberOf(predictor, validPredictors) {
 		return nil, fmt.Errorf("pdfcpu: filter FlateDecode: undefined \"Predictor\" %d", predictor)
 	}
 
@@ -321,18 +435,37 @@ func (f flate) decodePostProcess(r io.Reader, maxLen int64) (io.Reader, error) {
 	}
 
 	// cr and pr are the bytes for the current and previous row.
-	cr := make([]byte, m)
-	pr := make([]byte, m)
+	// Both are obtained from rowBufPool so their backing arrays are reused
+	// across calls.  We keep the original *[]byte pointers in crPtr/prPtr so
+	// that the end-of-loop swap (pr, cr = cr, pr) on the slice headers does
+	// not confuse the pool's Put calls in the defers.
+	crPtr := getRowBuf(m)
+	prPtr := getRowBuf(m)
+	defer putRowBuf(crPtr)
+	defer putRowBuf(prPtr)
 
-	// Output buffer
-	var b bytes.Buffer
+	cr := *crPtr
+	pr := *prPtr
 
-	for checkBufLen(b, maxLen) {
+	// Output buffer obtained from the pool; pre-grown with a rough capacity
+	// estimate (number of rows × rowSize) to minimise internal copies.
+	b := bufPool.Get().(*bytes.Buffer)
+	b.Reset()
+	if maxLen > 0 {
+		b.Grow(int(maxLen)) // caller already knows the expected byte count
+	} else if rowSize > 0 {
+		// A modest initial reservation; avoids the first few doublings.
+		b.Grow(rowSize * 64)
+	}
+
+	for checkBufLen(*b, maxLen) {
 
 		// Read decompressed bytes for one pixel row.
 		n, err := io.ReadFull(r, cr)
 		if err != nil {
 			if err != io.EOF {
+				b.Reset()
+				bufPool.Put(b)
 				return nil, err
 			}
 			// eof
@@ -342,10 +475,14 @@ func (f flate) decodePostProcess(r io.Reader, maxLen int64) (io.Reader, error) {
 		}
 
 		if n != m {
+			b.Reset()
+			bufPool.Put(b)
 			return nil, fmt.Errorf("pdfcpu: filter FlateDecode: read error, expected %d bytes, got: %d", m, n)
 		}
 
-		if err := process(&b, pr, cr, predictor, colors, bytesPerPixel); err != nil {
+		if err := process(b, pr, cr, predictor, colors, bytesPerPixel); err != nil {
+			b.Reset()
+			bufPool.Put(b)
 			return nil, err
 		}
 
@@ -353,13 +490,16 @@ func (f flate) decodePostProcess(r io.Reader, maxLen int64) (io.Reader, error) {
 			break
 		}
 
+		// Swap slice headers; the pool pointers (crPtr/prPtr) are unaffected.
 		pr, cr = cr, pr
 	}
 
 	if maxLen < 0 && b.Len()%rowSize > 0 {
 		log.Info.Printf("failed postprocessing: %d %d\n", b.Len(), rowSize)
+		b.Reset()
+		bufPool.Put(b)
 		return nil, errors.New("pdfcpu: filter FlateDecode: postprocessing failed")
 	}
 
-	return &b, nil
+	return &pooledBuffer{b}, nil
 }
