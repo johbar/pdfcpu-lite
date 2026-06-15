@@ -29,6 +29,7 @@ import (
 	"sort"
 	"strings"
 	"time"
+	"unsafe"
 
 	"github.com/johbar/pdfcpu-lite/pkg/filter"
 	"github.com/johbar/pdfcpu-lite/pkg/log"
@@ -1944,7 +1945,8 @@ func (xRefTable *XRefTable) consolidateResourcesWithContent(pageDict, resDict ty
 	}
 
 	// Calculate resources required by the content stream of this page.
-	prn, err := parseContent(string(bb))
+	bbStr := unsafe.String(unsafe.SliceData(bb), len(bb))
+	prn, err := parseContent(bbStr)
 	if err != nil {
 		return err
 	}

@@ -46,9 +46,7 @@ func (fo *FontObject) AddResourceName(resourceName string) {
 
 // ResourceNamesString returns a string representation of all the resource names of this font.
 func (fo FontObject) ResourceNamesString() string {
-	var resNames []string
-	resNames = append(resNames, fo.ResourceNames...)
-	return strings.Join(resNames, ",")
+	return strings.Join(fo.ResourceNames, ",")
 }
 
 // Data returns the raw data belonging to this image object.

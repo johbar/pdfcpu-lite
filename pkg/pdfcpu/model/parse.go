@@ -252,14 +252,20 @@ func cleanObjProlog(s string) (string, error) {
 	if len(s) == 0 {
 		return "", errors.New("pdfcpu: ParseObjectAttributes: can't find object number")
 	}
-
-	var b strings.Builder
-	for _, r := range s {
-		if r >= '0' && r <= '9' || r == ' ' {
-			b.WriteRune(r)
+	// only allocate when cleaning is necessary
+	if strings.ContainsFunc(s, func(r rune) bool {
+		return !(r >= '0' && r <= '9' || r == ' ')
+	}) {
+		var b strings.Builder
+		for _, r := range s {
+			if r >= '0' && r <= '9' || r == ' ' {
+				b.WriteRune(r)
+			}
 		}
+		s = b.String()
 	}
-	return b.String(), nil
+
+	return s, nil
 }
 
 // ParseObjectAttributes parses object number and generation of the next object for given string buffer.
