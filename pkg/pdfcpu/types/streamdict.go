@@ -50,16 +50,16 @@ type StreamDict struct {
 // NewStreamDict creates a new PDFStreamDict for given PDFDict, stream offset and length.
 func NewStreamDict(d Dict, streamOffset int64, streamLength *int64, streamLengthObjNr *int, filterPipeline []PDFFilter) StreamDict {
 	return StreamDict{
-		Dict: d,
-		StreamOffset : streamOffset,
-		StreamLength: streamLength,
+		Dict:              d,
+		StreamOffset:      streamOffset,
+		StreamLength:      streamLength,
 		StreamLengthObjNr: streamLengthObjNr,
-		FilterPipeline: filterPipeline,
-		Content: nil,
-		Raw: nil,
+		FilterPipeline:    filterPipeline,
+		Content:           nil,
+		Raw:               nil,
 		//nil,
 		IsPageContent: false,
-		CSComponents: 0,
+		CSComponents:  0,
 	}
 }
 
@@ -385,10 +385,10 @@ func (sd *StreamDict) decodeLength(maxLen int64) ([]byte, error) {
 		}
 
 		data = buf.Bytes()
-	}
-	// enure the bytes buffer goes back to the pool
-	if rc, ok := c.(io.Closer); ok {
-		rc.Close()
+		// enure the bytes buffer goes back to the pool
+		if rc, ok := c.(io.Closer); ok {
+			rc.Close()
+		}
 	}
 
 	if maxLen < 0 {
